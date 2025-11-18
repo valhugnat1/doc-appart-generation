@@ -1,0 +1,150 @@
+CONTRAT TYPE DE LOCATION OU DE COLOCATION DE LOGEMENT MEUBLÉ
+(Soumis au titre Ier bis de la loi du 6 juillet 1989 tendant à améliorer les rapports locatifs et portant modification de la loi n° 86-1290 du 23 décembre 1986)
+
+I. DÉSIGNATION DES PARTIES
+
+Le présent contrat est conclu entre les soussignés :
+
+LE BAILLEUR (Propriétaire) :
+Nom et prénom, ou dénomination du bailleur : {nom_bailleur}
+Domicile ou siège social du bailleur : {adresse_bailleur}
+Adresse e-mail du bailleur : {email_bailleur}
+Qualité du bailleur : {qualite_bailleur}
+{mandataire_section}
+
+ET :
+
+LE(S) LOCATAIRE(S) :
+{locataires_section}
+
+{garants_section}
+
+II. OBJET DU CONTRAT
+
+Le présent contrat a pour objet la location d'un logement ainsi déterminé :
+
+A. Consistance du logement
+
+Localisation du logement : {adresse_logement}
+Identifiant fiscal du logement : {identifiant_fiscal}
+Type d'habitat : {type_habitat}
+Régime juridique de l'immeuble : {regime_juridique}
+Période de construction : {periode_construction}
+Surface habitable : {surface_habitable} m²
+Nombre de pièces principales : {nombre_pieces}
+{autres_parties_section}
+
+Éléments d'équipements du logement (Meubles et électroménager) :
+{equipements_meubles}
+
+Modalité de production de chauffage : {chauffage_mode}
+{chauffage_repartition}
+
+Modalité de production d'eau chaude sanitaire : {eau_chaude_mode}
+{eau_chaude_repartition}
+
+Performance Énergétique :
+Niveau de performance du logement (DPE) : Classe {classe_dpe}
+
+B. Destination des locaux
+
+Usage : {usage_locaux}
+
+{accessoires_privatifs_section}
+
+{parties_communes_section}
+
+III. DATE DE PRISE D'EFFET ET DURÉE DU CONTRAT
+
+A. Date de prise d'effet du contrat : {date_prise_effet}
+
+B. Durée du contrat : {duree_bail}
+
+Note juridique : Pour un meublé résidence principale, la durée est de 1 an reconductible tacitement. Si le locataire est étudiant, la durée peut être réduite à 9 mois non reconductible (Bail étudiant).
+
+IV. CONDITIONS FINANCIÈRES
+
+A. Loyer
+
+1° Fixation du loyer initial :
+
+a) Montant du loyer mensuel hors charges : {loyer_hors_charges} €
+
+{zone_tendue_section}
+
+{loyer_precedent_section}
+
+2° Modalités de révision :
+
+a) Date de révision : {date_revision}
+b) Trimestre de référence de l'IRL : {trimestre_irl}
+
+B. Charges récupérables
+
+1. Modalité de règlement des charges : {modalite_charges}
+2. Montant : {montant_charges} €
+
+{assurance_colocation_section}
+
+D. Modalités de paiement
+
+Périodicité : Mensuelle
+Paiement : {type_paiement}
+Date de paiement : Le {jour_paiement} de chaque mois.
+
+Montant total dû à la première échéance :
+Loyer : {premier_loyer} €
+Charges : {premier_charges} €
+TOTAL Premier versement : {premier_total} €
+
+E. Dépenses énergétiques (Estimation)
+
+Montant estimé des dépenses annuelles d'énergie : {depenses_energetiques}
+(Année de référence : {annee_reference})
+
+{travaux_section}
+
+VI. GARANTIES (Dépôt de garantie)
+
+Montant du dépôt de garantie : {depot_garantie} €
+(Rappel : Pour un meublé, maximum 2 mois de loyer hors charges).
+
+VII. CLAUSE DE SOLIDARITÉ (En cas de colocation)
+
+Il est expressément stipulé que les copreneurs seront tenus solidairement et indivisiblement de l'exécution des obligations du présent contrat. La solidarité d'un colocataire sortant s'éteint lorsqu'un nouveau colocataire le remplace au bail, ou à défaut, à l'expiration d'un délai de 6 mois après son congé.
+
+VIII. CLAUSE RÉSOLUTOIRE
+
+Le contrat sera résilié de plein droit en cas de :
+• Défaut de paiement du loyer ou des charges.
+• Défaut de versement du dépôt de garantie.
+• Défaut d'assurance locative.
+• Trouble de voisinage constaté par décision de justice.
+
+{honoraires_section}
+
+X. ANNEXES
+
+Sont annexées au présent contrat les pièces suivantes :
+• Le dossier de diagnostic technique (DPE, Plomb, Amiante, Électricité, Risques).
+• La notice d'information relative aux droits et obligations.
+• L'état des lieux d'entrée et l'inventaire du mobilier.
+• Un extrait du règlement de copropriété (le cas échéant).
+
+Fait à {ville_signature}, le {date_signature}
+
+En 2 exemplaires originaux.
+
+LE BAILLEUR
+(Signature précédée de la mention "Lu et approuvé")
+
+
+
+
+LE(S) LOCATAIRE(S)
+(Signature précédée de la mention "Lu et approuvé")
+
+
+
+
+{garants_signatures}

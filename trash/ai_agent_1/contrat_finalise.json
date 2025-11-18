@@ -1,0 +1,42 @@
+{
+  "bailleur": {
+    "nom_complet": {
+      "valeur": "jhg keruj",
+      "requis": true,
+      "type": "texte"
+    },
+    "adresse": {
+      "valeur": "kjfn",
+      "requis": true,
+      "type": "texte"
+    }
+  },
+  "locataire": {
+    "nom_complet": {
+      "valeur": "df",
+      "requis": true,
+      "type": "texte"
+    }
+  },
+  "details_logement": {
+    "type_bien": {
+      "valeur": "fgs",
+      "requis": true,
+      "type": "texte",
+      "options": [
+        "Appartement",
+        "Maison"
+      ]
+    },
+    "surface_m2": {
+      "valeur": 150,
+      "requis": true,
+      "type": "nombre"
+    },
+    "meuble": {
+      "valeur": false,
+      "requis": true,
+      "type": "booleen"
+    }
+  }
+}
