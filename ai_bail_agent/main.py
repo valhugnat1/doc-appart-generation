@@ -1,7 +1,8 @@
 import os
 import uuid
 from dotenv import load_dotenv
-from langchain_openai import ChatOpenAI
+# from langchain_openai import ChatOpenAI
+from langchain_anthropic import ChatAnthropic
 from langchain_core.messages import HumanMessage, SystemMessage
 from agent.graph import create_agent
 
@@ -14,17 +15,27 @@ def main():
     # Using a default OpenAI compatible setup as per the example request
     # Adjust base_url and api_key as needed if using Scaleway/Fireworks
     
-    api_key = os.getenv("OPENAI_API_KEY") # Or other key var
-    base_url = os.getenv("OPENAI_BASE_URL") # Optional
+    # api_key = os.getenv("OPENAI_API_KEY") # Or other key var
+    # base_url = os.getenv("OPENAI_BASE_URL") # Optional
     
+    # if not api_key:
+    #     print("Error: API Key not found. Please set it in .env")
+    #     return
+
+    # llm = ChatOpenAI(
+    #     model="gpt-5", # Or the specific model name
+    #     api_key=api_key,
+    #     base_url=base_url
+    # )
+
+    api_key = os.getenv("ANTHROPIC_API_KEY")
     if not api_key:
-        print("Error: API Key not found. Please set it in .env")
+        print("Error: ANTHROPIC_API_KEY not found. Please set it in .env")
         return
 
-    llm = ChatOpenAI(
-        model="gpt-5", # Or the specific model name
-        api_key=api_key,
-        base_url=base_url
+    llm = ChatAnthropic(
+        model="claude-sonnet-4-5", 
+        api_key=api_key
     )
 
     # Create Agent
