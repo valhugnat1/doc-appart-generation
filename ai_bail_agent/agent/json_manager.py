@@ -110,7 +110,7 @@ class JsonManager:
         except Exception as e:
             return f"Error: {str(e)}"
 
-    def get_progress(self, session_id: str) -> Dict[str, str]:
+    def get_progress(self, session_id: str) -> Dict[str, Dict[str, Any]]:
         """Calculates percentage filled for each top-level category."""
         data = self.load_session(session_id)
         progress = {}
@@ -139,9 +139,17 @@ class JsonManager:
             
             if total_fields > 0:
                 percentage = int((filled_fields / total_fields) * 100)
-                progress[category] = f"{percentage}%"
+                progress[category] = {
+                    "percentage": f"{percentage}%",
+                    "filled": filled_fields,
+                    "total": total_fields
+                }
             else:
-                progress[category] = "N/A" # Or 100% if no required fields?
+                progress[category] = {
+                    "percentage": "N/A",
+                    "filled": 0,
+                    "total": 0
+                }
                 
         return progress
 
@@ -169,3 +177,38 @@ class JsonManager:
 
         find_missing(data[category])
         return missing
+
+    def get_all_paths(self) -> List[str]:
+        """
+        Returns a list of all valid dot-notation paths in the JSON structure.
+        Paths point to leaf nodes or nodes containing 'valeur'.
+        """
+        # Load from template to ensure we get the full structure
+        with open(self.template_path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+            
+        paths = []
+        
+        def traverse(obj, current_path=""):
+            if isinstance(obj, dict):
+                # Check if this is a field with 'valeur' (our target leaf)
+                if "valeur" in obj and "requis" in obj:
+                    paths.append(current_path)
+                else:
+                    for key, value in obj.items():
+                        new_path = f"{current_path}.{key}" if current_path else key
+                        traverse(value, new_path)
+            elif isinstance(obj, list):
+                for i, item in enumerate(obj):
+                    # For lists, we might want to show a generic path or specific indices
+                    # The prompt says "path possible in the JSON template".
+                    # If the list contains objects, we traverse them.
+                    # Using [0] as a representative for the structure if it's a list of objects
+                    # But if it's a list of values, we might need a different approach.
+                    # Given the context of "filling a form", lists usually imply repeating sections.
+                    # Let's include index 0 to show the structure.
+                    new_path = f"{current_path}[{i}]"
+                    traverse(item, new_path)
+
+        traverse(data)
+        return paths
