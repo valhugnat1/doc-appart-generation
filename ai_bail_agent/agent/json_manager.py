@@ -177,11 +177,11 @@ class JsonManager:
 
         find_missing(data[category])
         return missing
-
     def get_all_paths(self) -> List[str]:
         """
         Returns a list of all valid dot-notation paths in the JSON structure.
         Paths point to leaf nodes or nodes containing 'valeur'.
+        Examples: 'users.0.email' instead of 'users[0].email'
         """
         # Load from template to ensure we get the full structure
         with open(self.template_path, 'r', encoding='utf-8') as f:
@@ -198,16 +198,12 @@ class JsonManager:
                     for key, value in obj.items():
                         new_path = f"{current_path}.{key}" if current_path else key
                         traverse(value, new_path)
+            
             elif isinstance(obj, list):
                 for i, item in enumerate(obj):
-                    # For lists, we might want to show a generic path or specific indices
-                    # The prompt says "path possible in the JSON template".
-                    # If the list contains objects, we traverse them.
-                    # Using [0] as a representative for the structure if it's a list of objects
-                    # But if it's a list of values, we might need a different approach.
-                    # Given the context of "filling a form", lists usually imply repeating sections.
-                    # Let's include index 0 to show the structure.
-                    new_path = f"{current_path}[{i}]"
+                    # CHANGE: Use dot notation for indices instead of brackets
+                    # If current_path exists, append .i, otherwise just i
+                    new_path = f"{current_path}.{i}" if current_path else str(i)
                     traverse(item, new_path)
 
         traverse(data)
