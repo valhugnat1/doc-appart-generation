@@ -78,7 +78,7 @@ class AgentState(TypedDict):
 
 # --- 4. Nodes ---
 
-llm = ChatOpenAI(model="gpt-4o", temperature=0)
+llm = ChatOpenAI(model="gpt-5", temperature=0)
 
 
 def determine_progress(state: AgentState):

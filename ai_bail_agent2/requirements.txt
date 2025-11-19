@@ -1,0 +1,8 @@
+langchain
+langchain-core
+langchain-openai
+langgraph
+python-dotenv
+ipython
+pydantic
+langsmith

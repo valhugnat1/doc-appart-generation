@@ -23,8 +23,8 @@ def example_basic_usage():
 
     # Initialize the assistant
     assistant = FrenchLeaseAssistant(
-        model_name="claude-sonnet-4-5",  # or "claude-3-opus-20240229"
-        api_key=os.getenv("ANTHROPIC_API_KEY"),  # or ANTHROPIC_API_KEY
+        model_name="claude-sonnet-4-5",
+        api_key=os.getenv("ANTHROPIC_API_KEY"),
     )
 
     # Create a new session
@@ -48,7 +48,7 @@ def example_basic_usage():
     for message in messages:
         print(f"\nUser: {message}")
         response = assistant.chat(session_id, message)
-        print(f"Assistant: {response[:200]}...")  # Truncate for display
+        print(f"Assistant: {response[:400]}...")  # Truncate for display
 
     # Check status
     status = assistant.get_session_status(session_id)
@@ -66,7 +66,10 @@ def example_resume_session():
     print("=" * 60)
 
     # Initialize the assistant
-    assistant = FrenchLeaseAssistant()
+    assistant = FrenchLeaseAssistant(
+        model_name="claude-sonnet-4-5",
+        api_key=os.getenv("ANTHROPIC_API_KEY"),
+    )
 
     # List existing sessions
     sessions = assistant.list_sessions()
@@ -95,7 +98,10 @@ def example_batch_input():
     print("=" * 60)
 
     # Initialize the assistant
-    assistant = FrenchLeaseAssistant()
+    assistant = FrenchLeaseAssistant(
+        model_name="claude-sonnet-4-5",
+        api_key=os.getenv("ANTHROPIC_API_KEY"),
+    )
     session_id = assistant.new_session()
 
     # Provide all information in one message
@@ -164,7 +170,10 @@ def example_export_document():
     print("=" * 60)
 
     # First create and complete a session (simplified)
-    assistant = FrenchLeaseAssistant()
+    assistant = FrenchLeaseAssistant(
+        model_name="claude-sonnet-4-5",
+        api_key=os.getenv("ANTHROPIC_API_KEY"),
+    )
     session_id = example_basic_usage()  # Reuse the basic example
 
     # Try to export
@@ -196,7 +205,10 @@ def example_advanced_features():
     print("Example 5: Advanced Features")
     print("=" * 60)
 
-    assistant = FrenchLeaseAssistant()
+    assistant = FrenchLeaseAssistant(
+        model_name="claude-sonnet-4-5",
+        api_key=os.getenv("ANTHROPIC_API_KEY"),
+    )
     session_id = assistant.new_session()
 
     # Example 1: Handling corrections
