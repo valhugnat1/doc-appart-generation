@@ -1,7 +1,7 @@
 {
   "meta_donnees": {
     "type_document": {
-      "valeur": "",
+      "valeur": "Bail de location",
       "requis": true,
       "type": "fixe"
     },
@@ -14,12 +14,12 @@
   "designation_parties": {
     "bailleur": {
       "nom_prenom_ou_denomination": {
-        "valeur": "",
+        "valeur": "Hugo Philipp",
         "requis": true,
         "type": "texte"
       },
       "adresse_siege_social": {
-        "valeur": "",
+        "valeur": "38 rue champoinnet paris",
         "requis": true,
         "type": "texte"
       },
@@ -29,7 +29,7 @@
         "type": "email"
       },
       "type_personne": {
-        "valeur": "",
+        "valeur": "personne_physique",
         "requis": true,
         "type": "choix"
       },
@@ -99,7 +99,7 @@
   "objet_contrat": {
     "logement": {
       "adresse_complete": {
-        "valeur": "",
+        "valeur": "79 boulevard de l'eur",
         "requis": true,
         "type": "texte"
       },
@@ -112,13 +112,19 @@
         "valeur": "",
         "requis": true,
         "type": "choix",
-        "options": ["Immeuble collectif", "Individuel"]
+        "options": [
+          "Immeuble collectif",
+          "Individuel"
+        ]
       },
       "regime_juridique": {
         "valeur": "",
         "requis": true,
         "type": "choix",
-        "options": ["Mono propriété", "Copropriété"]
+        "options": [
+          "Mono propriété",
+          "Copropriété"
+        ]
       },
       "periode_construction": {
         "valeur": "",
@@ -167,7 +173,10 @@
           "valeur": "",
           "requis": true,
           "type": "choix",
-          "options": ["Individuel", "Collectif"]
+          "options": [
+            "Individuel",
+            "Collectif"
+          ]
         },
         "si_collectif_repartition": {
           "valeur": "",
@@ -180,7 +189,10 @@
           "valeur": "",
           "requis": true,
           "type": "choix",
-          "options": ["Individuel", "Collectif"]
+          "options": [
+            "Individuel",
+            "Collectif"
+          ]
         },
         "si_collectif_repartition": {
           "valeur": "",
@@ -193,7 +205,15 @@
           "valeur": "",
           "requis": true,
           "type": "choix",
-          "options": ["A", "B", "C", "D", "E", "F", "G"]
+          "options": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G"
+          ]
         }
       }
     },
@@ -202,60 +222,6 @@
         "valeur": "",
         "requis": true,
         "type": "choix"
-      }
-    },
-    "accessoires_privatifs": {
-      "garage_parking": {
-        "valeur": null,
-        "requis": false,
-        "type": "booleen"
-      },
-      "cave": {
-        "valeur": null,
-        "requis": false,
-        "type": "booleen"
-      },
-      "cave_numero": {
-        "valeur": "",
-        "requis": false,
-        "type": "texte"
-      },
-      "autres": {
-        "valeur": "",
-        "requis": false,
-        "type": "texte"
-      }
-    },
-    "parties_communes": {
-      "chauffage_collectif": {
-        "valeur": null,
-        "requis": false,
-        "type": "booleen"
-      },
-      "local_poubelle": {
-        "valeur": null,
-        "requis": false,
-        "type": "booleen"
-      },
-      "garage_velo": {
-        "valeur": null,
-        "requis": false,
-        "type": "booleen"
-      },
-      "ascenseur": {
-        "valeur": null,
-        "requis": false,
-        "type": "booleen"
-      },
-      "interphone": {
-        "valeur": null,
-        "requis": false,
-        "type": "booleen"
-      },
-      "fibre": {
-        "valeur": null,
-        "requis": false,
-        "type": "booleen"
       }
     }
   },
@@ -299,23 +265,6 @@
           "requis": false,
           "type": "nombre"
         }
-      },
-      "precedent_locataire": {
-        "depart_moins_18_mois": {
-          "valeur": null,
-          "requis": false,
-          "type": "booleen"
-        },
-        "montant_dernier_loyer": {
-          "valeur": null,
-          "requis": false,
-          "type": "nombre"
-        },
-        "date_dernier_versement": {
-          "valeur": "",
-          "requis": false,
-          "type": "date"
-        }
       }
     },
     "revision_loyer": {
@@ -335,7 +284,10 @@
         "valeur": "",
         "requis": true,
         "type": "choix",
-        "options": ["Forfait", "Provisions"]
+        "options": [
+          "Forfait",
+          "Provisions"
+        ]
       },
       "montant": {
         "valeur": null,
@@ -345,7 +297,7 @@
     },
     "paiement": {
       "periodicite": {
-        "valeur": "",
+        "valeur": "Mensuelle",
         "requis": true,
         "type": "fixe"
       },
@@ -353,7 +305,10 @@
         "valeur": "",
         "requis": true,
         "type": "choix",
-        "options": ["À échoir", "À terme échu"]
+        "options": [
+          "À échoir",
+          "À terme échu"
+        ]
       },
       "jour_paiement": {
         "valeur": null,

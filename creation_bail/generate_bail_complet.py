@@ -1068,7 +1068,7 @@ def main():
 
     # Generate complete version
     generator = CompletRentalContractGenerator(
-        json_file="contrat_data.json", output_file="contrat_location_complet.pdf"
+        json_file="creation_bail/2a5e56bd-ec52-4ff0-908e-64d709f25d8e.json", output_file="contrat_location_complet.pdf"
     )
     generator.generate_pdf()
 
