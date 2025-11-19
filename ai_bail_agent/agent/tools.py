@@ -8,7 +8,7 @@ import os
 # But standard tools usually take arguments.
 # We will assume the agent passes 'session_id' as an argument to the tools.
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 TEMPLATE_PATH = os.path.join(BASE_DIR, "data", "template_data.json")
 SESSIONS_DIR = os.path.join(BASE_DIR, "data", "sessions")
 
