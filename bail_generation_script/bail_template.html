@@ -152,7 +152,7 @@
         {% endif %}
     </div>
 
-    {% if designation_parties.garants.liste and designation_parties.garants.liste|length > 0 %}
+    {% if designation_parties.garants.liste and designation_parties.garants.liste|length > 0 and designation_parties.garants.liste[0].noms.valeur %}
     <div class="section">
         <p><strong>Nom et adresse du garant :</strong></p>
         {% for garant in designation_parties.garants.liste %}
@@ -161,6 +161,7 @@
     </div>
     {% endif %}
 
+    {% if designation_parties.locataires.liste and designation_parties.locataires.liste|length > 0 and designation_parties.locataires.liste[0].nom_prenom.valeur %}
     <div class="section">
         <p><strong>Nom et prénom du locataire :</strong></p>
         {% for locataire in designation_parties.locataires.liste %}
@@ -169,6 +170,7 @@
         {% endfor %}
         <p>désigné (s) ci-après <strong>le locataire</strong></p>
     </div>
+    {% endif %}
 
     <p>Il a été convenu ce qui suit :</p>
 
@@ -242,7 +244,9 @@
     <ul class="checkbox-list">
         {% if objet_contrat.parties_communes is defined %}
             {% for partie in objet_contrat.parties_communes %}
+            {% if partie %}
             <li><span class="checkbox checked"></span> {{ partie }}</li>
+            {% endif %}
             {% endfor %}
         {% endif %}
     </ul>
@@ -375,7 +379,6 @@
 
     <h2>VI. GARANTIES</h2>
     <p>Pour la garantie de l'exécution des obligations du locataire, il est prévu un dépôt de garantie d'un montant de <strong>{{ garanties.montant_depot_garantie.valeur }} €</strong> (en toutes lettres {% if garanties.montant_depot_garantie_lettres is defined %}{{ garanties.montant_depot_garantie_lettres.valeur }}{% endif %} ).</p>
-    <p><em>*deux mois de loyer hors charges.</em></p>
 
     <h2>VII. CLAUSE DE SOLIDARITÉ</h2>
     <p>Pour l'exécution de toutes les obligations du présent contrat en cas de pluralité de locataires, il y aura solidarité et indivisibilité entre eux.</p>
