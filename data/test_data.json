@@ -1,0 +1,126 @@
+{
+  "meta_donnees": {
+    "type_document": { "valeur": "Bail de location", "requis": true, "type": "fixe" },
+    "date_creation": { "valeur": "21/11/2025", "requis": true, "type": "date" }
+  },
+  "designation_parties": {
+    "bailleur": {
+      "nom_prenom_ou_denomination": { "valeur": "Jean Dupont", "requis": true, "type": "texte" },
+      "adresse_siege_social": { "valeur": "1 rue de la Paix, 75000 Paris", "requis": true, "type": "texte" },
+      "email": { "valeur": "jean.dupont@email.com", "requis": false, "type": "email" },
+      "type_personne": { "valeur": "Personne physique", "requis": true, "type": "choix" },
+      "societe_civile_familiale": { "valeur": false, "requis": false, "type": "booleen" },
+      "mandataire": {
+        "existe": { "valeur": false, "requis": true, "type": "booleen" },
+        "details": {
+          "nom_raison_sociale": { "valeur": "", "requis": false, "type": "texte" },
+          "adresse": { "valeur": "", "requis": false, "type": "texte" },
+          "numero_carte_pro": { "valeur": "", "requis": false, "type": "texte" }
+        }
+      }
+    },
+    "locataires": {
+      "liste": [
+        {
+          "nom_prenom": { "valeur": "Alice Martin", "requis": true, "type": "texte" },
+          "email": { "valeur": "alice.martin@email.com", "requis": false, "type": "email" }
+        }
+      ]
+    },
+    "garants": {
+      "liste": []
+    }
+  },
+  "objet_contrat": {
+    "logement": {
+      "adresse_complete": { "valeur": "10 Avenue des Champs-Élysées, 75008 Paris", "requis": true, "type": "texte" },
+      "identifiant_fiscal": { "valeur": "123456789", "requis": false, "type": "texte" },
+      "type_habitat": { "valeur": "Immeuble collectif", "requis": true, "type": "choix", "options": ["Immeuble collectif", "Individuel"] },
+      "regime_juridique": { "valeur": "Copropriété", "requis": true, "type": "choix", "options": ["Mono propriété", "Copropriété"] },
+      "periode_construction": { "valeur": "Avant 1948", "requis": true, "type": "choix" },
+      "surface_habitable_m2": { "valeur": 50, "requis": true, "type": "nombre" },
+      "nombre_pieces_principales": { "valeur": 2, "requis": true, "type": "nombre" },
+      "autres_parties": {
+        "terrasse": { "valeur": true, "requis": false, "type": "booleen" },
+        "balcon": { "valeur": false, "requis": false, "type": "booleen" },
+        "cave": { "valeur": true, "requis": false, "type": "booleen" },
+        "parking": { "valeur": false, "requis": false, "type": "booleen" }
+      },
+      "equipements_meubles": { "valeur": "Lit, Canapé, Table, Chaises, Cuisine équipée", "requis": true, "type": "texte_long" },
+      "chauffage": {
+        "mode": { "valeur": "Individuel", "requis": true, "type": "choix", "options": ["Individuel", "Collectif"] },
+        "si_collectif_repartition": { "valeur": "", "requis": false, "type": "texte" }
+      },
+      "eau_chaude": {
+        "mode": { "valeur": "Individuel", "requis": true, "type": "choix", "options": ["Individuel", "Collectif"] },
+        "si_collectif_repartition": { "valeur": "", "requis": false, "type": "texte" }
+      },
+      "performance_energetique": {
+        "classe_dpe": { "valeur": "D", "requis": true, "type": "choix", "options": ["A", "B", "C", "D", "E", "F", "G"] }
+      }
+    },
+    "destination_locaux": {
+      "usage": { "valeur": "Habitation principale", "requis": true, "type": "choix" }
+    },
+    "parties_communes": ["Ascenseur", "Local poubelle", "Espaces verts"]
+  },
+  "duree_contrat": {
+    "date_prise_effet": { "valeur": "01/01/2026", "requis": true, "type": "date" },
+    "duree_bail": { "valeur": "1 an", "requis": true, "type": "texte" }
+  },
+  "conditions_financieres": {
+    "loyer": {
+      "montant_hors_charges": { "valeur": 800, "requis": true, "type": "nombre" },
+      "zone_tendue_encadrement": {
+        "soumis": { "valeur": true, "requis": true, "type": "booleen" },
+        "loyer_reference": { "valeur": 15, "requis": false, "type": "nombre" },
+        "loyer_reference_majore": { "valeur": 18, "requis": false, "type": "nombre" },
+        "complement_loyer": { "valeur": 0, "requis": false, "type": "nombre" }
+      }
+    },
+    "revision_loyer": {
+      "date_revision": { "valeur": "01/01", "requis": true, "type": "texte" },
+      "trimestre_reference_irl": { "valeur": "2ème trimestre 2025", "requis": true, "type": "texte" }
+    },
+    "charges": {
+      "modalite_reglement": { "valeur": "Provisions", "requis": true, "type": "choix", "options": ["Forfait", "Provisions"] },
+      "montant": { "valeur": 50, "requis": true, "type": "nombre" }
+    },
+    "paiement": {
+      "periodicite": { "valeur": "Mensuelle", "requis": true, "type": "fixe" },
+      "type_paiement": { "valeur": "À échoir", "requis": true, "type": "choix", "options": ["À échoir", "À terme échu"] },
+      "jour_paiement": { "valeur": 5, "requis": true, "type": "nombre" }
+    },
+    "premier_versement": {
+      "loyer": { "valeur": 800, "requis": true, "type": "nombre" },
+      "charges": { "valeur": 50, "requis": true, "type": "nombre" },
+      "montant_total": { "valeur": 850, "requis": true, "type": "nombre" }
+    },
+    "depenses_energetiques": {
+      "estimation_annuelle": { "valeur": "500€ - 700€", "requis": true, "type": "texte" },
+      "annee_reference": { "valeur": "2024", "requis": true, "type": "annee" }
+    }
+  },
+  "travaux": {
+    "effectues_depuis_dernier_bail": { "valeur": false, "requis": false, "type": "booleen" },
+    "description": { "valeur": "", "requis": false, "type": "texte_long" },
+    "montant": { "valeur": 0, "requis": false, "type": "nombre" }
+  },
+  "garanties": {
+    "montant_depot_garantie": { "valeur": 1600, "requis": true, "type": "nombre" }
+  },
+  "colocation": {
+    "est_colocation": { "valeur": false, "requis": false, "type": "booleen" },
+    "assurance_bailleur": { "valeur": false, "requis": false, "type": "booleen" },
+    "montant_assurance": { "valeur": 0, "requis": false, "type": "nombre" }
+  },
+  "honoraires_location": {
+    "agence_impliquee": { "valeur": false, "requis": false, "type": "booleen" },
+    "part_locataire": { "valeur": 0, "requis": false, "type": "nombre" },
+    "part_bailleur": { "valeur": 0, "requis": false, "type": "nombre" }
+  },
+  "signature": {
+    "ville": { "valeur": "Paris", "requis": true, "type": "texte" },
+    "date": { "valeur": "21/11/2025", "requis": true, "type": "date" }
+  }
+}

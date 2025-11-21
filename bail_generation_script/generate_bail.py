@@ -2,7 +2,6 @@ import json
 import os
 import sys
 from jinja2 import Template
-import markdown
 from xhtml2pdf import pisa
 
 def load_data(json_path):
@@ -32,41 +31,18 @@ def render_template(template_path, data):
         print(f"Error rendering template: {e}")
         sys.exit(1)
 
-def convert_to_pdf(markdown_content, output_pdf_path, output_html_path):
-    """Converts Markdown content to HTML and then to PDF."""
+def convert_to_pdf(html_content, output_pdf_path, output_html_path):
+    """Saves HTML content and converts it to PDF."""
     try:
-        # Convert Markdown to HTML
-        html_content = markdown.markdown(markdown_content)
-        
-        # Add some basic styling
-        styled_html = f"""
-        <html>
-        <head>
-            <meta charset="utf-8">
-            <style>
-                body {{ font-family: sans-serif; font-size: 12px; line-height: 1.5; }}
-                h1 {{ font-size: 18px; text-align: center; margin-bottom: 20px; }}
-                h2 {{ font-size: 14px; margin-top: 20px; border-bottom: 1px solid #ccc; padding-bottom: 5px; }}
-                p {{ margin-bottom: 10px; }}
-                ul {{ margin-bottom: 10px; }}
-                .page-break {{ page-break-before: always; }}
-            </style>
-        </head>
-        <body>
-            {html_content}
-        </body>
-        </html>
-        """
-
         # Save HTML
         with open(output_html_path, "w", encoding="utf-8") as html_file:
-            html_file.write(styled_html)
+            html_file.write(html_content)
         print(f"HTML successfully created at {output_html_path}")
 
         # Convert HTML to PDF
         with open(output_pdf_path, "wb") as result_file:
             pisa_status = pisa.CreatePDF(
-                styled_html,
+                html_content,
                 dest=result_file
             )
 
@@ -85,19 +61,27 @@ def main():
     base_dir = os.path.dirname(os.path.abspath(__file__))
     project_root = os.path.dirname(base_dir)
     
-    json_path = os.path.join(project_root, 'data', '/Users/hugophilipp/Documents/perso/bail_generator/data/sessions/b2e7bde5-3ac0-4eda-9425-7421702c3d94.json')
-    template_path = os.path.join(base_dir, 'bail_template.md')
+    # Default JSON path
+    json_path = os.path.join(project_root, 'data', 'sessions', 'b2e7bde5-3ac0-4eda-9425-7421702c3d94.json')
+    if not os.path.exists(json_path):
+         json_path = os.path.join(project_root, 'data', 'template_data.json')
+
+    # Check for command line argument
+    if len(sys.argv) > 1:
+        json_path = sys.argv[1]
+
+    template_path = os.path.join(base_dir, 'bail_template.html')
     output_pdf_path = os.path.join(base_dir, 'bail_genere.pdf')
     output_html_path = os.path.join(base_dir, 'bail_genere.html')
 
-    print("Loading data...")
+    print(f"Loading data from {json_path}...")
     data = load_data(json_path)
     
-    print("Rendering template...")
-    markdown_content = render_template(template_path, data)
+    print(f"Rendering template from {template_path}...")
+    html_content = render_template(template_path, data)
     
-    print("Converting to HTML and PDF...")
-    convert_to_pdf(markdown_content, output_pdf_path, output_html_path)
+    print("Saving HTML and converting to PDF...")
+    convert_to_pdf(html_content, output_pdf_path, output_html_path)
 
 if __name__ == "__main__":
     main()
