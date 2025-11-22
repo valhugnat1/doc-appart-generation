@@ -3,3 +3,5 @@
 */.DS_Store
 *.pyc
 data/sessions
+data/conversations
+package-lock.json

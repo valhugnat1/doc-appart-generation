@@ -2,6 +2,8 @@ import sys
 import os
 import uuid
 import time
+import json
+import glob
 from typing import List, Optional, Dict, Any, Union
 from fastapi import FastAPI, HTTPException, Request
 from pydantic import BaseModel, Field
@@ -36,6 +38,27 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# --- Configuration ---
+CONVERSATIONS_DIR = os.path.join(parent_dir, "data", "conversations")
+os.makedirs(CONVERSATIONS_DIR, exist_ok=True)
+
+# --- Helper Functions ---
+
+def get_conversation_path(session_id: str) -> str:
+    return os.path.join(CONVERSATIONS_DIR, f"{session_id}.json")
+
+def save_conversation(session_id: str, messages: List[Dict[str, Any]]):
+    file_path = get_conversation_path(session_id)
+    with open(file_path, "w", encoding="utf-8") as f:
+        json.dump(messages, f, ensure_ascii=False, indent=2)
+
+def load_conversation(session_id: str) -> List[Dict[str, Any]]:
+    file_path = get_conversation_path(session_id)
+    if os.path.exists(file_path):
+        with open(file_path, "r", encoding="utf-8") as f:
+            return json.load(f)
+    return []
 
 # --- Pydantic Models for OpenAI API ---
 
@@ -84,53 +107,59 @@ agent_graph, system_prompt = create_agent(llm)
 
 # --- Endpoints ---
 
+@app.get("/conversations")
+async def list_conversations():
+    """List all available conversation UUIDs."""
+    files = glob.glob(os.path.join(CONVERSATIONS_DIR, "*.json"))
+    uuids = [os.path.splitext(os.path.basename(f))[0] for f in files]
+    return {"conversations": uuids}
+
+@app.get("/conversations/{uuid}")
+async def get_conversation(uuid: str):
+    """Get conversation history for a specific UUID."""
+    history = load_conversation(uuid)
+    if not history:
+        # If file doesn't exist, return empty list or 404? 
+        # Returning empty list implies new conversation or empty one.
+        return {"messages": []}
+    return {"messages": history}
+
 @app.post("/v1/chat/completions", response_model=ChatCompletionResponse)
 async def chat_completions(request: ChatCompletionRequest):
     session_id = request.user
     if not session_id:
         session_id = str(uuid.uuid4())
     
-    # Convert OpenAI messages to LangChain messages
-    # We only take the last user message for the current turn, 
-    # as the agent graph manages history in its state (if persisted).
-    # However, the current agent implementation in main.py keeps history in memory.
-    # The graph.py implementation expects 'messages' in state.
-    # Since we don't have a persistent store connected to the graph in this simple setup,
-    # we might need to reconstruct history or rely on the client sending full history.
-    # But the agent graph is stateful if we use a checkpointer. 
-    # The current graph.py DOES NOT use a checkpointer, so it's stateless between invokes unless we pass the full history.
+    # Load existing history
+    history = load_conversation(session_id)
     
-    # Strategy: Pass the full history from the request to the agent.
+    # Prepare LangChain messages
+    # Start with system prompt
     langchain_messages = [SystemMessage(content=system_prompt)]
     
-    for msg in request.messages:
-        if msg.role == "user":
-            langchain_messages.append(HumanMessage(content=msg.content))
-        elif msg.role == "assistant":
-            langchain_messages.append(AIMessage(content=msg.content))
-        elif msg.role == "system":
-            # We already added the main system prompt, but if client sends one, maybe ignore or append?
-            # Let's ignore client system messages to enforce our agent's persona
-            pass
+    # Add history
+    for msg in history:
+        if msg["role"] == "user":
+            langchain_messages.append(HumanMessage(content=msg["content"]))
+        elif msg["role"] == "assistant":
+            langchain_messages.append(AIMessage(content=msg["content"]))
             
-    # Add session_id to the last message or state if needed by tools
-    # The tools tool.py implementation doesn't seem to automatically extract session_id from state
-    # unless the agent passes it.
-    # The system prompt tells the agent: "You will be provided with a session_id. ALWAYS use this ID for tool calls."
-    # So we should inject it into the context.
-    
-    # Let's append a hidden system message or modify the last user message to include session_id
-    # if it's not already there.
-    # A cleaner way is to trust the agent to use the session_id provided in the state if we pass it.
+    # Add new messages from request (usually just the last one)
+    last_user_message = None
+    for msg in reversed(request.messages):
+        if msg.role == "user":
+            last_user_message = msg
+            break
+            
+    if last_user_message:
+        langchain_messages.append(HumanMessage(content=last_user_message.content))
+        # Update history list for saving later
+        history.append({"role": "user", "content": last_user_message.content})
     
     current_state = {
         "messages": langchain_messages,
         "session_id": session_id
     }
-    
-    # Invoke the agent
-    # We use invoke instead of stream for the non-streaming endpoint
-    # The graph returns the final state.
     
     print(f"Invoking agent for session: {session_id}")
     
@@ -146,8 +175,13 @@ async def chat_completions(request: ChatCompletionRequest):
         if isinstance(last_message, AIMessage):
             response_content = last_message.content
         else:
-            # Fallback if the last message isn't an AI message (unlikely)
             response_content = str(last_message)
+
+        # Update history with assistant response
+        history.append({"role": "assistant", "content": response_content})
+        
+        # Save updated conversation
+        save_conversation(session_id, history)
 
         # Construct response
         response = ChatCompletionResponse(
@@ -161,7 +195,7 @@ async def chat_completions(request: ChatCompletionRequest):
                     finish_reason="stop"
                 )
             ],
-            usage=Usage() # Usage tracking not implemented
+            usage=Usage() 
         )
         
         return response
