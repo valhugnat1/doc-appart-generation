@@ -73,7 +73,7 @@ onMounted(() => {
         <span class="icon">💬</span>
         <div class="conversation-info">
           <span class="title">{{ conv.title || conv.id }}</span>
-          <span class="date">{{ new Date(conv.updated_at * 1000).toLocaleDateString() }}</span>
+          <span class="date">{{ new Date(conv.updated_at * 1000).toLocaleString() }}</span>
         </div>
       </div>
     </div>

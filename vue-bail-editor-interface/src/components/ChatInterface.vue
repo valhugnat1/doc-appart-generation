@@ -1,6 +1,8 @@
 <script setup>
 import { ref, nextTick, watch, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { marked } from 'marked'
+import DOMPurify from 'dompurify'
 
 const router = useRouter()
 
@@ -16,6 +18,12 @@ const userInput = ref('')
 const isLoading = ref(false)
 const messagesContainer = ref(null)
 const isCreatingConversation = ref(false)
+
+const renderMarkdown = (content) => {
+  if (!content) return ''
+  const html = marked.parse(content)
+  return DOMPurify.sanitize(html)
+}
 
 const scrollToBottom = async () => {
   await nextTick()
@@ -124,9 +132,7 @@ const sendMessage = async () => {
           <div class="avatar">
             {{ msg.role === 'user' ? '👤' : '🤖' }}
           </div>
-          <div class="text">
-            {{ msg.content }}
-          </div>
+          <div class="text markdown-body" v-html="renderMarkdown(msg.content)"></div>
         </div>
       </div>
       <div v-if="isLoading" class="message assistant">
@@ -195,12 +201,67 @@ const sendMessage = async () => {
   align-items: center;
   justify-content: center;
   font-size: 20px;
+  flex-shrink: 0;
 }
 
 .text {
   flex: 1;
   line-height: 1.6;
-  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+
+/* Markdown Styles */
+:deep(.markdown-body) {
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+:deep(.markdown-body p) {
+  margin-bottom: 1em;
+}
+
+:deep(.markdown-body p:last-child) {
+  margin-bottom: 0;
+}
+
+:deep(.markdown-body pre) {
+  background-color: #000;
+  padding: 10px;
+  border-radius: 4px;
+  overflow-x: auto;
+  margin-bottom: 1em;
+}
+
+:deep(.markdown-body code) {
+  font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+
+:deep(.markdown-body pre code) {
+  background-color: transparent;
+  padding: 0;
+}
+
+:deep(.markdown-body ul), :deep(.markdown-body ol) {
+  margin-bottom: 1em;
+  padding-left: 20px;
+}
+
+:deep(.markdown-body h1), :deep(.markdown-body h2), :deep(.markdown-body h3), :deep(.markdown-body h4), :deep(.markdown-body h5), :deep(.markdown-body h6) {
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  font-weight: 600;
+}
+
+:deep(.markdown-body a) {
+  color: #10a37f;
+  text-decoration: none;
+}
+
+:deep(.markdown-body a:hover) {
+  text-decoration: underline;
 }
 
 .input-area {
