@@ -195,7 +195,9 @@ async def chat_completions(request: ChatCompletionRequest):
     
     # Prepare LangChain messages
     # Start with system prompt
-    langchain_messages = [SystemMessage(content=system_prompt)]
+    # Inject session_id into the system prompt so the agent knows it
+    system_prompt_with_session = f"{system_prompt}\n\nCURRENT SESSION ID: {session_id}"
+    langchain_messages = [SystemMessage(content=system_prompt_with_session)]
     
     # Add history
     for msg in history:
