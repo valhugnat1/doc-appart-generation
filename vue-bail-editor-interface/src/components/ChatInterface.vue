@@ -15,6 +15,7 @@ const messages = ref([])
 const userInput = ref('')
 const isLoading = ref(false)
 const messagesContainer = ref(null)
+const isCreatingConversation = ref(false)
 
 const scrollToBottom = async () => {
   await nextTick()
@@ -24,6 +25,12 @@ const scrollToBottom = async () => {
 }
 
 const loadConversation = async () => {
+  // If we are in the process of creating a conversation, don't reload (which would clear messages)
+  if (isCreatingConversation.value) {
+    isCreatingConversation.value = false
+    return
+  }
+
   if (!props.conversationId) {
     messages.value = []
     return
@@ -69,6 +76,8 @@ const sendMessage = async () => {
   if (!currentConversationId) {
     // Generate new UUID
     currentConversationId = crypto.randomUUID()
+    // Mark that we are creating a conversation so the watcher doesn't clear our messages
+    isCreatingConversation.value = true
     // Update URL
     router.replace(`/chat/${currentConversationId}`)
   }
@@ -93,10 +102,9 @@ const sendMessage = async () => {
     const assistantMessage = data.choices[0].message
     messages.value.push(assistantMessage)
     
-    // If we just created a new conversation, we might want to trigger a refresh of the sidebar.
-    // But Sidebar is a sibling. We can use a global event bus or store, or just reload the page (brute force).
-    // Or better, emit an event that the parent (ChatView) can handle? No, Sidebar is in App.vue.
-    // For now, let's just ensure the URL is correct.
+    // Trigger sidebar refresh if possible (not easily accessible here without global state/bus)
+    // Ideally we would emit an event or use a store. 
+    // For now, the user will see it in the sidebar on refresh or next load.
     
   } catch (error) {
     console.error('Error:', error)

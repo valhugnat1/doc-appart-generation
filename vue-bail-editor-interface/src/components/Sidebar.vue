@@ -2,6 +2,15 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 
+const props = defineProps({
+  isOpen: {
+    type: Boolean,
+    default: true
+  }
+})
+
+const emit = defineEmits(['toggle'])
+
 const router = useRouter()
 const conversations = ref([])
 const isLoading = ref(false)
@@ -29,27 +38,43 @@ const selectConversation = (id) => {
   router.push(`/chat/${id}`)
 }
 
+const toggleSidebar = () => {
+  emit('toggle')
+}
+
+// Expose fetchConversations so parent or siblings can trigger refresh if needed
+defineExpose({ fetchConversations })
+
 onMounted(() => {
   fetchConversations()
 })
 </script>
 
 <template>
-  <div class="sidebar">
-    <div class="new-chat-btn" @click="createNewChat">
-      + New chat
+  <div class="sidebar" v-show="isOpen">
+    <div class="sidebar-header">
+      <div class="new-chat-btn" @click="createNewChat">
+        + New chat
+      </div>
+      <button class="close-btn" @click="toggleSidebar" title="Close sidebar">
+        ◀
+      </button>
     </div>
+    
     <div class="conversations-list">
       <div v-if="isLoading" class="loading">Loading...</div>
       <div 
         v-else
-        v-for="id in conversations" 
-        :key="id" 
+        v-for="conv in conversations" 
+        :key="conv.id" 
         class="conversation-item"
-        @click="selectConversation(id)"
+        @click="selectConversation(conv.id)"
       >
         <span class="icon">💬</span>
-        <span class="title">{{ id }}</span>
+        <div class="conversation-info">
+          <span class="title">{{ conv.title || conv.id }}</span>
+          <span class="date">{{ new Date(conv.updated_at * 1000).toLocaleDateString() }}</span>
+        </div>
       </div>
     </div>
   </div>
@@ -65,21 +90,45 @@ onMounted(() => {
   color: #ececf1;
   padding: 10px;
   box-sizing: border-box;
+  border-right: 1px solid rgba(255,255,255,0.1);
+}
+
+.sidebar-header {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
 }
 
 .new-chat-btn {
+  flex: 1;
   border: 1px solid rgba(255,255,255,0.2);
   border-radius: 5px;
   padding: 10px;
-  margin-bottom: 10px;
   cursor: pointer;
   transition: background-color 0.2s;
   display: flex;
   align-items: center;
   gap: 10px;
+  white-space: nowrap;
 }
 
 .new-chat-btn:hover {
+  background-color: rgba(255,255,255,0.1);
+}
+
+.close-btn {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 5px;
+  color: #ececf1;
+  cursor: pointer;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close-btn:hover {
   background-color: rgba(255,255,255,0.1);
 }
 
@@ -93,23 +142,37 @@ onMounted(() => {
   border-radius: 5px;
   cursor: pointer;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 10px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  margin-bottom: 2px;
 }
 
 .conversation-item:hover {
   background-color: #2A2B32;
 }
 
+.conversation-info {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
 .icon {
   font-size: 1.2em;
+  margin-top: 2px;
 }
 
 .title {
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.9em;
+}
+
+.date {
+  font-size: 0.7em;
+  color: #8e8ea0;
 }
 </style>
