@@ -15,7 +15,9 @@ from langchain_anthropic import ChatAnthropic
 current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir)
 agent_dir = os.path.join(parent_dir, "agent_recup_info")
+bail_script_dir = os.path.join(parent_dir, "bail_generation_script")
 sys.path.append(agent_dir)
+sys.path.append(bail_script_dir)
 
 try:
     from agent.graph import create_agent
@@ -23,6 +25,15 @@ except ImportError as e:
     print(f"Error importing agent: {e}")
     print(f"sys.path: {sys.path}")
     raise
+
+try:
+    from generate_bail import generate_bail_for_session
+except ImportError as e:
+    print(f"Error importing generate_bail: {e}")
+    print(f"sys.path: {sys.path}")
+    # We don't raise here to allow the app to start even if bail generation fails to import, 
+    # but in production we might want to be stricter.
+    pass
 
 # Load environment variables
 load_dotenv(os.path.join(parent_dir, ".env"))
@@ -184,6 +195,17 @@ async def get_conversation(uuid: str):
     # Always return a list of messages for the frontend
     return {"messages": history}
 
+@app.get("/bail/{uuid}")
+async def get_bail(uuid: str):
+    """Get the generated bail HTML for a specific UUID."""
+    bail_path = os.path.join(parent_dir, "data", "generated_bails", f"{uuid}.html")
+    if os.path.exists(bail_path):
+        with open(bail_path, "r", encoding="utf-8") as f:
+            content = f.read()
+        return {"html": content}
+    else:
+        raise HTTPException(status_code=404, detail="Bail not found")
+
 @app.post("/v1/chat/completions", response_model=ChatCompletionResponse)
 async def chat_completions(request: ChatCompletionRequest):
     session_id = request.user
@@ -244,6 +266,13 @@ async def chat_completions(request: ChatCompletionRequest):
         
         # Save updated conversation
         save_conversation(session_id, history)
+
+        # Generate bail
+        print(f"Generating bail for session: {session_id}")
+        try:
+            generate_bail_for_session(session_id)
+        except Exception as e:
+            print(f"Error generating bail: {e}")
 
         # Construct response
         response = ChatCompletionResponse(

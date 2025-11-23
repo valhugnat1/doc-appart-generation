@@ -1,11 +1,42 @@
 <script setup>
 import { ref } from 'vue'
 import Sidebar from './components/Sidebar.vue'
+import RightSidebar from './components/RightSidebar.vue'
 
 const isSidebarOpen = ref(true)
+const isRightSidebarOpen = ref(false)
+const bailHtml = ref('')
 
 const toggleSidebar = () => {
   isSidebarOpen.value = !isSidebarOpen.value
+}
+
+const fetchBail = async (conversationId) => {
+  if (!conversationId) return
+  
+  try {
+    const response = await fetch(`http://localhost:8000/bail/${conversationId}`)
+    if (response.ok) {
+      const data = await response.json()
+      bailHtml.value = data.html
+      // Open the right sidebar if we have content
+      if (bailHtml.value) {
+        isRightSidebarOpen.value = true
+      }
+    } else {
+      // If 404 or other error, maybe just clear or keep previous?
+      // User said: "it's only when the html file is available in the API the side bar display the doc"
+      // So if not available, maybe close it or do nothing?
+      // Let's keep it simple: if error, assume no bail yet.
+      console.log('Bail not found or error fetching')
+    }
+  } catch (error) {
+    console.error('Error fetching bail:', error)
+  }
+}
+
+const onMessageReceived = (conversationId) => {
+  fetchBail(conversationId)
 }
 </script>
 
@@ -21,8 +52,9 @@ const toggleSidebar = () => {
       >
         ▶
       </button>
-      <router-view></router-view>
+      <router-view @message-received="onMessageReceived"></router-view>
     </div>
+    <RightSidebar :is-open="isRightSidebarOpen" :html-content="bailHtml" />
   </div>
 </template>
 

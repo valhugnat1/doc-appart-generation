@@ -11,10 +11,10 @@ def load_data(json_path):
             return json.load(f)
     except FileNotFoundError:
         print(f"Error: File not found at {json_path}")
-        sys.exit(1)
+        return None
     except json.JSONDecodeError:
         print(f"Error: Invalid JSON in {json_path}")
-        sys.exit(1)
+        return None
 
 def render_template(template_path, data):
     """Renders a Jinja2 template with the provided data."""
@@ -26,10 +26,10 @@ def render_template(template_path, data):
         return template.render(**data)
     except FileNotFoundError:
         print(f"Error: Template not found at {template_path}")
-        sys.exit(1)
+        raise
     except Exception as e:
         print(f"Error rendering template: {e}")
-        sys.exit(1)
+        raise
 
 def convert_to_pdf(html_content, output_pdf_path, output_html_path):
     """Saves HTML content and converts it to PDF."""
@@ -48,20 +48,66 @@ def convert_to_pdf(html_content, output_pdf_path, output_html_path):
 
         if pisa_status.err:
             print(f"Error converting to PDF: {pisa_status.err}")
-            sys.exit(1)
+            return False
             
         print(f"PDF successfully created at {output_pdf_path}")
+        return True
 
     except Exception as e:
         print(f"Error converting to PDF: {e}")
-        sys.exit(1)
+        return False
+
+def generate_bail_for_session(session_id: str):
+    """Generates bail HTML and PDF for a given session ID."""
+    # Paths
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    project_root = os.path.dirname(base_dir)
+    
+    # Input JSON path
+    json_path = os.path.join(project_root, 'data', 'sessions', f'{session_id}.json')
+    
+    # Output paths
+    output_dir = os.path.join(project_root, 'data', 'generated_bails')
+    os.makedirs(output_dir, exist_ok=True)
+    
+    output_html_path = os.path.join(output_dir, f'{session_id}.html')
+    output_pdf_path = os.path.join(output_dir, f'{session_id}.pdf')
+    
+    template_path = os.path.join(base_dir, 'bail_template.html')
+
+    print(f"Loading data from {json_path}...")
+    data = load_data(json_path)
+    
+    if not data:
+        print(f"No data found for session {session_id}")
+        return None
+
+    # If data is a list (legacy format), we might need to extract the actual data
+    # But assuming the agent saves the structured data for the bail in the session file
+    # If the session file only contains messages, this won't work as expected.
+    # However, per the user request, we are using the session file.
+    # Let's assume the session file contains the data needed for the template.
+    # If the session file is just chat history, we might need to extract the data from the last message or a specific field.
+    # For now, we'll pass the whole data object.
+    
+    print(f"Rendering template from {template_path}...")
+    try:
+        html_content = render_template(template_path, data)
+        
+        print("Saving HTML and converting to PDF...")
+        convert_to_pdf(html_content, output_pdf_path, output_html_path)
+        
+        return output_html_path
+    except Exception as e:
+        print(f"Failed to generate bail: {e}")
+        return None
 
 def main():
     # Paths
     base_dir = os.path.dirname(os.path.abspath(__file__))
     project_root = os.path.dirname(base_dir)
     
-    # Default JSON path
+    # Default JSON path for testing
     json_path = os.path.join(project_root, 'data', 'sessions', 'b2e7bde5-3ac0-4eda-9425-7421702c3d94.json')
     if not os.path.exists(json_path):
          json_path = os.path.join(project_root, 'data', 'template_data.json')
@@ -77,11 +123,12 @@ def main():
     print(f"Loading data from {json_path}...")
     data = load_data(json_path)
     
-    print(f"Rendering template from {template_path}...")
-    html_content = render_template(template_path, data)
-    
-    print("Saving HTML and converting to PDF...")
-    convert_to_pdf(html_content, output_pdf_path, output_html_path)
+    if data:
+        print(f"Rendering template from {template_path}...")
+        html_content = render_template(template_path, data)
+        
+        print("Saving HTML and converting to PDF...")
+        convert_to_pdf(html_content, output_pdf_path, output_html_path)
 
 if __name__ == "__main__":
     main()

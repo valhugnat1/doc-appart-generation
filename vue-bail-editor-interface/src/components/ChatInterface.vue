@@ -13,6 +13,8 @@ const props = defineProps({
   }
 })
 
+const emit = defineEmits(['message-received'])
+
 const messages = ref([])
 const userInput = ref('')
 const isLoading = ref(false)
@@ -110,9 +112,8 @@ const sendMessage = async () => {
     const assistantMessage = data.choices[0].message
     messages.value.push(assistantMessage)
     
-    // Trigger sidebar refresh if possible (not easily accessible here without global state/bus)
-    // Ideally we would emit an event or use a store. 
-    // For now, the user will see it in the sidebar on refresh or next load.
+    // Trigger sidebar refresh
+    emit('message-received', currentConversationId)
     
   } catch (error) {
     console.error('Error:', error)
