@@ -1,11 +1,14 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
 import Sidebar from './components/Sidebar.vue'
 import RightSidebar from './components/RightSidebar.vue'
 
+const route = useRoute()
 const isSidebarOpen = ref(true)
 const isRightSidebarOpen = ref(false)
 const bailHtml = ref('')
+const isAiLoading = ref(false)
 
 const toggleSidebar = () => {
   isSidebarOpen.value = !isSidebarOpen.value
@@ -24,19 +27,35 @@ const fetchBail = async (conversationId) => {
         isRightSidebarOpen.value = true
       }
     } else {
-      // If 404 or other error, maybe just clear or keep previous?
-      // User said: "it's only when the html file is available in the API the side bar display the doc"
-      // So if not available, maybe close it or do nothing?
-      // Let's keep it simple: if error, assume no bail yet.
-      console.log('Bail not found or error fetching')
+      // If 404 or other error, close the sidebar
+      isRightSidebarOpen.value = false
+      bailHtml.value = ''
     }
   } catch (error) {
     console.error('Error fetching bail:', error)
+    isRightSidebarOpen.value = false
+    bailHtml.value = ''
   }
 }
 
+watch(() => route.params.id, (newId) => {
+  if (newId) {
+    fetchBail(newId)
+  } else {
+    isRightSidebarOpen.value = false
+    bailHtml.value = ''
+  }
+})
+
 const onMessageReceived = (conversationId) => {
   fetchBail(conversationId)
+}
+
+const handleLoading = (loading) => {
+  isAiLoading.value = loading
+  if (loading) {
+    isRightSidebarOpen.value = true
+  }
 }
 </script>
 
@@ -52,9 +71,9 @@ const onMessageReceived = (conversationId) => {
       >
         ▶
       </button>
-      <router-view @message-received="onMessageReceived"></router-view>
+      <router-view @message-received="onMessageReceived" @is-loading="handleLoading"></router-view>
     </div>
-    <RightSidebar :is-open="isRightSidebarOpen" :html-content="bailHtml" />
+    <RightSidebar :is-open="isRightSidebarOpen" :html-content="bailHtml" :is-loading="isAiLoading" />
   </div>
 </template>
 

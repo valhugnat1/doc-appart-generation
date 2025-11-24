@@ -13,7 +13,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['message-received'])
+const emit = defineEmits(['message-received', 'is-loading'])
 
 const messages = ref([])
 const userInput = ref('')
@@ -67,6 +67,10 @@ const loadConversation = async () => {
 
 watch(() => props.conversationId, () => {
   loadConversation()
+})
+
+watch(isLoading, (newValue) => {
+  emit('is-loading', newValue)
 })
 
 onMounted(() => {
