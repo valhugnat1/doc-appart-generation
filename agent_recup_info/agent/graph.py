@@ -1,4 +1,5 @@
 import operator
+from datetime import datetime
 from typing import TypedDict, Annotated, List, Union
 
 from langchain_core.messages import AnyMessage, SystemMessage, HumanMessage, ToolMessage
@@ -76,8 +77,11 @@ def create_agent(llm):
 
     # --- SYSTEM PROMPT ---
     
-    system_message = """You are an expert assistant helping a user fill out a French lease (bail de location meublé) JSON file.
+    current_date = datetime.now().strftime("%d/%m/%Y")
+
+    system_message = f"""You are an expert assistant helping a user fill out a French lease (bail de location meublé) JSON file.
 Your goal is to gather all the necessary information to complete the JSON structure.
+Today's date is {current_date}.
 
 ## Process
 
