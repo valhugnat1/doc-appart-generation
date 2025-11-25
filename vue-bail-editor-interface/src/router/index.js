@@ -14,7 +14,11 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: () => import('../views/ChatView.vue') // Lazy load
+    redirect: () => {
+      // Generate a new UUID and redirect to /chat/{uuid}
+      const uuid = crypto.randomUUID()
+      return `/chat/${uuid}`
+    }
   },
   {
     path: '/chat/:id',

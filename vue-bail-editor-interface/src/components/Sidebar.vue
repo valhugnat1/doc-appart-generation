@@ -31,7 +31,9 @@ const fetchConversations = async () => {
 }
 
 const createNewChat = () => {
-  router.push('/')
+  // Generate a new UUID v4
+  const uuid = crypto.randomUUID()
+  router.push(`/chat/${uuid}`)
 }
 
 const selectConversation = (id) => {
