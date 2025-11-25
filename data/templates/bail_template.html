@@ -230,7 +230,14 @@
         {% endif %}
     </ul>
 
-    <p>Le cas échéant, autres parties du logement :</p>
+    {% if (objet_contrat.logement.autres_parties.grenier is defined and objet_contrat.logement.autres_parties.grenier.valeur) or 
+          (objet_contrat.logement.autres_parties.comble is defined and objet_contrat.logement.autres_parties.comble.valeur) or 
+          (objet_contrat.logement.autres_parties.terrasse is defined and objet_contrat.logement.autres_parties.terrasse.valeur) or 
+          (objet_contrat.logement.autres_parties.balcon is defined and objet_contrat.logement.autres_parties.balcon.valeur) or 
+          (objet_contrat.logement.autres_parties.loggia is defined and objet_contrat.logement.autres_parties.loggia.valeur) or 
+          (objet_contrat.logement.autres_parties.jardin is defined and objet_contrat.logement.autres_parties.jardin.valeur) or 
+          (objet_contrat.logement.autres_parties.autre is defined and objet_contrat.logement.autres_parties.autre.valeur) %}
+    <p>Autres parties du logement :</p>
     <ul>
         {% if objet_contrat.logement.autres_parties.grenier is defined and objet_contrat.logement.autres_parties.grenier.valeur %}<li>Grenier</li>{% endif %}
         {% if objet_contrat.logement.autres_parties.comble is defined and objet_contrat.logement.autres_parties.comble.valeur %}<li>Comble aménagé ou non</li>{% endif %}
@@ -242,10 +249,11 @@
             <li>Autre : {{ objet_contrat.logement.autres_parties.autre_details.valeur }}</li>
         {% endif %}
     </ul>
+    {% endif %}
 
     {% if objet_contrat.logement.equipements_meubles is defined and objet_contrat.logement.equipements_meubles.valeur %}
-    <p>Le cas échéant, éléments d'équipements du logement :</p>
-    <p><strong>{{ objet_contrat.logement.equipements_meubles.valeur }}</strong></p>
+    <p>Eléments d'équipements du logement :</p>
+    <p>{{ objet_contrat.logement.equipements_meubles.valeur }}</p>
     {% endif %}
 
     <ul>
@@ -269,6 +277,10 @@
         <li><strong>Niveau de performance énergétique du logement :</strong> {{ objet_contrat.logement.performance_energetique.classe_dpe.valeur }}</li>
 
     </ul>
+
+    {% if objet_contrat.logement.estimation_depenses_energie.min.valeur and objet_contrat.logement.estimation_depenses_energie.max.valeur and objet_contrat.logement.estimation_depenses_energie.annee_reference.valeur %}
+    <p>Montant estimé des dépenses annuelles d'énergie pour un usage standard : entre {{ objet_contrat.logement.estimation_depenses_energie.min.valeur }} € et {{ objet_contrat.logement.estimation_depenses_energie.max.valeur }} € par an (prix moyens des énergies indexés au 1er janvier {{ objet_contrat.logement.estimation_depenses_energie.annee_reference.valeur }}).</p>
+    {% endif %}
 
     <div class="legal-ref">
         « Rappel : un logement décent doit respecter les critères minimaux de performance suivants :<br>
@@ -382,6 +394,7 @@
     {% endif %}
 
     <p>c) Le cas échéant, informations relatives au loyer du dernier locataire :</p>
+    {% if conditions_financieres.loyer.dernier_loyer_existe is defined and conditions_financieres.loyer.dernier_loyer_existe.valeur %}
     <ul class="checkbox-list">
         {% if conditions_financieres.loyer.dernier_loyer_montant is defined and conditions_financieres.loyer.dernier_loyer_montant.valeur %}
         <li><span class="checkbox"></span> Montant du dernier loyer acquitté par le précédent locataire (en €) : {{ conditions_financieres.loyer.dernier_loyer_montant.valeur }}</li>
@@ -395,6 +408,9 @@
         <li><span class="checkbox"></span> Date de la dernière révision du loyer : {{ conditions_financieres.loyer.dernier_loyer_revision.valeur }}</li>
         {% endif %}
     </ul>
+    {% else %}
+    <p><em>Il s'agit d'une première location ou le logement est vacant depuis plus de 18 mois.</em></p>
+    {% endif %}
 
     <h4>2. Le cas échéant, modalités de révision :</h4>
     <ul>
@@ -578,12 +594,12 @@
     <h2>XI. ANNEXES</h2>
     <p>Sont annexées et jointes au contrat de location les pièces suivantes :</p>
     <ul class="checkbox-list">
-        <li><span class="checkbox"></span> Le cas échéant, un extrait du règlement concernant la destination de l'immeuble...</li>
-        <li><span class="checkbox"></span> Un dossier de diagnostic technique...</li>
-        <li><span class="checkbox"></span> Une notice d'information relative aux droits et obligations des locataires et des bailleurs.</li>
-        <li><span class="checkbox"></span> Un état des lieux, un inventaire et un état détaillé du mobilier...</li>
-        <li><span class="checkbox"></span> Le cas échéant, une autorisation préalable de mise en location.</li>
-        <li><span class="checkbox"></span> Le cas échéant, les références aux loyers habituellement constatés dans le voisinage...</li>
+        <li>Le cas échéant, un extrait du règlement concernant la destination de l'immeuble...</li>
+        <li>Un dossier de diagnostic technique...</li>
+        <li>Une notice d'information relative aux droits et obligations des locataires et des bailleurs.</li>
+        <li>Un état des lieux, un inventaire et un état détaillé du mobilier...</li>
+        <li>Le cas échéant, une autorisation préalable de mise en location.</li>
+        <li>Le cas échéant, les références aux loyers habituellement constatés dans le voisinage...</li>
     </ul>
 
     <div class="signature-section">

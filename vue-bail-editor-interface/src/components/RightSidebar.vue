@@ -56,7 +56,7 @@ const props = defineProps({
 .sidebar-content {
   padding: 20px;
   overflow-y: auto;
-  height: 100%;
+  height: 80%;
 }
 
 .preview-container {

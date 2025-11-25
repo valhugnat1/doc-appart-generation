@@ -195,6 +195,23 @@
           "type": "choix",
           "options": ["A", "B", "C", "D", "E", "F", "G"]
         }
+      },
+      "estimation_depenses_energie": {
+        "min": {
+          "valeur": null,
+          "requis": true,
+          "type": "nombre"
+        },
+        "max": {
+          "valeur": null,
+          "requis": true,
+          "type": "nombre"
+        },
+        "annee_reference": {
+          "valeur": "",
+          "requis": true,
+          "type": "annee"
+        }
       }
     },
     "destination_locaux": {
@@ -245,6 +262,26 @@
           "requis": false,
           "type": "nombre"
         }
+      },
+      "dernier_loyer_existe": {
+        "valeur": null,
+        "requis": true,
+        "type": "booleen"
+      },
+      "dernier_loyer_montant": {
+        "valeur": null,
+        "requis": false,
+        "type": "nombre"
+      },
+      "dernier_loyer_date": {
+        "valeur": "",
+        "requis": false,
+        "type": "date"
+      },
+      "dernier_loyer_revision": {
+        "valeur": "",
+        "requis": false,
+        "type": "date"
       }
     },
     "revision_loyer": {
