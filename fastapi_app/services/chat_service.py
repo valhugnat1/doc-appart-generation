@@ -8,7 +8,7 @@ from langchain_core.messages import HumanMessage, SystemMessage, AIMessage
 from langchain_anthropic import ChatAnthropic
 from dotenv import load_dotenv
 
-from ..models.chat import Delta, StreamChoice, ChatCompletionStreamResponse
+from ..models.chat import Delta, StreamChoice, ChatCompletionStreamResponse, ToolCall, Function
 from ..config import PARENT_DIR
 from .. import config 
 
@@ -169,6 +169,39 @@ async def stream_chat_request(session_id: str, history: List[Dict[str, Any]], ne
                         id=response_id, created=created_time, model=model_name, choices=[choice]
                     )
                     yield f"data: {chunk.model_dump_json()}\n\n"
+
+            # Handle tool call chunks
+            if hasattr(message_chunk, 'tool_call_chunks') and message_chunk.tool_call_chunks:
+                tool_calls = []
+                for tc_chunk in message_chunk.tool_call_chunks:
+                    # Check if tc_chunk is a dict or object
+                    if isinstance(tc_chunk, dict):
+                        index = tc_chunk.get("index")
+                        tc_id = tc_chunk.get("id")
+                        name = tc_chunk.get("name")
+                        args = tc_chunk.get("args")
+                    else:
+                        index = tc_chunk.index
+                        tc_id = tc_chunk.id
+                        name = tc_chunk.name
+                        args = tc_chunk.args
+
+                    tool_calls.append(ToolCall(
+                        index=index,
+                        id=tc_id,
+                        type="function",
+                        function=Function(
+                            name=name,
+                            arguments=args
+                        )
+                    ))
+                
+                delta = Delta(tool_calls=tool_calls)
+                choice = StreamChoice(index=0, delta=delta, finish_reason=None)
+                chunk = ChatCompletionStreamResponse(
+                    id=response_id, created=created_time, model=model_name, choices=[choice]
+                )
+                yield f"data: {chunk.model_dump_json()}\n\n"
                 
     except Exception as e:
         print(f"Error during streaming: {e}")

@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router'
 import { marked } from 'marked'
 import DOMPurify from 'dompurify'
 import OpenAI from 'openai'
+import ToolCallStatus from './ToolCallStatus.vue'
 
 const router = useRouter()
 
@@ -23,6 +24,7 @@ const isLoading = ref(false)
 const messagesContainer = ref(null)
 const textareaRef = ref(null)
 const isCreatingConversation = ref(false)
+const currentToolCall = ref(null)
 
 // Markdown rendering
 const renderMarkdown = (content) => {
@@ -50,6 +52,14 @@ const resizeTextarea = () => {
 
 const handleInput = () => {
   resizeTextarea()
+}
+
+const handleKeyDown = (event) => {
+  if (event.key === 'Enter' && !event.shiftKey) {
+    event.preventDefault()
+    sendMessage()
+  }
+  // If Shift+Enter, let the default behavior happen (new line)
 }
 
 // Load Conversation History
@@ -128,13 +138,28 @@ const sendMessage = async () => {
     })
 
     for await (const chunk of stream) {
-      const delta = chunk.choices[0]?.delta?.content || ''
+      const delta = chunk.choices[0]?.delta
       
-      if (delta) {
-        messages.value[lastMsgIndex].content += delta
+      if (delta?.tool_calls) {
+        const toolCall = delta.tool_calls[0]
+        if (toolCall.function?.name) {
+          currentToolCall.value = { name: toolCall.function.name }
+          await scrollToBottom()
+        }
+      }
+
+      const content = delta?.content || ''
+      
+      if (content) {
+        if (currentToolCall.value) {
+          currentToolCall.value = null
+        }
+        messages.value[lastMsgIndex].content += content
         await scrollToBottom() 
       }
     }
+    
+    currentToolCall.value = null
 
     emit('message-received', currentConversationId)
 
@@ -167,6 +192,10 @@ const sendMessage = async () => {
             {{ msg.role === 'user' ? '👤' : '🤖' }}
           </div>
           <div class="text markdown-body" v-html="renderMarkdown(msg.content)"></div>
+          <ToolCallStatus 
+            v-if="index === messages.length - 1 && currentToolCall" 
+            :toolName="currentToolCall.name" 
+          />
         </div>
       </div>
       
@@ -186,7 +215,7 @@ const sendMessage = async () => {
           ref="textareaRef"
           v-model="userInput" 
           @input="handleInput"
-          @keydown.enter.prevent="sendMessage"
+          @keydown="handleKeyDown"
           placeholder="Send a message..."
           rows="1"
         ></textarea>

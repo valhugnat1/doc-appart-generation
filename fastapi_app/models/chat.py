@@ -30,9 +30,20 @@ class ChatCompletionResponse(BaseModel):
     usage: Optional[Usage] = None
 
 # Streaming models
+class Function(BaseModel):
+    name: Optional[str] = None
+    arguments: Optional[str] = None
+
+class ToolCall(BaseModel):
+    index: int
+    id: Optional[str] = None
+    type: Optional[str] = None
+    function: Optional[Function] = None
+
 class Delta(BaseModel):
     role: Optional[str] = None
     content: Optional[str] = None
+    tool_calls: Optional[List[ToolCall]] = None
 
 class StreamChoice(BaseModel):
     index: int
