@@ -4,13 +4,6 @@
     <meta charset="UTF-8">
     <title>Contrat de Location Meublée</title>
     <style>
-        /* @page {
-            size: A4;
-            margin: 2cm;
-            @bottom-center {
-                content: "Page " counter(page) " sur " counter(pages);
-            }
-        } */
         body {
             font-family: "Times New Roman", Times, serif;
             font-size: 11pt;
@@ -104,69 +97,94 @@
             font-size: 10pt;
             margin-bottom: 5px;
         }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 10px;
-        }
-        td {
-            vertical-align: top;
-        }
     </style>
 </head>
 <body>
 
     <div class="info-box">
-        <strong>RAPPEL NOUVEAU LOCATAIRE :</strong> n'oubliez pas de mettre vos compteurs d'énergie à votre nom dès la signature du bail.<br>
-        Contactez le 09 87 67 94 26 (non surtaxé, lundi-vendredi 8H-21H ; samedi 8H30-18H30, dimanche 9H-17H, service Selectra) pour mettre vos compteurs d'électricité et de gaz naturel à votre nom et éviter toute coupure.
+        <strong>RAPPEL NOUVEAU LOCATAIRE :</strong> 
+        n'oubliez pas de mettre vos compteurs d'énergie à votre nom dès la signature du bail.<br>
+        Contactez le 09 87 67 94 26 (non surtaxé) pour mettre vos compteurs d'électricité et de gaz naturel à votre nom.
     </div>
 
     <h1>CONTRAT DE LOCATION/COLLOCATION</h1>
-    <div style="text-align: center; font-weight: bold; margin-bottom: 20px;">LOGEMENT MEUBLÉ<br><span style="font-size: 10pt; font-weight: normal;">(Loi n°89-462 du 6 juillet 1989)</span></div>
+    <div style="text-align: center; font-weight: bold; margin-bottom: 20px;">
+        LOGEMENT MEUBLÉ<br>
+        <span style="font-size: 10pt; font-weight: normal;">(Loi n°89-462 du 6 juillet 1989)</span>
+    </div>
 
     <h2>I. DÉSIGNATION DES PARTIES</h2>
     <p>Le présent contrat est conclu entre les soussignés :</p>
 
     <div class="section">
+        {% if designation_parties.bailleur.nom_prenom_ou_denomination is defined and designation_parties.bailleur.nom_prenom_ou_denomination.valeur %}
         <p><strong>Nom et prénom, ou dénomination du bailleur :</strong> {{ designation_parties.bailleur.nom_prenom_ou_denomination.valeur }}</p>
+        {% endif %}
+
+        {% if designation_parties.bailleur.adresse_siege_social is defined and designation_parties.bailleur.adresse_siege_social.valeur %}
         <p><strong>Domicile ou siège social du bailleur :</strong> {{ designation_parties.bailleur.adresse_siege_social.valeur }}</p>
+        {% endif %}
+
+        {% if designation_parties.bailleur.type_personne is defined and designation_parties.bailleur.type_personne.valeur %}
         <p><strong>Qualité du bailleur :</strong> {{ designation_parties.bailleur.type_personne.valeur }}</p>
+        {% endif %}
+
         {% if designation_parties.bailleur.type_personne.valeur == 'Personne morale' and designation_parties.bailleur.societe_civile_familiale.valeur %}
         <p><em>La personne morale est une société civile constituée exclusivement entre parents et alliés jusqu'au quatrième degré inclus.</em></p>
         {% endif %}
+
+        {% if designation_parties.bailleur.email is defined and designation_parties.bailleur.email.valeur %}
         <p><strong>Adresse email du bailleur (facultatif) :</strong> {{ designation_parties.bailleur.email.valeur }}</p>
+        {% endif %}
+
         <p>désigné (s) ci-après <strong>le bailleur</strong> ;</p>
     </div>
 
+    {% if designation_parties.bailleur.mandataire.existe.valeur %}
     <div class="section">
         <p>Le cas échéant, représenté par le mandataire :</p>
-        {% if designation_parties.bailleur.mandataire.existe.valeur %}
         <ul>
+            {% if designation_parties.bailleur.mandataire.details.nom_raison_sociale is defined and designation_parties.bailleur.mandataire.details.nom_raison_sociale.valeur %}
             <li><strong>Nom ou raison sociale du mandataire :</strong> {{ designation_parties.bailleur.mandataire.details.nom_raison_sociale.valeur }}</li>
-            <li><strong>Adresse du mandataire :</strong> {{ designation_parties.bailleur.mandataire.details.adresse.valeur }}</li>
-            <li><strong>Activité exercée par le mandataire :</strong> {% if designation_parties.bailleur.mandataire.details.activite is defined %}{{ designation_parties.bailleur.mandataire.details.activite.valeur }}{% endif %}</li>
-            <li><strong>Le cas échéant, numéro et lieu de délivrance de la carte professionnelle :</strong> {{ designation_parties.bailleur.mandataire.details.numero_carte_pro.valeur }}</li>
-        </ul>
-        {% else %}
-        <p>(Sans objet)</p>
-        {% endif %}
-    </div>
+            {% endif %}
 
-    {% if designation_parties.garants.liste and designation_parties.garants.liste|length > 0 and designation_parties.garants.liste[0].noms.valeur %}
+            {% if designation_parties.bailleur.mandataire.details.adresse is defined and designation_parties.bailleur.mandataire.details.adresse.valeur %}
+            <li><strong>Adresse du mandataire :</strong> {{ designation_parties.bailleur.mandataire.details.adresse.valeur }}</li>
+            {% endif %}
+
+            {% if designation_parties.bailleur.mandataire.details.activite is defined and designation_parties.bailleur.mandataire.details.activite.valeur %}
+            <li><strong>Activité exercée par le mandataire :</strong> {{ designation_parties.bailleur.mandataire.details.activite.valeur }}</li>
+            {% endif %}
+
+            {% if designation_parties.bailleur.mandataire.details.numero_carte_pro is defined and designation_parties.bailleur.mandataire.details.numero_carte_pro.valeur %}
+            <li><strong>Le cas échéant, numéro et lieu de délivrance de la carte professionnelle :</strong> {{ designation_parties.bailleur.mandataire.details.numero_carte_pro.valeur }}</li>
+            {% endif %}
+        </ul>
+    </div>
+    {% endif %}
+
+    {% if designation_parties.garants.liste and designation_parties.garants.liste|length > 0 %}
     <div class="section">
         <p><strong>Nom et adresse du garant :</strong></p>
         {% for garant in designation_parties.garants.liste %}
-        <p><strong>{{ garant.noms.valeur }} - {{ garant.adresse.valeur }}</strong></p>
+            {% if garant.noms.valeur %}
+            <p>{{ garant.noms.valeur }} {% if garant.adresse.valeur %}- {{ garant.adresse.valeur }}{% endif %}</p>
+            {% endif %}
         {% endfor %}
     </div>
     {% endif %}
 
-    {% if designation_parties.locataires.liste and designation_parties.locataires.liste|length > 0 and designation_parties.locataires.liste[0].nom_prenom.valeur %}
+    {% if designation_parties.locataires.liste and designation_parties.locataires.liste|length > 0 %}
     <div class="section">
         <p><strong>Nom et prénom du locataire :</strong></p>
         {% for locataire in designation_parties.locataires.liste %}
-        <p><strong>{{ locataire.nom_prenom.valeur }}</strong></p>
-        <p><strong>Adresse email du locataire (facultatif) :</strong> {{ locataire.email.valeur }}</p>
+            {% if locataire.nom_prenom.valeur %}
+            <p>{{ locataire.nom_prenom.valeur }}</p>
+            {% endif %}
+            
+            {% if locataire.email is defined and locataire.email.valeur %}
+            <p>Adresse email du locataire (facultatif) : {{ locataire.email.valeur }}</p>
+            {% endif %}
         {% endfor %}
         <p>désigné (s) ci-après <strong>le locataire</strong></p>
     </div>
@@ -179,14 +197,37 @@
 
     <h3>A. Consistance du logement :</h3>
     <ul>
+        {% if objet_contrat.logement.adresse_complete is defined and objet_contrat.logement.adresse_complete.valeur %}
         <li><strong>Adresse du logement :</strong> {{ objet_contrat.logement.adresse_complete.valeur }}</li>
-        <li><strong>Bâtiment / escalier / étage / porte :</strong> {% if objet_contrat.logement.complement_adresse is defined %}{{ objet_contrat.logement.complement_adresse.valeur }}{% endif %}</li>
+        {% endif %}
+
+        {% if objet_contrat.logement.complement_adresse is defined and objet_contrat.logement.complement_adresse.valeur %}
+        <li><strong>Bâtiment / escalier / étage / porte :</strong> {{ objet_contrat.logement.complement_adresse.valeur }}</li>
+        {% endif %}
+
+        {% if objet_contrat.logement.identifiant_fiscal is defined and objet_contrat.logement.identifiant_fiscal.valeur %}
         <li><strong>Identifiant fiscal du logement :</strong> {{ objet_contrat.logement.identifiant_fiscal.valeur }}</li>
+        {% endif %}
+
+        {% if objet_contrat.logement.type_habitat is defined and objet_contrat.logement.type_habitat.valeur %}
         <li><strong>Type d'habitat :</strong> {{ objet_contrat.logement.type_habitat.valeur }}</li>
+        {% endif %}
+
+        {% if objet_contrat.logement.regime_juridique is defined and objet_contrat.logement.regime_juridique.valeur %}
         <li><strong>Régime juridique :</strong> {{ objet_contrat.logement.regime_juridique.valeur }}</li>
+        {% endif %}
+
+        {% if objet_contrat.logement.periode_construction is defined and objet_contrat.logement.periode_construction.valeur %}
         <li><strong>Période de construction :</strong> {{ objet_contrat.logement.periode_construction.valeur }}</li>
+        {% endif %}
+
+        {% if objet_contrat.logement.surface_habitable_m2 is defined and objet_contrat.logement.surface_habitable_m2.valeur %}
         <li><strong>Surface habitable (en m²) :</strong> {{ objet_contrat.logement.surface_habitable_m2.valeur }}</li>
+        {% endif %}
+
+        {% if objet_contrat.logement.nombre_pieces_principales is defined and objet_contrat.logement.nombre_pieces_principales.valeur %}
         <li><strong>Nombre de pièces principales :</strong> {{ objet_contrat.logement.nombre_pieces_principales.valeur }}</li>
+        {% endif %}
     </ul>
 
     <p>Le cas échéant, autres parties du logement :</p>
@@ -197,24 +238,36 @@
         {% if objet_contrat.logement.autres_parties.balcon is defined and objet_contrat.logement.autres_parties.balcon.valeur %}<li>Balcon</li>{% endif %}
         {% if objet_contrat.logement.autres_parties.loggia is defined and objet_contrat.logement.autres_parties.loggia.valeur %}<li>Loggia</li>{% endif %}
         {% if objet_contrat.logement.autres_parties.jardin is defined and objet_contrat.logement.autres_parties.jardin.valeur %}<li>Jardin</li>{% endif %}
-        {% if objet_contrat.logement.autres_parties.autre is defined and objet_contrat.logement.autres_parties.autre.valeur %}<li>Autre : {{ objet_contrat.logement.autres_parties.autre_details.valeur }}</li>{% endif %}
+        {% if objet_contrat.logement.autres_parties.autre is defined and objet_contrat.logement.autres_parties.autre.valeur %}
+            <li>Autre : {{ objet_contrat.logement.autres_parties.autre_details.valeur }}</li>
+        {% endif %}
     </ul>
 
+    {% if objet_contrat.logement.equipements_meubles is defined and objet_contrat.logement.equipements_meubles.valeur %}
     <p>Le cas échéant, éléments d'équipements du logement :</p>
     <p><strong>{{ objet_contrat.logement.equipements_meubles.valeur }}</strong></p>
+    {% endif %}
 
     <ul>
+        {% if objet_contrat.logement.chauffage.mode is defined and objet_contrat.logement.chauffage.mode.valeur %}
         <li><strong>Modalité de production de chauffage :</strong> {{ objet_contrat.logement.chauffage.mode.valeur }}</li>
-        {% if objet_contrat.logement.chauffage.mode.valeur == 'Collectif' %}
+        {% endif %}
+
+        {% if objet_contrat.logement.chauffage.mode.valeur == 'Collectif' and objet_contrat.logement.chauffage.si_collectif_repartition.valeur %}
         <li>Si collectif, préciser les modalités de répartition de la consommation du locataire : <strong>{{ objet_contrat.logement.chauffage.si_collectif_repartition.valeur }}</strong></li>
         {% endif %}
         
+        {% if objet_contrat.logement.eau_chaude.mode is defined and objet_contrat.logement.eau_chaude.mode.valeur %}
         <li><strong>Modalité de production d'eau chaude sanitaire :</strong> {{ objet_contrat.logement.eau_chaude.mode.valeur }}</li>
-        {% if objet_contrat.logement.eau_chaude.mode.valeur == 'Collectif' %}
+        {% endif %}
+
+        {% if objet_contrat.logement.eau_chaude.mode.valeur == 'Collectif' and objet_contrat.logement.eau_chaude.si_collectif_repartition.valeur %}
         <li>Si collectif, préciser les modalités de répartition de la consommation du locataire : <strong>{{ objet_contrat.logement.eau_chaude.si_collectif_repartition.valeur }}</strong></li>
         {% endif %}
 
+        {% if objet_contrat.logement.performance_energetique.classe_dpe is defined and objet_contrat.logement.performance_energetique.classe_dpe.valeur %}
         <li><strong>Niveau de performance énergétique du logement :</strong> {{ objet_contrat.logement.performance_energetique.classe_dpe.valeur }}</li>
+
     </ul>
 
     <div class="legal-ref">
@@ -228,42 +281,57 @@
         B.2) A compter du 1er janvier 2031, le niveau de performance minimal du logement correspond à la classe E du DPE.<br>
         La consommation d'énergie finale et le niveau de performance du logement sont déterminés selon la méthode du diagnostic de performance énergétique mentionné à l'article L. 126-26 du code de la construction et de l'habitation. »
     </div>
-
+    {% endif %}
     <h3>B. Destination des locaux :</h3>
+    {% if objet_contrat.destination_locaux.usage is defined and objet_contrat.destination_locaux.usage.valeur %}
     <p><strong>{{ objet_contrat.destination_locaux.usage.valeur }}</strong></p>
+    {% endif %}
 
     <h3>C. Le cas échéant, désignation des locaux et équipements accessoires de l'immeuble à usage privatif du locataire :</h3>
     <ul>
-        {% if objet_contrat.logement.autres_parties.cave is defined and objet_contrat.logement.autres_parties.cave.valeur %}<li>Cave {% if objet_contrat.logement.autres_parties.cave_numero is defined %}/ n°: {{ objet_contrat.logement.autres_parties.cave_numero.valeur }}{% endif %}</li>{% endif %}
-        {% if objet_contrat.logement.autres_parties.parking is defined and objet_contrat.logement.autres_parties.parking.valeur %}<li>Parking {% if objet_contrat.logement.autres_parties.parking_numero is defined %}/ n°: {{ objet_contrat.logement.autres_parties.parking_numero.valeur }}{% endif %}</li>{% endif %}
-        {% if objet_contrat.logement.autres_parties.garage is defined and objet_contrat.logement.autres_parties.garage.valeur %}<li>Garage {% if objet_contrat.logement.autres_parties.garage_numero is defined %}/ n°: {{ objet_contrat.logement.autres_parties.garage_numero.valeur }}{% endif %}</li>{% endif %}
-        <li><span class="checkbox"></span> Autre : {% if objet_contrat.logement.autres_parties.autre_accessoire is defined %}{{ objet_contrat.logement.autres_parties.autre_accessoire.valeur }}{% endif %}</li>
+        {% if objet_contrat.logement.autres_parties.cave is defined and objet_contrat.logement.autres_parties.cave.valeur %}
+            <li>Cave {% if objet_contrat.logement.autres_parties.cave_numero is defined and objet_contrat.logement.autres_parties.cave_numero.valeur %}/ n°: {{ objet_contrat.logement.autres_parties.cave_numero.valeur }}{% endif %}</li>
+        {% endif %}
+        {% if objet_contrat.logement.autres_parties.parking is defined and objet_contrat.logement.autres_parties.parking.valeur %}
+            <li>Parking {% if objet_contrat.logement.autres_parties.parking_numero is defined and objet_contrat.logement.autres_parties.parking_numero.valeur %}/ n°: {{ objet_contrat.logement.autres_parties.parking_numero.valeur }}{% endif %}</li>
+        {% endif %}
+        {% if objet_contrat.logement.autres_parties.garage is defined and objet_contrat.logement.autres_parties.garage.valeur %}
+            <li>Garage {% if objet_contrat.logement.autres_parties.garage_numero is defined and objet_contrat.logement.autres_parties.garage_numero.valeur %}/ n°: {{ objet_contrat.logement.autres_parties.garage_numero.valeur }}{% endif %}</li>
+        {% endif %}
+        {% if objet_contrat.logement.autres_parties.autre_accessoire is defined and objet_contrat.logement.autres_parties.autre_accessoire.valeur %}
+            <li><span class="checkbox"></span> Autre : {{ objet_contrat.logement.autres_parties.autre_accessoire.valeur }}</li>
+        {% endif %}
     </ul>
 
     <h3>D. Le cas échéant, énumération des locaux, parties, équipements et accessoires de l'immeuble à usage commun :</h3>
     <ul class="checkbox-list">
         {% if objet_contrat.parties_communes is defined %}
             {% for partie in objet_contrat.parties_communes %}
-            {% if partie %}
-            <li><span class="checkbox checked"></span> {{ partie }}</li>
-            {% endif %}
+                {% if partie %}
+                <li><span class="checkbox checked"></span> {{ partie }}</li>
+                {% endif %}
             {% endfor %}
         {% endif %}
     </ul>
 
+    {% if objet_contrat.equipement_tic is defined and objet_contrat.equipement_tic.valeur %}
     <h3>E. Équipement d'accès aux technologies de l'information et de la communication :</h3>
     <p>(modalités de réception de la télévision dans l'immeuble, modalités de raccordement Internet etc)</p>
-    <p>{% if objet_contrat.equipement_tic is defined %}{{ objet_contrat.equipement_tic.valeur }}{% endif %}</p>
-
+    <p>{{ objet_contrat.equipement_tic.valeur }}</p>
+    {% endif %}
 
     <h2>III. DATE DE PRISE D'EFFET ET DURÉE DU CONTRAT</h2>
     <p>La durée du contrat et sa date de prise d'effet sont ainsi définies :</p>
 
     <h3>A. Prise d'effet du contrat :</h3>
+    {% if duree_contrat.date_prise_effet is defined and duree_contrat.date_prise_effet.valeur %}
     <p><strong>Date de prise d'effet du contrat :</strong> {{ duree_contrat.date_prise_effet.valeur }}</p>
+    {% endif %}
 
     <h3>B. Durée du contrat :</h3>
+    {% if duree_contrat.duree_bail is defined and duree_contrat.duree_bail.valeur %}
     <p><strong>{{ duree_contrat.duree_bail.valeur }}</strong></p>
+    {% endif %}
     <p><em>(minimum 1 an, ou 9 mois si la location est consentie à un étudiant).</em></p>
 
     <div class="legal-ref">
@@ -275,16 +343,22 @@
 
     <h3>A. Loyer :</h3>
     <h4>1. Fixation du loyer initial :</h4>
+    
+    {% if conditions_financieres.loyer.montant_hors_charges is defined and conditions_financieres.loyer.montant_hors_charges.valeur %}
     <p>a) Montant du loyer mensuel : <strong>{{ conditions_financieres.loyer.montant_hors_charges.valeur }} €</strong></p>
+    {% endif %}
+    
     <p><em>Lorsqu'un complément de loyer est appliqué, le loyer mensuel s'entend comme la somme du loyer de base et de ce complément.</em></p>
 
     <p>b) Le cas échant, modalités particulières de fixation initiale du loyer applicables dans certaines zones tendues :</p>
     <p><em>Zones d'urbanisation continue de plus de 50 000 habitants où il existe un déséquilibre marqué entre l'offre et la demande de logements, entraînant des difficultés sérieuses d'accès au logement sur l'ensemble du parc résidentiel telles que définies par décret.</em></p>
 
+    {% if conditions_financieres.loyer.zone_tendue_encadrement.soumis is defined %}
     <ul>
         <li>Le loyer du logement objet du présent contrat est soumis au décret fixant annuellement le montant maximum d'évolution des loyers à la relocation : <strong>{% if conditions_financieres.loyer.zone_tendue_encadrement.soumis.valeur %}Oui{% else %}Non{% endif %}</strong></li>
         <li>Le loyer du logement objet du présent contrat est soumis au loyer de référence majoré fixé par arrêté préfectoral : <strong>{% if conditions_financieres.loyer.zone_tendue_encadrement.loyer_reference.valeur %}Oui{% else %}Non{% endif %}</strong></li>
     </ul>
+    {% endif %}
 
     {% if conditions_financieres.loyer.zone_tendue_encadrement.loyer_reference.valeur %}
     <ul>
@@ -299,86 +373,142 @@
 
     {% if conditions_financieres.loyer.zone_tendue_encadrement.complement_loyer.valeur %}
     <ul>
-        <li>Montant du loyer de base (nécessairement égal au loyer de référence majoré) : {% if conditions_financieres.loyer.zone_tendue_encadrement.loyer_base is defined %}{{ conditions_financieres.loyer.zone_tendue_encadrement.loyer_base.valeur }}{% endif %} €</li>
+        <li>Montant du loyer de base : {% if conditions_financieres.loyer.zone_tendue_encadrement.loyer_base is defined and conditions_financieres.loyer.zone_tendue_encadrement.loyer_base.valeur %}{{ conditions_financieres.loyer.zone_tendue_encadrement.loyer_base.valeur }}{% endif %} €</li>
         <li>Montant du complément de loyer : <strong>{{ conditions_financieres.loyer.zone_tendue_encadrement.complement_loyer.valeur }} €</strong></li>
-        <li>Caractéristiques du logement justifiant le complément de loyer : {% if conditions_financieres.loyer.zone_tendue_encadrement.justification_complement is defined %}{{ conditions_financieres.loyer.zone_tendue_encadrement.justification_complement.valeur }}{% endif %}</li>
+        {% if conditions_financieres.loyer.zone_tendue_encadrement.justification_complement is defined and conditions_financieres.loyer.zone_tendue_encadrement.justification_complement.valeur %}
+        <li>Caractéristiques du logement justifiant le complément de loyer : {{ conditions_financieres.loyer.zone_tendue_encadrement.justification_complement.valeur }}</li>
+        {% endif %}
     </ul>
     {% endif %}
 
     <p>c) Le cas échéant, informations relatives au loyer du dernier locataire :</p>
-    <p><em>Mention obligatoire si le précédent locataire a quitté le logement moins de dix-huit mois avant la signature du bail.</em></p>
     <ul class="checkbox-list">
-        <li><span class="checkbox"></span> Montant du dernier loyer acquitté par le précédent locataire (en €) : {% if conditions_financieres.loyer.dernier_loyer_montant is defined %}{{ conditions_financieres.loyer.dernier_loyer_montant.valeur }}{% endif %}</li>
-        <li><span class="checkbox"></span> Date de versement : {% if conditions_financieres.loyer.dernier_loyer_date is defined %}{{ conditions_financieres.loyer.dernier_loyer_date.valeur }}{% endif %}</li>
-        <li><span class="checkbox"></span> Date de la dernière révision du loyer : {% if conditions_financieres.loyer.dernier_loyer_revision is defined %}{{ conditions_financieres.loyer.dernier_loyer_revision.valeur }}{% endif %}</li>
+        {% if conditions_financieres.loyer.dernier_loyer_montant is defined and conditions_financieres.loyer.dernier_loyer_montant.valeur %}
+        <li><span class="checkbox"></span> Montant du dernier loyer acquitté par le précédent locataire (en €) : {{ conditions_financieres.loyer.dernier_loyer_montant.valeur }}</li>
+        {% endif %}
+        
+        {% if conditions_financieres.loyer.dernier_loyer_date is defined and conditions_financieres.loyer.dernier_loyer_date.valeur %}
+        <li><span class="checkbox"></span> Date de versement : {{ conditions_financieres.loyer.dernier_loyer_date.valeur }}</li>
+        {% endif %}
+        
+        {% if conditions_financieres.loyer.dernier_loyer_revision is defined and conditions_financieres.loyer.dernier_loyer_revision.valeur %}
+        <li><span class="checkbox"></span> Date de la dernière révision du loyer : {{ conditions_financieres.loyer.dernier_loyer_revision.valeur }}</li>
+        {% endif %}
     </ul>
 
     <h4>2. Le cas échéant, modalités de révision :</h4>
     <ul>
+        {% if conditions_financieres.revision_loyer.date_revision is defined and conditions_financieres.revision_loyer.date_revision.valeur %}
         <li>a) Date de révision du loyer annuel : <strong>{{ conditions_financieres.revision_loyer.date_revision.valeur }}</strong></li>
+        {% endif %}
+        
+        {% if conditions_financieres.revision_loyer.trimestre_reference_irl is defined and conditions_financieres.revision_loyer.trimestre_reference_irl.valeur %}
         <li>b) Date ou trimestre de référence de l'Indice de Référence du Loyer : <strong>{{ conditions_financieres.revision_loyer.trimestre_reference_irl.valeur }}</strong></li>
+        {% endif %}
     </ul>
 
     <h3>B. Charges récupérables :</h3>
     <p>1. Modalité de règlement des charges récupérables :</p>
+    {% if conditions_financieres.charges.modalite_reglement is defined and conditions_financieres.charges.modalite_reglement.valeur %}
     <p>
         {% if conditions_financieres.charges.modalite_reglement.valeur == 'Provisions' %}Provisions sur charges avec régularisation annuelle{% endif %}
         {% if conditions_financieres.charges.modalite_reglement.valeur == 'Paiement périodique' %}Paiement périodique des charges sans provision{% endif %}
         {% if conditions_financieres.charges.modalite_reglement.valeur == 'Forfait' %}Forfait de charges{% endif %}
     </p>
+    {% endif %}
 
+    {% if conditions_financieres.charges.montant is defined and conditions_financieres.charges.montant.valeur %}
     <p>2. Le cas échéant, montant des provisions sur charges ou du forfait de charges : <strong>{{ conditions_financieres.charges.montant.valeur }} €</strong></p>
-
-    <p>3. Si les parties conviennent d'un forfait de charges, ce forfait sera révisé chaque année dans les mêmes conditions que le loyer principal.</p>
+    {% endif %}
 
     <h3>C. Assurance pour compte des colocataires :</h3>
-    <p>Le cas échéant, en cas de colocation, souscription par le bailleur d'une assurance pour le compte des colocataires : <strong>{% if colocation.assurance_bailleur.valeur %}Oui{% else %}Non{% endif %}</strong></p>
-    {% if colocation.assurance_bailleur.valeur %}
+    {% if colocation.assurance_bailleur is defined and colocation.assurance_bailleur.valeur %}
+    <p>Le cas échéant, en cas de colocation, souscription par le bailleur d'une assurance pour le compte des colocataires : <strong>Oui</strong></p>
+    
+    {% if colocation.montant_assurance is defined and colocation.montant_assurance.valeur %}
     <p>Montant total annuel récupérable au titre de l'assurance pour compte des colocataires : <strong>{{ colocation.montant_assurance.valeur }} €</strong></p>
-    <p><em>(montant de la prime d'assurance annuelle, éventuellement majoré dans la limite d'un montant fixé par décret en Conseil d'Etat)</em></p>
-    <p>Ce montant est récupérable par douzième soit {% if colocation.montant_assurance_mensuel is defined %}{{ colocation.montant_assurance_mensuel.valeur }}{% endif %} € par mois.</p>
+    {% endif %}
+    
+    {% if colocation.montant_assurance_mensuel is defined and colocation.montant_assurance_mensuel.valeur %}
+    <p>Ce montant est récupérable par douzième soit {{ colocation.montant_assurance_mensuel.valeur }} € par mois.</p>
+    {% endif %}
+    {% else %}
+    <p>Le cas échéant, en cas de colocation, souscription par le bailleur d'une assurance pour le compte des colocataires : <strong>Non</strong></p>
     {% endif %}
 
     <h3>D. Modalités de paiement :</h3>
-    <p>Le loyer est payé <strong>{{ conditions_financieres.paiement.periodicite.valeur }}</strong>, <strong>{{ conditions_financieres.paiement.type_paiement.valeur }}</strong> et dû avant le <strong>{{ conditions_financieres.paiement.jour_paiement.valeur }}</strong> de chaque mois.</p>
+    <p>Le loyer est payé
+         {% if conditions_financieres.paiement.periodicite is defined %}<strong>{{ conditions_financieres.paiement.periodicite.valeur }}</strong>{% endif %}, 
+         {% if conditions_financieres.paiement.type_paiement is defined %}<strong>{{ conditions_financieres.paiement.type_paiement.valeur }}</strong>{% endif %}
+         et dû avant le {% if conditions_financieres.paiement.jour_paiement is defined %}<strong>{{ conditions_financieres.paiement.jour_paiement.valeur }}</strong>{% endif %} de chaque mois.</p>
+
+    {% if conditions_financieres.premier_versement.montant_total is defined and conditions_financieres.premier_versement.montant_total.valeur %}
     <p>Le montant total dû pour un mois de location est de <strong>{{ conditions_financieres.premier_versement.montant_total.valeur }} €</strong>, détaillé comme suit :</p>
     <ul>
+        {% if conditions_financieres.premier_versement.loyer is defined and conditions_financieres.premier_versement.loyer.valeur %}
         <li>Loyer : <strong>{{ conditions_financieres.premier_versement.loyer.valeur }} €</strong></li>
+        {% endif %}
+        
+        {% if conditions_financieres.premier_versement.charges is defined and conditions_financieres.premier_versement.charges.valeur %}
         <li>Charges récupérables : <strong>{{ conditions_financieres.premier_versement.charges.valeur }} €</strong></li>
-        <li>En cas de colocation, assurance récupérable pour le compte des colocataires : {% if conditions_financieres.premier_versement.assurance_colocation is defined %}{{ conditions_financieres.premier_versement.assurance_colocation.valeur }}{% endif %} €</li>
+        {% endif %}
+        
+        {% if conditions_financieres.premier_versement.assurance_colocation is defined and conditions_financieres.premier_versement.assurance_colocation.valeur %}
+        <li>En cas de colocation, assurance récupérable pour le compte des colocataires : {{ conditions_financieres.premier_versement.assurance_colocation.valeur }} €</li>
+        {% endif %}
     </ul>
+    {% endif %}
 
     <h3>E. Réévaluation d'un loyer manifestement sous-évalué :</h3>
-    <p><em>Le cas échéant, exclusivement lors d'un renouvellement de contrat.</em></p>
-    <p>Le montant de la hausse de loyer mensuelle est de {% if conditions_financieres.hausse_loyer_montant is defined %}{{ conditions_financieres.hausse_loyer_montant.valeur }}{% endif %} € appliquée :</p>
+    {% if conditions_financieres.hausse_loyer_montant is defined and conditions_financieres.hausse_loyer_montant.valeur %}
+    <p>Le montant de la hausse de loyer mensuelle est de {{ conditions_financieres.hausse_loyer_montant.valeur }} € appliquée :</p>
     <p><span class="checkbox"></span> par tiers* <span class="checkbox"></span> par sixième*</p>
     <p><em>* selon la durée du contrat et le montant de la hausse de loyer.</em></p>
-
-    <h2>V. TRAVAUX</h2>
-    <h3>A. Travaux d'amélioration ou de mise en conformité :</h3>
-    <p><em>Le cas échéant, montant et nature des travaux effectués depuis la fin du dernier contrat de location ou depuis le dernier renouvellement.</em></p>
-    {% if travaux.effectues_depuis_dernier_bail.valeur %}
-    <p><strong>{{ travaux.description.valeur }}</strong></p>
-    <p>Montant : <strong>{{ travaux.montant.valeur }} €</strong></p>
     {% else %}
     <p>(Néant)</p>
     {% endif %}
-    <p>Le cas échéant, montant des travaux d'amélioration effectués au cours des six derniers mois : {% if travaux.montant_amelioration_6_mois is defined %}{{ travaux.montant_amelioration_6_mois.valeur }}{% endif %}</p>
 
+    <h2>V. TRAVAUX</h2>
+    <h3>A. Travaux d'amélioration ou de mise en conformité :</h3>
+    {% if travaux.effectues_depuis_dernier_bail.valeur and travaux.description is defined and travaux.description.valeur %}
+        <p><strong>{{ travaux.description.valeur }}</strong></p>
+        {% if travaux.montant is defined and travaux.montant.valeur %}
+        <p>Montant : <strong>{{ travaux.montant.valeur }} €</strong></p>
+        {% endif %}
+    {% else %}
+    <p>(Néant)</p>
+    {% endif %}
+    
+    {% if travaux.montant_amelioration_6_mois is defined and travaux.montant_amelioration_6_mois.valeur %}
+    <p>Le cas échéant, montant des travaux d'amélioration effectués au cours des six derniers mois : {{ travaux.montant_amelioration_6_mois.valeur }}</p>
+    {% endif %}
+
+    {% if travaux.majoration_loyer_details is defined and travaux.majoration_loyer_details.valeur %}
     <h3>B. Majoration du loyer (travaux bailleur) :</h3>
-    <p><em>Le cas échéant, majoration du loyer en cours de bail consécutive à des travaux d'amélioration entrepris par le bailleur.</em></p>
-    <p>Nature des travaux ou des équipements, modalités d'exécution, délai de réalisation ou d'acquisition : {% if travaux.majoration_loyer_details is defined %}{{ travaux.majoration_loyer_details.valeur }}{% endif %}</p>
-    <p>Montant de la majoration du loyer : {% if travaux.majoration_loyer_montant is defined %}{{ travaux.majoration_loyer_montant.valeur }}{% endif %} €</p>
-    <p><em>(Clause invalide pour les travaux de mise en conformité aux caractéristiques de décence)</em></p>
+    <p>Nature des travaux ou des équipements, modalités d'exécution, délai de réalisation ou d'acquisition : {{ travaux.majoration_loyer_details.valeur }}</p>
+    {% endif %}
+    
+    {% if travaux.majoration_loyer_montant is defined and travaux.majoration_loyer_montant.valeur %}
+    <p>Montant de la majoration du loyer : {{ travaux.majoration_loyer_montant.valeur }} €</p>
+    {% endif %}
 
+    {% if travaux.diminution_loyer_nature is defined and travaux.diminution_loyer_nature.valeur %}
     <h3>C. Diminution de loyer (travaux locataire) :</h3>
-    <p><em>Le cas échéant, diminution de loyer en cours de bail consécutive à des travaux entrepris par le locataire.</em></p>
-    <p>Nature des travaux : {% if travaux.diminution_loyer_nature is defined %}{{ travaux.diminution_loyer_nature.valeur }}{% endif %}</p>
-    <p>Montant et durée de la diminution du loyer : {% if travaux.diminution_loyer_montant_duree is defined %}{{ travaux.diminution_loyer_montant_duree.valeur }}{% endif %} mois.</p>
-    <p>Modalités de dédommagement du locataire sur justification des dépenses effectuées en cas de départ anticipé : {% if travaux.diminution_loyer_dedommagement is defined %}{{ travaux.diminution_loyer_dedommagement.valeur }}{% endif %}</p>
+    <p>Nature des travaux : {{ travaux.diminution_loyer_nature.valeur }}</p>
+    {% endif %}
+    
+    {% if travaux.diminution_loyer_montant_duree is defined and travaux.diminution_loyer_montant_duree.valeur %}
+    <p>Montant et durée de la diminution du loyer : {{ travaux.diminution_loyer_montant_duree.valeur }} mois.</p>
+    {% endif %}
+    
+    {% if travaux.diminution_loyer_dedommagement is defined and travaux.diminution_loyer_dedommagement.valeur %}
+    <p>Modalités de dédommagement du locataire sur justification des dépenses effectuées en cas de départ anticipé : {{ travaux.diminution_loyer_dedommagement.valeur }}</p>
+    {% endif %}
 
     <h2>VI. GARANTIES</h2>
-    <p>Pour la garantie de l'exécution des obligations du locataire, il est prévu un dépôt de garantie d'un montant de <strong>{{ garanties.montant_depot_garantie.valeur }} €</strong> (en toutes lettres {% if garanties.montant_depot_garantie_lettres is defined %}{{ garanties.montant_depot_garantie_lettres.valeur }}{% endif %} ).</p>
+    {% if garanties.montant_depot_garantie is defined and garanties.montant_depot_garantie.valeur %}
+    <p>Pour la garantie de l'exécution des obligations du locataire, il est prévu un dépôt de garantie d'un montant de <strong>{{ garanties.montant_depot_garantie.valeur }} €</strong>.</p>
+    {% endif %}
 
     <h2>VII. CLAUSE DE SOLIDARITÉ</h2>
     <p>Pour l'exécution de toutes les obligations du présent contrat en cas de pluralité de locataires, il y aura solidarité et indivisibilité entre eux.</p>
@@ -388,37 +518,62 @@
     <ul>
         <li>en cas de défaut de paiement du loyer, des provisions de charge, ou de la régularisation annuelle de charge</li>
         <li>en cas de défaut de versement du dépôt de garantie</li>
-        <li>en cas de défaut d'assurance des risques locatifs par le locataire (sauf si le bailleur a souscrit une assurance pour le locataire)</li>
+        <li>en cas de défaut d'assurance des risques locatifs par le locataire</li>
         <li>en cas de trouble de voisinage constaté par une décision de justice</li>
     </ul>
-
     <h2>IX. LE CAS ÉCHÉANT, HONORAIRES DE LOCATION</h2>
-    <p><em>A mentionner lorsque le contrat de location est conclu avec le concours d'une personne mandatée et rémunérée à cette fin.</em></p>
 
     <h3>A. Dispositions applicables :</h3>
-    <p>Il est rappelé les dispositions du I de l'article 5 (I) de la loi du 6 juillet 1989... (texte légal omis pour brièveté, voir original)</p>
+
+    <p>Il est rappelé les dispositions du I de l'article 5 (I) de la loi du 6 juillet 1989, alinéas 1 à 3 : La rémunération des personnes mandatées pour se livrer ou prêter leur concours à l'entremise ou à la négociation d'une mise en location d'un logement, tel que défini aux articles 2 et 25-3, est à la charge exclusive du bailleur, à l'exception des honoraires liés aux prestations mentionnées aux deuxième et troisième alinéas du présent I.</p>
+    <p>Les honoraires des personnes mandatées pour effectuer la visite du preneur, constituer son dossier et rédiger un bail sont partagés entre le bailleur et le preneur. Le montant toutes taxes comprises imputé au preneur pour ces prestations ne peut excéder celui imputé au bailleur et demeure inférieur ou égal à un plafond par mètre carré de surface habitable de la chose louée fixé par voie réglementaire et révisable chaque année, dans des conditions définies par décret. Ces honoraires sont dus à la signature du bail.</p>
+    <p>Les honoraires des personnes mandatées pour réaliser un état des lieux sont partagés entre le bailleur et le preneur. Le montant toutes taxes comprises imputé au locataire pour cette prestation ne peut excéder celui imputé au bailleur et demeure inférieur ou égal à un plafond par mètre carré de surface habitable de la chose louée fixé par voie réglementaire et révisable chaque année, dans des conditions définies par décret. Ces honoraires sont dus à compter de la réalisation de la prestation.</p>
+    <hr>
     <p><strong>Plafonds applicables à ces honoraires :</strong></p>
     <ul>
-        <li>Montant du plafond des honoraires imputables aux locataires en matière de prestation de visite du preneur, de constitution de son dossier et de rédaction de bail : {% if honoraires_location.plafond_visite is defined %}{{ honoraires_location.plafond_visite.valeur }}{% endif %} €/m² de surface habitable ;</li>
-        <li>Montant du plafond des honoraires imputables aux locataires en matière d'établissement de l'état des lieux d'entrée : {% if honoraires_location.plafond_etat_lieux is defined %}{{ honoraires_location.plafond_etat_lieux.valeur }}{% endif %} €/m² de surface habitable.</li>
+        {% if honoraires_location.plafond_visite is defined and honoraires_location.plafond_visite.valeur %}
+        <li>
+            Montant du plafond des honoraires imputables aux locataires en matière de prestation de visite du preneur, de constitution de son dossier et de rédaction de bail : 
+            <strong>{{ honoraires_location.plafond_visite.valeur }} €/m²</strong> de surface habitable.
+        </li>
+        {% endif %}
+        
+        {% if honoraires_location.plafond_etat_lieux is defined and honoraires_location.plafond_etat_lieux.valeur %}
+        <li>
+            Montant du plafond des honoraires imputables aux locataires en matière d'établissement de l'état des lieux d'entrée : 
+            <strong>{{ honoraires_location.plafond_etat_lieux.valeur }} €/m²</strong> de surface habitable.
+        </li>
+        {% endif %}
     </ul>
-
     <h3>B. Détail et répartition des honoraires :</h3>
     <h4>1. Honoraires à la charge du bailleur :</h4>
     <ul>
-        <li>prestations de visite du preneur, de constitution de son dossier et de rédaction de bail : {% if honoraires_location.bailleur_visite is defined %}{{ honoraires_location.bailleur_visite.valeur }}{% endif %}</li>
-        <li>le cas échéant, prestation de réalisation de l'état des lieux d'entrée : {% if honoraires_location.bailleur_etat_lieux is defined %}{{ honoraires_location.bailleur_etat_lieux.valeur }}{% endif %}</li>
-        <li>autres prestations : {% if honoraires_location.bailleur_autres is defined %}{{ honoraires_location.bailleur_autres.valeur }}{% endif %}</li>
+        {% if honoraires_location.bailleur_visite is defined and honoraires_location.bailleur_visite.valeur %}
+        <li>prestations de visite du preneur, de constitution de son dossier et de rédaction de bail : {{ honoraires_location.bailleur_visite.valeur }}</li>
+        {% endif %}
+        
+        {% if honoraires_location.bailleur_etat_lieux is defined and honoraires_location.bailleur_etat_lieux.valeur %}
+        <li>le cas échéant, prestation de réalisation de l'état des lieux d'entrée : {{ honoraires_location.bailleur_etat_lieux.valeur }}</li>
+        {% endif %}
+        
+        {% if honoraires_location.bailleur_autres is defined and honoraires_location.bailleur_autres.valeur %}
+        <li>autres prestations : {{ honoraires_location.bailleur_autres.valeur }}</li>
+        {% endif %}
     </ul>
 
     <h4>2. Honoraires à la charge du locataire :</h4>
     <ul>
+        {% if honoraires_location.part_locataire is defined and honoraires_location.part_locataire.valeur %}
         <li>prestations de visite du preneur, de constitution de son dossier et de rédaction de bail : <strong>{{ honoraires_location.part_locataire.valeur }} €</strong></li>
-        <li>le cas échéant, prestation de réalisation de l'état des lieux d'entrée : {% if honoraires_location.locataire_etat_lieux is defined %}{{ honoraires_location.locataire_etat_lieux.valeur }}{% endif %}</li>
+        {% endif %}
+        
+        {% if honoraires_location.locataire_etat_lieux is defined and honoraires_location.locataire_etat_lieux.valeur %}
+        <li>le cas échéant, prestation de réalisation de l'état des lieux d'entrée : {{ honoraires_location.locataire_etat_lieux.valeur }}</li>
+        {% endif %}
     </ul>
 
     <h2>X. AUTRES CONDITIONS PARTICULIÈRES</h2>
-    <p>{% if autres_conditions is defined %}{{ autres_conditions.valeur }}{% endif %}</p>
+    <p>{% if autres_conditions is defined and autres_conditions.valeur %}{{ autres_conditions.valeur }}{% endif %}</p>
 
     <h2>XI. ANNEXES</h2>
     <p>Sont annexées et jointes au contrat de location les pièces suivantes :</p>
@@ -432,7 +587,7 @@
     </ul>
 
     <div class="signature-section">
-        <p>Fait à <strong>{{ signature.ville.valeur }}</strong>, le <strong>{{ signature.date.valeur }}</strong></p>
+        <p>Fait à {% if signature.ville is defined %}<strong>{{ signature.ville.valeur }}</strong>{% endif %}, le {% if signature.date is defined %}<strong>{{ signature.date.valeur }}</strong>{% endif %}</p>
         <p>Exemplaires originaux dont un remis à chaque signataires</p>
 
         <div class="signature-block">

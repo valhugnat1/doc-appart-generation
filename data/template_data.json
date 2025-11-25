@@ -264,7 +264,7 @@
         "valeur": "",
         "requis": true,
         "type": "choix",
-        "options": ["Forfait", "Provisions"]
+        "options": ["Forfait", "Provisions", "Paiement périodique"]
       },
       "montant": {
         "valeur": null,

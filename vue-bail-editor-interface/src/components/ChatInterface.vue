@@ -191,11 +191,13 @@ const sendMessage = async () => {
           <div class="avatar">
             {{ msg.role === 'user' ? '👤' : '🤖' }}
           </div>
-          <div class="text markdown-body" v-html="renderMarkdown(msg.content)"></div>
-          <ToolCallStatus 
-            v-if="index === messages.length - 1 && currentToolCall" 
-            :toolName="currentToolCall.name" 
-          />
+          <div class="content-wrapper">
+            <div class="text markdown-body" v-html="renderMarkdown(msg.content)"></div>
+            <ToolCallStatus 
+              v-if="index === messages.length - 1 && currentToolCall" 
+              :toolName="currentToolCall.name" 
+            />
+          </div>
         </div>
       </div>
       
@@ -262,13 +264,13 @@ const sendMessage = async () => {
 .message.assistant {
   background-color: #444654;
 }
-
 .message-content {
   max-width: 800px;
   margin: 0 auto;
   display: flex;
   gap: 20px;
   padding: 0 20px;
+  align-items: flex-start; 
 }
 
 .avatar {
@@ -280,16 +282,22 @@ const sendMessage = async () => {
   justify-content: center;
   font-size: 20px;
   flex-shrink: 0;
+  margin-top: 2px; 
+}
+
+.content-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
 }
 
 .text {
-  flex: 1;
   line-height: 1.6;
   overflow-wrap: break-word;
-  min-width: 0; /* Fixes flex overflow issues */
+  width: 100%;
 }
 
-/* Markdown Styles */
 :deep(.markdown-body) {
   font-size: 16px;
   line-height: 1.6;
