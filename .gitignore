@@ -4,5 +4,5 @@
 *.pyc
 data/sessions
 data/conversations
+data/generated_bails
 package-lock.json
-generated_bails

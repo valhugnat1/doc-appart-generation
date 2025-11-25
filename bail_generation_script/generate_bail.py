@@ -73,7 +73,7 @@ def generate_bail_for_session(session_id: str):
     output_html_path = os.path.join(output_dir, f'{session_id}.html')
     output_pdf_path = os.path.join(output_dir, f'{session_id}.pdf')
     
-    template_path = os.path.join(project_root, 'data/template/bail_template.html')
+    template_path = os.path.join(project_root, 'data/templates/bail_template.html')
 
     print(f"Loading data from {json_path}...")
     data = load_data(json_path)
@@ -82,14 +82,6 @@ def generate_bail_for_session(session_id: str):
         print(f"No data found for session {session_id}")
         return None
 
-    # If data is a list (legacy format), we might need to extract the actual data
-    # But assuming the agent saves the structured data for the bail in the session file
-    # If the session file only contains messages, this won't work as expected.
-    # However, per the user request, we are using the session file.
-    # Let's assume the session file contains the data needed for the template.
-    # If the session file is just chat history, we might need to extract the data from the last message or a specific field.
-    # For now, we'll pass the whole data object.
-    
     print(f"Rendering template from {template_path}...")
     try:
         html_content = render_template(template_path, data)
@@ -101,34 +93,3 @@ def generate_bail_for_session(session_id: str):
     except Exception as e:
         print(f"Failed to generate bail: {e}")
         return None
-
-def main():
-    # Paths
-    base_dir = os.path.dirname(os.path.abspath(__file__))
-    project_root = os.path.dirname(base_dir)
-    
-    # Default JSON path for testing
-    json_path = os.path.join(project_root, 'data', 'sessions', 'b2e7bde5-3ac0-4eda-9425-7421702c3d94.json')
-    if not os.path.exists(json_path):
-         json_path = os.path.join(project_root, 'data', 'template', 'template_data.json')
-
-    # Check for command line argument
-    if len(sys.argv) > 1:
-        json_path = sys.argv[1]
-
-    template_path = os.path.join(base_dir, 'bail_template.html')
-    output_pdf_path = os.path.join(base_dir, 'bail_genere.pdf')
-    output_html_path = os.path.join(base_dir, 'bail_genere.html')
-
-    print(f"Loading data from {json_path}...")
-    data = load_data(json_path)
-    
-    if data:
-        print(f"Rendering template from {template_path}...")
-        html_content = render_template(template_path, data)
-        
-        print("Saving HTML and converting to PDF...")
-        convert_to_pdf(html_content, output_pdf_path, output_html_path)
-
-if __name__ == "__main__":
-    main()

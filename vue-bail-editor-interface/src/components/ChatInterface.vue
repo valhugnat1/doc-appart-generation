@@ -334,7 +334,7 @@ const sendMessage = async () => {
   right: 0; /* Better for layout than width 100% in flex containers */
   background-image: linear-gradient(180deg, rgba(53,55,64,0), #353740 50%);
   padding: 20px 0 40px;
-  z-index: 10;
+  z-index: 20;
 }
 
 .input-wrapper {
