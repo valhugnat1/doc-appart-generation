@@ -6,6 +6,10 @@ const props = defineProps({
   isOpen: {
     type: Boolean,
     default: true
+  },
+  width: {
+    type: Number,
+    default: 260
   }
 })
 
@@ -84,7 +88,7 @@ onMounted(() => {
 
 <style scoped>
 .sidebar {
-  width: 260px;
+  width: v-bind(width + 'px');
   height: 100vh;
   background-color: #202123;
   display: flex;

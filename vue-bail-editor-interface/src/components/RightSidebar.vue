@@ -13,6 +13,10 @@ const props = defineProps({
   isLoading: {
     type: Boolean,
     default: false
+  },
+  width: {
+    type: Number,
+    default: 600
   }
 })
 </script>
@@ -46,7 +50,7 @@ const props = defineProps({
 }
 
 .right-sidebar.is-open {
-  width: 50%; /* Adjust width as needed */
+  width: v-bind(width + 'px');
 }
 
 .sidebar-content {

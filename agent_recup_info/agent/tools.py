@@ -5,7 +5,7 @@ import os
 
 # Initialize JsonManager
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-TEMPLATE_PATH = os.path.join(BASE_DIR, "data", "template_data.json")
+TEMPLATE_PATH = os.path.join(BASE_DIR, "data", "template", "template_data.json")
 SESSIONS_DIR = os.path.join(BASE_DIR, "data", "sessions")
 
 json_manager = JsonManager(TEMPLATE_PATH, SESSIONS_DIR)

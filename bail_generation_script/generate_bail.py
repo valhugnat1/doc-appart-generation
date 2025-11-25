@@ -73,7 +73,7 @@ def generate_bail_for_session(session_id: str):
     output_html_path = os.path.join(output_dir, f'{session_id}.html')
     output_pdf_path = os.path.join(output_dir, f'{session_id}.pdf')
     
-    template_path = os.path.join(base_dir, 'bail_template.html')
+    template_path = os.path.join(project_root, 'data/template/bail_template.html')
 
     print(f"Loading data from {json_path}...")
     data = load_data(json_path)
@@ -110,7 +110,7 @@ def main():
     # Default JSON path for testing
     json_path = os.path.join(project_root, 'data', 'sessions', 'b2e7bde5-3ac0-4eda-9425-7421702c3d94.json')
     if not os.path.exists(json_path):
-         json_path = os.path.join(project_root, 'data', 'template_data.json')
+         json_path = os.path.join(project_root, 'data', 'template', 'template_data.json')
 
     # Check for command line argument
     if len(sys.argv) > 1:

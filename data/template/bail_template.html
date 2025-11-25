@@ -134,7 +134,7 @@
         {% endif %}
 
         {% if designation_parties.bailleur.email is defined and designation_parties.bailleur.email.valeur %}
-        <p><strong>Adresse email du bailleur (facultatif) :</strong> {{ designation_parties.bailleur.email.valeur }}</p>
+        <p><strong>Adresse email du bailleur :</strong> {{ designation_parties.bailleur.email.valeur }}</p>
         {% endif %}
 
         <p>désigné (s) ci-après <strong>le bailleur</strong> ;</p>
@@ -183,7 +183,7 @@
             {% endif %}
             
             {% if locataire.email is defined and locataire.email.valeur %}
-            <p>Adresse email du locataire (facultatif) : {{ locataire.email.valeur }}</p>
+            <p>Adresse email du locataire : {{ locataire.email.valeur }}</p>
             {% endif %}
         {% endfor %}
         <p>désigné (s) ci-après <strong>le locataire</strong></p>

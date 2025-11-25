@@ -10,6 +10,61 @@ const isRightSidebarOpen = ref(false)
 const bailHtml = ref('')
 const isAiLoading = ref(false)
 
+const leftSidebarWidth = ref(260)
+const rightSidebarWidth = ref(600)
+const isResizingLeft = ref(false)
+const isResizingRight = ref(false)
+
+const startResizeLeft = () => {
+  isResizingLeft.value = true
+  document.addEventListener('mousemove', handleResizeLeft)
+  document.addEventListener('mouseup', stopResizeLeft)
+  document.body.style.cursor = 'col-resize'
+  document.body.style.userSelect = 'none'
+}
+
+const handleResizeLeft = (e) => {
+  if (isResizingLeft.value) {
+    const newWidth = e.clientX
+    if (newWidth > 150 && newWidth < 600) {
+      leftSidebarWidth.value = newWidth
+    }
+  }
+}
+
+const stopResizeLeft = () => {
+  isResizingLeft.value = false
+  document.removeEventListener('mousemove', handleResizeLeft)
+  document.removeEventListener('mouseup', stopResizeLeft)
+  document.body.style.cursor = ''
+  document.body.style.userSelect = ''
+}
+
+const startResizeRight = () => {
+  isResizingRight.value = true
+  document.addEventListener('mousemove', handleResizeRight)
+  document.addEventListener('mouseup', stopResizeRight)
+  document.body.style.cursor = 'col-resize'
+  document.body.style.userSelect = 'none'
+}
+
+const handleResizeRight = (e) => {
+  if (isResizingRight.value) {
+    const newWidth = window.innerWidth - e.clientX
+    if (newWidth > 300 && newWidth < 1200) {
+      rightSidebarWidth.value = newWidth
+    }
+  }
+}
+
+const stopResizeRight = () => {
+  isResizingRight.value = false
+  document.removeEventListener('mousemove', handleResizeRight)
+  document.removeEventListener('mouseup', stopResizeRight)
+  document.body.style.cursor = ''
+  document.body.style.userSelect = ''
+}
+
 const toggleSidebar = () => {
   isSidebarOpen.value = !isSidebarOpen.value
 }
@@ -61,7 +116,12 @@ const handleLoading = (loading) => {
 
 <template>
   <div class="app-container">
-    <Sidebar :is-open="isSidebarOpen" @toggle="toggleSidebar" />
+    <Sidebar :is-open="isSidebarOpen" :width="leftSidebarWidth" @toggle="toggleSidebar" />
+    <div 
+      v-if="isSidebarOpen"
+      class="resizer left-resizer" 
+      @mousedown="startResizeLeft"
+    ></div>
     <div class="main-content">
       <button 
         v-if="!isSidebarOpen" 
@@ -73,7 +133,12 @@ const handleLoading = (loading) => {
       </button>
       <router-view @message-received="onMessageReceived" @is-loading="handleLoading"></router-view>
     </div>
-    <RightSidebar :is-open="isRightSidebarOpen" :html-content="bailHtml" :is-loading="isAiLoading" />
+    <div 
+      v-if="isRightSidebarOpen"
+      class="resizer right-resizer" 
+      @mousedown="startResizeRight"
+    ></div>
+    <RightSidebar :is-open="isRightSidebarOpen" :width="rightSidebarWidth" :html-content="bailHtml" :is-loading="isAiLoading" />
   </div>
 </template>
 
@@ -112,5 +177,26 @@ body {
 
 .open-sidebar-btn:hover {
   background-color: rgba(255,255,255,0.1);
+}
+
+.resizer {
+  width: 5px;
+  background-color: transparent;
+  cursor: col-resize;
+  height: 100%;
+  z-index: 10;
+  transition: background-color 0.2s;
+}
+
+.resizer:hover, .resizer:active {
+  background-color: rgba(52, 152, 219, 0.5);
+}
+
+.left-resizer {
+  border-right: 1px solid rgba(255,255,255,0.1);
+}
+
+.right-resizer {
+  border-left: 1px solid #e5e5e5;
 }
 </style>
