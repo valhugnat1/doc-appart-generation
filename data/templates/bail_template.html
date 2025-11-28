@@ -100,6 +100,8 @@
     </style>
 </head>
 <body>
+    {% set romans = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII', 'XIII', 'XIV', 'XV'] %}
+    {% set ns = namespace(idx=0) %}
 
     <div class="info-box">
         <strong>RAPPEL NOUVEAU LOCATAIRE :</strong> 
@@ -113,7 +115,9 @@
         <span style="font-size: 10pt; font-weight: normal;">(Loi n°89-462 du 6 juillet 1989)</span>
     </div>
 
-    <h2>I. DÉSIGNATION DES PARTIES</h2>
+    {% if designation_parties is defined %}
+    {% set ns.idx = ns.idx + 1 %}
+    <h2>{{ romans[ns.idx - 1] }}. DÉSIGNATION DES PARTIES</h2>
     <p>Le présent contrat est conclu entre les soussignés :</p>
 
     <div class="section">
@@ -191,8 +195,11 @@
     {% endif %}
 
     <p>Il a été convenu ce qui suit :</p>
+    {% endif %}
 
-    <h2>II. OBJET DU CONTRAT</h2>
+    {% if objet_contrat is defined %}
+    {% set ns.idx = ns.idx + 1 %}
+    <h2>{{ romans[ns.idx - 1] }}. OBJET DU CONTRAT</h2>
     <p>Le présent contrat a pour objet la location d'un logement ainsi déterminé :</p>
 
     <h3>A. Consistance du logement :</h3>
@@ -275,6 +282,7 @@
 
         {% if objet_contrat.logement.performance_energetique.classe_dpe is defined and objet_contrat.logement.performance_energetique.classe_dpe.valeur %}
         <li><strong>Niveau de performance énergétique du logement :</strong> {{ objet_contrat.logement.performance_energetique.classe_dpe.valeur }}</li>
+        {% endif %}
 
     </ul>
 
@@ -293,7 +301,7 @@
         B.2) A compter du 1er janvier 2031, le niveau de performance minimal du logement correspond à la classe E du DPE.<br>
         La consommation d'énergie finale et le niveau de performance du logement sont déterminés selon la méthode du diagnostic de performance énergétique mentionné à l'article L. 126-26 du code de la construction et de l'habitation. »
     </div>
-    {% endif %}
+    
     <h3>B. Destination des locaux :</h3>
     {% if objet_contrat.destination_locaux.usage is defined and objet_contrat.destination_locaux.usage.valeur %}
     <p><strong>{{ objet_contrat.destination_locaux.usage.valeur }}</strong></p>
@@ -331,8 +339,11 @@
     <p>(modalités de réception de la télévision dans l'immeuble, modalités de raccordement Internet etc)</p>
     <p>{{ objet_contrat.equipement_tic.valeur }}</p>
     {% endif %}
+    {% endif %}
 
-    <h2>III. DATE DE PRISE D'EFFET ET DURÉE DU CONTRAT</h2>
+    {% if duree_contrat is defined %}
+    {% set ns.idx = ns.idx + 1 %}
+    <h2>{{ romans[ns.idx - 1] }}. DATE DE PRISE D'EFFET ET DURÉE DU CONTRAT</h2>
     <p>La durée du contrat et sa date de prise d'effet sont ainsi définies :</p>
 
     <h3>A. Prise d'effet du contrat :</h3>
@@ -349,8 +360,11 @@
     <div class="legal-ref">
         A l'exception des locations consenties à un étudiant pour une durée de 9 mois, les contrats de location de logements meublés sont reconduits tacitement à leur terme pour une durée d'un an et dans les mêmes conditions. Le locataire peut mettre fin au bail à tout moment, après avoir donné congé. Le bailleur peut, quant à lui, mettre fin au bail à son échéance et après avoir donné congé, soit pour reprendre le logement en vue de l'occuper lui-même ou une personne de sa famille, soit pour le vendre, soit pour un motif sérieux et légitime. Les contrats de locations meublées consenties à un étudiant pour une durée de 9 mois ne sont pas reconduits tacitement à leur terme et le locataire peut mettre fin au bail à tout moment, après avoir donné congé. Le bailleur peut, quant à lui, mettre fin au bail à son échéance et après avoir donné congé.
     </div>
+    {% endif %}
 
-    <h2>IV. CONDITIONS FINANCIÈRES</h2>
+    {% if conditions_financieres is defined %}
+    {% set ns.idx = ns.idx + 1 %}
+    <h2>{{ romans[ns.idx - 1] }}. CONDITIONS FINANCIÈRES</h2>
     <p>Les parties conviennent des conditions financières suivantes :</p>
 
     <h3>A. Loyer :</h3>
@@ -483,8 +497,11 @@
     {% else %}
     <p>(Néant)</p>
     {% endif %}
+    {% endif %}
 
-    <h2>V. TRAVAUX</h2>
+    {% if travaux is defined %}
+    {% set ns.idx = ns.idx + 1 %}
+    <h2>{{ romans[ns.idx - 1] }}. TRAVAUX</h2>
     <h3>A. Travaux d'amélioration ou de mise en conformité :</h3>
     {% if travaux.effectues_depuis_dernier_bail.valeur and travaux.description is defined and travaux.description.valeur %}
         <p><strong>{{ travaux.description.valeur }}</strong></p>
@@ -520,16 +537,24 @@
     {% if travaux.diminution_loyer_dedommagement is defined and travaux.diminution_loyer_dedommagement.valeur %}
     <p>Modalités de dédommagement du locataire sur justification des dépenses effectuées en cas de départ anticipé : {{ travaux.diminution_loyer_dedommagement.valeur }}</p>
     {% endif %}
+    {% endif %}
 
-    <h2>VI. GARANTIES</h2>
+    {% if garanties is defined %}
+    {% set ns.idx = ns.idx + 1 %}
+    <h2>{{ romans[ns.idx - 1] }}. GARANTIES</h2>
     {% if garanties.montant_depot_garantie is defined and garanties.montant_depot_garantie.valeur %}
     <p>Pour la garantie de l'exécution des obligations du locataire, il est prévu un dépôt de garantie d'un montant de <strong>{{ garanties.montant_depot_garantie.valeur }} €</strong>.</p>
     {% endif %}
+    {% endif %}
 
-    <h2>VII. CLAUSE DE SOLIDARITÉ</h2>
+    {% if designation_parties.locataires.liste is defined and designation_parties.locataires.liste|length > 1 %}
+    {% set ns.idx = ns.idx + 1 %}
+    <h2>{{ romans[ns.idx - 1] }}. CLAUSE DE SOLIDARITÉ</h2>
     <p>Pour l'exécution de toutes les obligations du présent contrat en cas de pluralité de locataires, il y aura solidarité et indivisibilité entre eux.</p>
+    {% endif %}
 
-    <h2>VIII. CLAUSE RÉSOLUTOIRE</h2>
+    {% set ns.idx = ns.idx + 1 %}
+    <h2>{{ romans[ns.idx - 1] }}. CLAUSE RÉSOLUTOIRE</h2>
     <p>Le présent contrat sera résilié de plein droit :</p>
     <ul>
         <li>en cas de défaut de paiement du loyer, des provisions de charge, ou de la régularisation annuelle de charge</li>
@@ -537,7 +562,14 @@
         <li>en cas de défaut d'assurance des risques locatifs par le locataire</li>
         <li>en cas de trouble de voisinage constaté par une décision de justice</li>
     </ul>
-    <h2>IX. LE CAS ÉCHÉANT, HONORAIRES DE LOCATION</h2>
+
+    {% if honoraires_location is defined and 
+          ((honoraires_location.plafond_visite is defined and honoraires_location.plafond_visite.valeur) or 
+           (honoraires_location.plafond_etat_lieux is defined and honoraires_location.plafond_etat_lieux.valeur) or 
+           (honoraires_location.bailleur_visite is defined and honoraires_location.bailleur_visite.valeur) or 
+           (honoraires_location.part_locataire is defined and honoraires_location.part_locataire.valeur)) %}
+    {% set ns.idx = ns.idx + 1 %}
+    <h2>{{ romans[ns.idx - 1] }}. LE CAS ÉCHÉANT, HONORAIRES DE LOCATION</h2>
 
     <h3>A. Dispositions applicables :</h3>
 
@@ -587,11 +619,16 @@
         <li>le cas échéant, prestation de réalisation de l'état des lieux d'entrée : {{ honoraires_location.locataire_etat_lieux.valeur }}</li>
         {% endif %}
     </ul>
+    {% endif %}
 
-    <h2>X. AUTRES CONDITIONS PARTICULIÈRES</h2>
-    <p>{% if autres_conditions is defined and autres_conditions.valeur %}{{ autres_conditions.valeur }}{% endif %}</p>
+    {% if autres_conditions is defined and autres_conditions.valeur %}
+    {% set ns.idx = ns.idx + 1 %}
+    <h2>{{ romans[ns.idx - 1] }}. AUTRES CONDITIONS PARTICULIÈRES</h2>
+    <p>{{ autres_conditions.valeur }}</p>
+    {% endif %}
 
-    <h2>XI. ANNEXES</h2>
+    {% set ns.idx = ns.idx + 1 %}
+    <h2>{{ romans[ns.idx - 1] }}. ANNEXES</h2>
     <p>Sont annexées et jointes au contrat de location les pièces suivantes :</p>
     <ul class="checkbox-list">
         <li>Le cas échéant, un extrait du règlement concernant la destination de l'immeuble...</li>
