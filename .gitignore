@@ -2,7 +2,7 @@
 .DS_Store
 */.DS_Store
 *.pyc
-data/sessions
-data/conversations
-data/generated_bails
+backend/data/sessions
+backend/data/conversations
+backend/data/generated_bails
 package-lock.json
