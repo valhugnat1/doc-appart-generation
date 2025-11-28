@@ -1,62 +1,62 @@
 # Bail Generator Project
 
-This project is an AI-powered tool for generating French rental lease documents (Bail de location). It consists of two main components: an AI agent to gather lease information and a PDF generator to create the final contract.
+This project is an AI-powered tool for generating French rental lease documents (Bail de location). It consists of a FastAPI backend with an AI agent and a Vue.js frontend.
 
 ## Project Structure
 
-- **`ai_bail_agent/`**: Contains the AI agent (LangGraph/LangChain) that interacts with the user to fill out the lease details in a JSON format.
-- **`creation_bail/`**: Contains Python scripts to generate the PDF lease from the JSON data.
-- **`data/`**: Stores the session data (JSON files) and templates.
+- **`backend/`**: Contains the FastAPI application, AI agent, and PDF generation scripts.
+- **`frontend/`**: Contains the Vue.js web interface.
+- **`docker-compose.yml`**: Orchestrates the application services.
 
 ## Prerequisites
 
-- Python 3.8+
+- Docker and Docker Compose
 - OpenAI API Key (or compatible LLM provider)
 
-## Installation
+## Installation & Usage
 
-1.  **Clone the repository** (if not already done).
-2.  **Install dependencies**:
-    ```bash
-    pip install -r ai_bail_agent/requirements.txt
-    # Note: You might need to install reportlab manually if not in requirements
-    pip install reportlab
-    ```
-3.  **Environment Setup**:
-    - Create a `.env` file in `ai_bail_agent/` (copy from `.env.example` if available).
-    - Add your API key:
-      ```
-      OPENAI_API_KEY=your_api_key_here
-      ```
+### 1. Environment Setup
 
-## Usage
-
-### Step 1: Gather Information with the AI Agent
-
-Run the agent to start an interactive session. The agent will ask you questions to fill in the necessary lease details.
+Create a `.env` file in the root directory (or ensure it exists) with your API key:
 
 ```bash
-cd ai_bail_agent
-python main.py
+OPENAI_API_KEY=your_api_key_here
 ```
 
-- Follow the conversation prompts.
-- The agent will save the session data to `../data/sessions/<session_id>.json`.
-- Note the `<session_id>` displayed at the start of the session.
+### 2. Build and Run with Docker
 
-### Step 2: Generate the PDF Lease
+The easiest way to run the application is using Docker Compose.
 
-Once the JSON data is complete, use the generator script to create the PDF.
-
+**Build the images:**
 ```bash
-cd ../creation_bail
-python generate_bail_complet.py ../data/sessions/<session_id>.json
+docker-compose build
 ```
 
-- Replace `<session_id>` with the actual ID from Step 1.
-- The PDF will be generated in the current directory (e.g., `contrat_location_complet.pdf`).
+**Start the application:**
+```bash
+docker-compose up
+```
 
-## Customization
+### 3. Access the Application
 
-- **Templates**: The data structure is based on `data/template_data.json`.
-- **PDF Styles**: You can modify the PDF layout and styles in `creation_bail/generate_bail_complet.py`.
+- **Frontend**: Open [http://localhost:8080](http://localhost:8080) in your browser.
+- **Backend API**: Accessible at [http://localhost:8000](http://localhost:8000).
+- **API Documentation**: [http://localhost:8000/docs](http://localhost:8000/docs).
+
+## Manual Development
+
+If you prefer to run the services locally without Docker:
+
+### Backend
+```bash
+cd backend
+pip install -r fastapi_app/requirements.txt
+python -m fastapi_app.main
+```
+
+### Frontend
+```bash
+cd frontend
+npm install
+npm run dev
+```
