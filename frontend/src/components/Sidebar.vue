@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { API_BASE_URL } from '@/config.js'
 
 const props = defineProps({
@@ -10,13 +10,14 @@ const props = defineProps({
   },
   width: {
     type: Number,
-    default: 260
+    default: 280
   }
 })
 
 const emit = defineEmits(['toggle'])
 
 const router = useRouter()
+const route = useRoute()
 const conversations = ref([])
 const isLoading = ref(false)
 
@@ -36,7 +37,6 @@ const fetchConversations = async () => {
 }
 
 const createNewChat = () => {
-  // Generate a new UUID v4
   const uuid = crypto.randomUUID()
   router.push(`/chat/${uuid}`)
 }
@@ -49,7 +49,10 @@ const toggleSidebar = () => {
   emit('toggle')
 }
 
-// Expose fetchConversations so parent or siblings can trigger refresh if needed
+const isActive = (id) => {
+  return route.params.id === id
+}
+
 defineExpose({ fetchConversations })
 
 onMounted(() => {
@@ -59,30 +62,78 @@ onMounted(() => {
 
 <template>
   <div class="sidebar" v-show="isOpen">
-    <div class="sidebar-header">
-      <div class="new-chat-btn" @click="createNewChat">
-        + New chat
+    <!-- Logo -->
+    <div class="sidebar-brand">
+      <div class="logo">
+        <div class="logo-icon">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <path d="M14 2v6h6"/>
+            <path d="M16 13H8"/>
+            <path d="M16 17H8"/>
+            <path d="M10 9H8"/>
+          </svg>
+        </div>
+        <span class="logo-text">BailAssist</span>
       </div>
-      <button class="close-btn" @click="toggleSidebar" title="Close sidebar">
-        ◀
+      <button class="close-btn" @click="toggleSidebar" title="Fermer">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- New Chat Button -->
+    <div class="sidebar-actions">
+      <button class="new-chat-btn" @click="createNewChat">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M12 5v14M5 12h14"/>
+        </svg>
+        Nouveau bail
       </button>
     </div>
     
-    <div class="conversations-list">
-      <div v-if="isLoading" class="loading">Loading...</div>
-      <div 
-        v-else
-        v-for="conv in conversations" 
-        :key="conv.id" 
-        class="conversation-item"
-        @click="selectConversation(conv.id)"
-      >
-        <span class="icon">💬</span>
-        <div class="conversation-info">
-          <span class="title">{{ conv.title || conv.id }}</span>
-          <span class="date">{{ new Date(conv.updated_at * 1000).toLocaleString() }}</span>
+    <!-- Conversations List -->
+    <div class="conversations-section">
+      <h3 class="section-title">Conversations récentes</h3>
+      <div class="conversations-list">
+        <div v-if="isLoading" class="loading">
+          <div class="spinner"></div>
+          Chargement...
+        </div>
+        <div v-else-if="conversations.length === 0" class="empty-list">
+          <p>Aucune conversation</p>
+        </div>
+        <div 
+          v-else
+          v-for="conv in conversations" 
+          :key="conv.id" 
+          class="conversation-item"
+          :class="{ 'active': isActive(conv.id) }"
+          @click="selectConversation(conv.id)"
+        >
+          <div class="conversation-icon">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            </svg>
+          </div>
+          <div class="conversation-info">
+            <span class="title">{{ conv.title || 'Nouvelle conversation' }}</span>
+            <span class="date">{{ new Date(conv.updated_at * 1000).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' }) }}</span>
+          </div>
         </div>
       </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="sidebar-footer">
+      <a href="/" class="footer-link">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          <polyline points="9,22 9,12 15,12 15,22"/>
+        </svg>
+        Retour à l'accueil
+      </a>
     </div>
   </div>
 </template>
@@ -91,71 +142,185 @@ onMounted(() => {
 .sidebar {
   width: v-bind(width + 'px');
   height: 100vh;
-  background-color: #202123;
+  background: white;
   display: flex;
   flex-direction: column;
-  color: #ececf1;
-  padding: 10px;
-  box-sizing: border-box;
-  border-right: 1px solid rgba(255,255,255,0.1);
+  color: var(--color-ink, #1a1a2e);
+  border-right: 1px solid var(--color-cream-dark, #f0ede8);
+  font-family: 'DM Sans', -apple-system, sans-serif;
 }
 
-.sidebar-header {
+.sidebar-brand {
   display: flex;
-  gap: 10px;
-  margin-bottom: 10px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid var(--color-cream-dark, #f0ede8);
 }
 
-.new-chat-btn {
-  flex: 1;
-  border: 1px solid rgba(255,255,255,0.2);
-  border-radius: 5px;
-  padding: 10px;
-  cursor: pointer;
-  transition: background-color 0.2s;
+.logo {
   display: flex;
   align-items: center;
-  gap: 10px;
-  white-space: nowrap;
+  gap: 12px;
 }
 
-.new-chat-btn:hover {
-  background-color: rgba(255,255,255,0.1);
+.logo-icon {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, var(--color-accent, #2563eb), var(--color-accent-dark, #1d4ed8));
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.logo-text {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-ink, #1a1a2e);
 }
 
 .close-btn {
   background: transparent;
-  border: 1px solid rgba(255,255,255,0.2);
-  border-radius: 5px;
-  color: #ececf1;
+  border: none;
+  color: var(--color-ink-muted, #7a7a8a);
   cursor: pointer;
-  padding: 0 10px;
+  padding: 8px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: all 0.2s;
 }
 
 .close-btn:hover {
-  background-color: rgba(255,255,255,0.1);
+  background-color: var(--color-cream, #faf9f7);
+  color: var(--color-ink, #1a1a2e);
+}
+
+.sidebar-actions {
+  padding: 16px;
+}
+
+.new-chat-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 20px;
+  background: linear-gradient(135deg, var(--color-accent, #2563eb), var(--color-accent-dark, #1d4ed8));
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+}
+
+.new-chat-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35);
+}
+
+.conversations-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 0 16px;
+}
+
+.section-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-ink-muted, #7a7a8a);
+  margin-bottom: 12px;
+  padding: 0 4px;
 }
 
 .conversations-list {
   flex: 1;
   overflow-y: auto;
+  margin: 0 -16px;
+  padding: 0 16px;
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 40px 20px;
+  color: var(--color-ink-muted, #7a7a8a);
+  font-size: 0.9rem;
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--color-cream-dark, #f0ede8);
+  border-top-color: var(--color-accent, #2563eb);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.empty-list {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--color-ink-muted, #7a7a8a);
+  font-size: 0.9rem;
 }
 
 .conversation-item {
-  padding: 10px;
-  border-radius: 5px;
+  padding: 12px 16px;
+  border-radius: 12px;
   cursor: pointer;
   display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  margin-bottom: 2px;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 4px;
+  transition: all 0.2s;
+  border: 1px solid transparent;
 }
 
 .conversation-item:hover {
-  background-color: #2A2B32;
+  background-color: var(--color-cream, #faf9f7);
+}
+
+.conversation-item.active {
+  background-color: var(--color-accent-light, #dbeafe);
+  border-color: var(--color-accent, #2563eb);
+}
+
+.conversation-item.active .conversation-icon {
+  color: var(--color-accent, #2563eb);
+}
+
+.conversation-icon {
+  width: 32px;
+  height: 32px;
+  background: var(--color-cream, #faf9f7);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-ink-muted, #7a7a8a);
+  flex-shrink: 0;
+}
+
+.conversation-item.active .conversation-icon {
+  background: white;
 }
 
 .conversation-info {
@@ -163,23 +328,61 @@ onMounted(() => {
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  gap: 4px;
-}
-
-.icon {
-  font-size: 1.2em;
-  margin-top: 2px;
+  gap: 2px;
 }
 
 .title {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: 0.9em;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-ink, #1a1a2e);
 }
 
 .date {
-  font-size: 0.7em;
-  color: #8e8ea0;
+  font-size: 0.75rem;
+  color: var(--color-ink-muted, #7a7a8a);
+}
+
+.sidebar-footer {
+  padding: 16px;
+  border-top: 1px solid var(--color-cream-dark, #f0ede8);
+}
+
+.footer-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  color: var(--color-ink-light, #4a4a5a);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.footer-link:hover {
+  background-color: var(--color-cream, #faf9f7);
+  color: var(--color-accent, #2563eb);
+}
+
+/* Scrollbar styling */
+.conversations-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.conversations-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.conversations-list::-webkit-scrollbar-thumb {
+  background: var(--color-cream-dark, #f0ede8);
+  border-radius: 3px;
+}
+
+.conversations-list::-webkit-scrollbar-thumb:hover {
+  background: var(--color-ink-muted, #7a7a8a);
 }
 </style>

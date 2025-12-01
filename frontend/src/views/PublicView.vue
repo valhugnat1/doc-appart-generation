@@ -47,12 +47,10 @@ const fetchBail = async (conversationId) => {
     if (response.ok) {
       const data = await response.json()
       bailHtml.value = data.html
-      // Open the right sidebar if we have content
       if (bailHtml.value) {
         isRightSidebarOpen.value = true
       }
     } else {
-      // If 404 or other error, close the sidebar
       isRightSidebarOpen.value = false
       bailHtml.value = ''
     }
@@ -85,19 +83,17 @@ const handleLoading = (loading) => {
 
 const startNewConversation = () => {
   const newUuid = crypto.randomUUID()
-  Cookies.set('session_uuid', newUuid, { expires: 7 }) // Expires in 7 days
+  Cookies.set('session_uuid', newUuid, { expires: 7 })
   router.push(`/chat/${newUuid}`)
 }
 
 onMounted(() => {
-  // Check for existing session
   const sessionUuid = Cookies.get('session_uuid')
   if (!sessionUuid) {
     startNewConversation()
   } else if (!route.params.id) {
      router.push(`/chat/${sessionUuid}`)
   } else {
-    // If we have an ID in the URL, fetch the bail
     fetchBail(route.params.id)
   }
 })
@@ -106,19 +102,50 @@ onMounted(() => {
 <template>
   <div class="public-container">
     <div class="main-content">
-      <div class="header">
-        <button @click="startNewConversation" class="new-conv-btn">
-          + Nouveau bail
-        </button>
+      <!-- Header -->
+      <header class="header">
+        <a href="/" class="logo">
+          <div class="logo-icon">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <path d="M14 2v6h6"/>
+              <path d="M16 13H8"/>
+              <path d="M16 17H8"/>
+            </svg>
+          </div>
+          <span class="logo-text">BailAssist</span>
+        </a>
+        
+        <div class="header-actions">
+          <button @click="startNewConversation" class="new-conv-btn">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M12 5v14M5 12h14"/>
+            </svg>
+            Nouveau bail
+          </button>
+        </div>
+      </header>
+
+      <!-- Chat Content -->
+      <div class="chat-wrapper">
+        <router-view @message-received="onMessageReceived" @is-loading="handleLoading"></router-view>
       </div>
-      <router-view @message-received="onMessageReceived" @is-loading="handleLoading"></router-view>
     </div>
+
+    <!-- Resizer -->
     <div 
       v-if="isRightSidebarOpen"
-      class="resizer right-resizer" 
+      class="resizer" 
       @mousedown="startResizeRight"
     ></div>
-    <RightSidebar :is-open="isRightSidebarOpen" :width="rightSidebarWidth" :html-content="bailHtml" :is-loading="isAiLoading" />
+
+    <!-- Right Sidebar -->
+    <RightSidebar 
+      :is-open="isRightSidebarOpen" 
+      :width="rightSidebarWidth" 
+      :html-content="bailHtml" 
+      :is-loading="isAiLoading" 
+    />
   </div>
 </template>
 
@@ -128,7 +155,8 @@ onMounted(() => {
   height: 100vh;
   width: 100vw;
   overflow: hidden;
-  background-color: #343541; /* Match main background */
+  background-color: var(--color-cream, #faf9f7);
+  font-family: 'DM Sans', -apple-system, sans-serif;
 }
 
 .main-content {
@@ -137,44 +165,120 @@ onMounted(() => {
   position: relative;
   display: flex;
   flex-direction: column;
+  min-width: 0;
 }
 
 .header {
-  padding: 10px;
   display: flex;
-  justify-content: flex-start;
-  background-color: #202123;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  background: white;
+  border-bottom: 1px solid var(--color-cream-dark, #f0ede8);
+  z-index: 10;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+
+.logo-icon {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, var(--color-accent, #2563eb), var(--color-accent-dark, #1d4ed8));
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.logo-text {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: var(--color-ink, #1a1a2e);
+}
+
+.header-actions {
+  display: flex;
+  gap: 12px;
 }
 
 .new-conv-btn {
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.2);
-  border-radius: 5px;
-  color: #ececf1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, var(--color-accent, #2563eb), var(--color-accent-dark, #1d4ed8));
+  color: white;
+  border: none;
+  border-radius: 100px;
+  font-size: 0.9rem;
+  font-weight: 600;
   cursor: pointer;
-  padding: 8px 12px;
-  transition: background-color 0.2s;
+  transition: all 0.2s;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
 }
 
 .new-conv-btn:hover {
-  background-color: rgba(255,255,255,0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35);
+}
+
+.chat-wrapper {
+  flex: 1;
+  overflow: hidden;
 }
 
 .resizer {
-  width: 5px;
+  width: 6px;
   background-color: transparent;
   cursor: col-resize;
   height: 100%;
   z-index: 10;
   transition: background-color 0.2s;
+  position: relative;
 }
 
-.resizer:hover, .resizer:active {
-  background-color: rgba(52, 152, 219, 0.5);
+.resizer::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 4px;
+  height: 48px;
+  background: var(--color-cream-dark, #f0ede8);
+  border-radius: 2px;
+  transition: background-color 0.2s;
 }
 
-.right-resizer {
-  border-left: 1px solid #e5e5e5;
+.resizer:hover::before,
+.resizer:active::before {
+  background-color: var(--color-accent, #2563eb);
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .header {
+    padding: 12px 16px;
+  }
+
+  .logo-text {
+    font-size: 1.1rem;
+  }
+
+  .new-conv-btn span {
+    display: none;
+  }
+
+  .new-conv-btn {
+    padding: 10px;
+    border-radius: 10px;
+  }
 }
 </style>

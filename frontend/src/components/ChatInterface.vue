@@ -60,7 +60,6 @@ const handleKeyDown = (event) => {
     event.preventDefault()
     sendMessage()
   }
-  // If Shift+Enter, let the default behavior happen (new line)
 }
 
 // Load Conversation History
@@ -184,15 +183,24 @@ const sendMessage = async () => {
   <div class="chat-container">
     <div class="messages" ref="messagesContainer">
       <div v-if="messages.length === 0" class="empty-state">
-        <h1>Comment puis-je vous aider aujourd'hui ?</h1>
+        <div class="empty-icon">💬</div>
+        <h1>Comment puis-je vous aider ?</h1>
+        <p>Posez-moi vos questions pour créer votre bail de location</p>
       </div>
       
       <div v-for="(msg, index) in messages" :key="index" :class="['message', msg.role]">
         <div class="message-content">
-          <div class="avatar">
-            {{ msg.role === 'user' ? '👤' : '🤖' }}
+          <div class="avatar" :class="msg.role">
+            <span v-if="msg.role === 'user'">👤</span>
+            <svg v-else width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <path d="M14 2v6h6"/>
+              <path d="M16 13H8"/>
+              <path d="M16 17H8"/>
+            </svg>
           </div>
           <div class="content-wrapper">
+            <div class="sender-name">{{ msg.role === 'user' ? 'Vous' : 'BailAssist' }}</div>
             <div class="text markdown-body" v-html="renderMarkdown(msg.content)"></div>
             <ToolCallStatus 
               v-if="index === messages.length - 1 && currentToolCall" 
@@ -204,9 +212,19 @@ const sendMessage = async () => {
       
       <div v-if="isLoading && messages[messages.length - 1]?.role !== 'assistant'" class="message assistant">
         <div class="message-content">
-          <div class="avatar">🤖</div>
-          <div class="text typing-indicator">
-            <span>.</span><span>.</span><span>.</span>
+          <div class="avatar assistant">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <path d="M14 2v6h6"/>
+              <path d="M16 13H8"/>
+              <path d="M16 17H8"/>
+            </svg>
+          </div>
+          <div class="content-wrapper">
+            <div class="sender-name">BailAssist</div>
+            <div class="text typing-indicator">
+              <span></span><span></span><span></span>
+            </div>
           </div>
         </div>
       </div>
@@ -219,13 +237,16 @@ const sendMessage = async () => {
           v-model="userInput" 
           @input="handleInput"
           @keydown="handleKeyDown"
-          placeholder="Envoyez un message..."
+          placeholder="Tapez votre message..."
           rows="1"
         ></textarea>
-        <button @click="sendMessage" :disabled="!userInput.trim() || isLoading">
-          <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height="16" width="16" xmlns="http://www.w3.org/2000/svg"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+        <button @click="sendMessage" :disabled="!userInput.trim() || isLoading" class="send-btn">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+          </svg>
         </button>
       </div>
+      <p class="input-hint">Appuyez sur Entrée pour envoyer, Maj+Entrée pour un saut de ligne</p>
     </div>
   </div>
 </template>
@@ -235,55 +256,94 @@ const sendMessage = async () => {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background-color: #343541;
-  color: #ececf1;
-  font-family: 'Söhne', 'ui-sans-serif', system-ui, -apple-system, sans-serif;
+  background-color: var(--color-cream, #faf9f7);
+  color: var(--color-ink, #1a1a2e);
+  font-family: 'DM Sans', -apple-system, sans-serif;
 }
 
 .messages {
   flex: 1;
   overflow-y: auto;
-  padding-bottom: 150px;
+  padding-bottom: 180px;
   scroll-behavior: smooth;
 }
 
 .empty-state {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   height: 100%;
-  color: #fff;
-  font-weight: 600;
-  opacity: 0.8;
+  text-align: center;
+  padding: 40px;
+}
+
+.empty-icon {
+  font-size: 4rem;
+  margin-bottom: 24px;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.empty-state h1 {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 2rem;
+  font-weight: 500;
+  color: var(--color-ink, #1a1a2e);
+  margin-bottom: 12px;
+}
+
+.empty-state p {
+  color: var(--color-ink-light, #4a4a5a);
+  font-size: 1.1rem;
 }
 
 .message {
-  padding: 24px 0;
-  border-bottom: 1px solid rgba(0,0,0,0.1);
+  padding: 32px 0;
+}
+
+.message.user {
+  background-color: var(--color-cream, #faf9f7);
 }
 
 .message.assistant {
-  background-color: #444654;
+  background-color: white;
+  border-top: 1px solid var(--color-cream-dark, #f0ede8);
+  border-bottom: 1px solid var(--color-cream-dark, #f0ede8);
 }
+
 .message-content {
   max-width: 800px;
   margin: 0 auto;
   display: flex;
   gap: 20px;
-  padding: 0 20px;
+  padding: 0 24px;
   align-items: flex-start; 
 }
 
 .avatar {
-  width: 30px;
-  height: 30px;
-  border-radius: 2px;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 20px;
+  font-size: 18px;
   flex-shrink: 0;
-  margin-top: 2px; 
+}
+
+.avatar.user {
+  background: linear-gradient(135deg, var(--color-accent, #2563eb), var(--color-accent-dark, #1d4ed8));
+  color: white;
+}
+
+.avatar.assistant {
+  background: linear-gradient(135deg, #7c3aed, #a78bfa);
+  color: white;
 }
 
 .content-wrapper {
@@ -293,48 +353,106 @@ const sendMessage = async () => {
   min-width: 0;
 }
 
+.sender-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--color-ink, #1a1a2e);
+  margin-bottom: 8px;
+}
+
 .text {
-  line-height: 1.6;
+  line-height: 1.7;
   overflow-wrap: break-word;
   width: 100%;
 }
 
 :deep(.markdown-body) {
   font-size: 16px;
-  line-height: 1.6;
-  color: #ececf1;
+  line-height: 1.7;
+  color: var(--color-ink, #1a1a2e);
 }
 
 :deep(.markdown-body p) { margin-bottom: 1em; }
 :deep(.markdown-body p:last-child) { margin-bottom: 0; }
+
 :deep(.markdown-body pre) {
-  background-color: #000;
-  padding: 15px;
-  border-radius: 6px;
+  background-color: var(--color-ink, #1a1a2e);
+  color: #f8f8f2;
+  padding: 16px 20px;
+  border-radius: 12px;
   overflow-x: auto;
   margin: 1em 0;
+  font-size: 14px;
 }
+
 :deep(.markdown-body code) {
-  font-family: 'Menlo', monospace;
-  background-color: rgba(255, 255, 255, 0.1);
-  padding: 2px 4px;
-  border-radius: 3px;
+  font-family: 'Menlo', 'Monaco', monospace;
+  background-color: var(--color-cream-dark, #f0ede8);
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 0.9em;
+  color: #7c3aed;
 }
+
 :deep(.markdown-body pre code) {
   background-color: transparent;
   padding: 0;
   border: none;
+  color: inherit;
 }
-:deep(.markdown-body ul), :deep(.markdown-body ol) { margin-bottom: 1em; padding-left: 20px; }
-:deep(.markdown-body a) { color: #10a37f; text-decoration: underline; }
+
+:deep(.markdown-body ul), :deep(.markdown-body ol) { 
+  margin-bottom: 1em; 
+  padding-left: 24px; 
+}
+
+:deep(.markdown-body li) {
+  margin-bottom: 0.5em;
+}
+
+:deep(.markdown-body a) { 
+  color: var(--color-accent, #2563eb); 
+  text-decoration: none;
+  font-weight: 500;
+}
+
+:deep(.markdown-body a:hover) { 
+  text-decoration: underline; 
+}
+
+:deep(.markdown-body strong) {
+  font-weight: 600;
+  color: var(--color-ink, #1a1a2e);
+}
+
+:deep(.markdown-body h1),
+:deep(.markdown-body h2),
+:deep(.markdown-body h3) {
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 500;
+  margin: 1.5em 0 0.75em;
+  color: var(--color-ink, #1a1a2e);
+}
+
+:deep(.markdown-body h1) { font-size: 1.5em; }
+:deep(.markdown-body h2) { font-size: 1.3em; }
+:deep(.markdown-body h3) { font-size: 1.15em; }
+
+:deep(.markdown-body blockquote) {
+  border-left: 4px solid var(--color-accent, #2563eb);
+  padding-left: 16px;
+  margin: 1em 0;
+  color: var(--color-ink-light, #4a4a5a);
+  font-style: italic;
+}
 
 .input-area {
   position: fixed;
   bottom: 0;
-  left: 0; /* Ensure it stretches if inside a container, otherwise use width: 100% */
-  right: 0; /* Better for layout than width 100% in flex containers */
-  background-image: linear-gradient(180deg, rgba(53,55,64,0), #353740 50%);
-  padding: 20px 0 40px;
+  left: 0;
+  right: 0;
+  background: linear-gradient(180deg, transparent, var(--color-cream, #faf9f7) 30%);
+  padding: 20px 24px 32px;
   z-index: 20;
 }
 
@@ -342,13 +460,19 @@ const sendMessage = async () => {
   max-width: 800px;
   margin: 0 auto;
   position: relative;
-  padding: 0 20px;
-  background: #40414f;
-  border-radius: 16px;
-  box-shadow: 0 0 15px rgba(0,0,0,0.1);
-  border: 1px solid rgba(32,33,35,0.5);
+  background: white;
+  border-radius: 24px;
+  box-shadow: 0 4px 24px rgba(26, 26, 46, 0.1);
+  border: 2px solid var(--color-cream-dark, #f0ede8);
   display: flex;
-  align-items: flex-end; /* Aligns button to bottom if textarea grows */
+  align-items: flex-end;
+  padding: 8px 8px 8px 20px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.input-wrapper:focus-within {
+  border-color: var(--color-accent, #2563eb);
+  box-shadow: 0 4px 24px rgba(37, 99, 235, 0.15);
 }
 
 textarea {
@@ -356,50 +480,97 @@ textarea {
   max-height: 200px;
   background-color: transparent;
   border: none;
-  color: #fff;
-  padding: 14px 40px 14px 10px;
+  color: var(--color-ink, #1a1a2e);
+  padding: 12px 0;
   font-family: inherit;
   font-size: 16px;
   line-height: 1.5;
   resize: none;
   outline: none;
-  overflow-y: hidden; /* Hidden until max-height reached */
+  overflow-y: hidden;
 }
 
-/* Scrollbar for textarea if it gets too tall */
+textarea::placeholder {
+  color: var(--color-ink-muted, #7a7a8a);
+}
+
 textarea:focus { overflow-y: auto; }
 
-button {
-  position: absolute;
-  right: 10px;
-  bottom: 8px;
-  background: #19c37d;
+.send-btn {
+  background: linear-gradient(135deg, var(--color-accent, #2563eb), var(--color-accent-dark, #1d4ed8));
   border: none;
   color: white;
   cursor: pointer;
-  padding: 6px;
-  border-radius: 6px;
-  transition: background-color 0.2s;
+  padding: 12px;
+  border-radius: 16px;
+  transition: all 0.2s;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
-button:hover:not(:disabled) { background-color: #1a885d; }
-button:disabled { background-color: transparent; color: #aaa; cursor: not-allowed; }
+.send-btn:hover:not(:disabled) { 
+  transform: scale(1.05);
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.3);
+}
+
+.send-btn:disabled { 
+  background: var(--color-cream-dark, #f0ede8); 
+  color: var(--color-ink-muted, #7a7a8a); 
+  cursor: not-allowed; 
+}
+
+.input-hint {
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--color-ink-muted, #7a7a8a);
+  margin-top: 12px;
+}
+
+.typing-indicator {
+  display: flex;
+  gap: 6px;
+  padding: 8px 0;
+}
 
 .typing-indicator span {
-  animation: blink 1.4s infinite both;
-  font-size: 24px;
-  line-height: 10px;
-  margin: 0 2px;
+  width: 8px;
+  height: 8px;
+  background-color: var(--color-accent, #2563eb);
+  border-radius: 50%;
+  animation: bounce 1.4s infinite both;
 }
+
 .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
 .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
 
-@keyframes blink {
-  0% { opacity: 0.2; }
-  20% { opacity: 1; }
-  100% { opacity: 0.2; }
+@keyframes bounce {
+  0%, 80%, 100% { 
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+  40% { 
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Scrollbar styling */
+.messages::-webkit-scrollbar {
+  width: 8px;
+}
+
+.messages::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.messages::-webkit-scrollbar-thumb {
+  background: var(--color-cream-dark, #f0ede8);
+  border-radius: 4px;
+}
+
+.messages::-webkit-scrollbar-thumb:hover {
+  background: var(--color-ink-muted, #7a7a8a);
 }
 </style>

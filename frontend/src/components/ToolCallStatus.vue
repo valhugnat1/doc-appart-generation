@@ -11,7 +11,7 @@ defineProps({
   <div class="tool-call-status">
     <div class="spinner"></div>
     <div class="content">
-      <span class="label">Utilisation de l'outil :</span>
+      <span class="label">Utilisation de l'outil</span>
       <span class="name">{{ toolName }}</span>
     </div>
   </div>
@@ -19,42 +19,48 @@ defineProps({
 
 <style scoped>
 .tool-call-status {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 12px;
-  padding: 12px 16px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  margin-top: 8px;
+  gap: 14px;
+  padding: 14px 20px;
+  background: linear-gradient(135deg, var(--color-accent-light, #dbeafe), #ede9fe);
+  border: 1px solid rgba(37, 99, 235, 0.2);
+  border-radius: 14px;
+  margin-top: 12px;
   font-size: 14px;
-  color: #ececf1;
-  width: fit-content;
+  color: var(--color-ink, #1a1a2e);
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.1);
 }
 
 .spinner {
-  width: 16px;
-  height: 16px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(37, 99, 235, 0.2);
   border-radius: 50%;
-  border-top-color: #fff;
+  border-top-color: var(--color-accent, #2563eb);
   animation: spin 1s linear infinite;
+  flex-shrink: 0;
 }
 
 .content {
   display: flex;
-  gap: 6px;
-  align-items: center;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .label {
-  color: #8e8ea0;
+  font-size: 0.75rem;
+  color: var(--color-ink-muted, #7a7a8a);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 500;
 }
 
 .name {
-  font-family: 'Menlo', monospace;
+  font-family: 'Menlo', 'Monaco', monospace;
   font-weight: 600;
-  color: #10a37f;
+  font-size: 0.9rem;
+  color: #7c3aed;
 }
 
 @keyframes spin {

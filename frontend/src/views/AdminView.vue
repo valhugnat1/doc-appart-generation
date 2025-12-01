@@ -12,7 +12,7 @@ const bailHtml = ref('')
 const isAiLoading = ref(false)
 const sidebarRef = ref(null)
 
-const leftSidebarWidth = ref(260)
+const leftSidebarWidth = ref(280)
 const rightSidebarWidth = ref(600)
 const isResizingLeft = ref(false)
 const isResizingRight = ref(false)
@@ -28,7 +28,7 @@ const startResizeLeft = () => {
 const handleResizeLeft = (e) => {
   if (isResizingLeft.value) {
     const newWidth = e.clientX
-    if (newWidth > 150 && newWidth < 600) {
+    if (newWidth > 200 && newWidth < 500) {
       leftSidebarWidth.value = newWidth
     }
   }
@@ -79,12 +79,10 @@ const fetchBail = async (conversationId) => {
     if (response.ok) {
       const data = await response.json()
       bailHtml.value = data.html
-      // Open the right sidebar if we have content
       if (bailHtml.value) {
         isRightSidebarOpen.value = true
       }
     } else {
-      // If 404 or other error, close the sidebar
       isRightSidebarOpen.value = false
       bailHtml.value = ''
     }
@@ -112,7 +110,6 @@ watch(() => route.params.id, (newId) => {
 
 const onMessageReceived = (conversationId) => {
   fetchBail(conversationId)
-  // Refresh the conversation list to show the new conversation
   if (sidebarRef.value) {
     sidebarRef.value.fetchConversations()
   }
@@ -128,29 +125,56 @@ const handleLoading = (loading) => {
 
 <template>
   <div class="admin-container">
-    <Sidebar ref="sidebarRef" :is-open="isSidebarOpen" :width="leftSidebarWidth" @toggle="toggleSidebar" />
+    <!-- Left Sidebar -->
+    <Sidebar 
+      ref="sidebarRef" 
+      :is-open="isSidebarOpen" 
+      :width="leftSidebarWidth" 
+      @toggle="toggleSidebar" 
+    />
+
+    <!-- Left Resizer -->
     <div 
       v-if="isSidebarOpen"
       class="resizer left-resizer" 
       @mousedown="startResizeLeft"
     ></div>
+
+    <!-- Main Content -->
     <div class="main-content">
+      <!-- Toggle Sidebar Button (when closed) -->
       <button 
         v-if="!isSidebarOpen" 
         class="open-sidebar-btn"
         @click="toggleSidebar"
-        title="Open sidebar"
+        title="Ouvrir le menu"
       >
-        ▶
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M3 12h18M3 6h18M3 18h18"/>
+        </svg>
       </button>
-      <router-view @message-received="onMessageReceived" @is-loading="handleLoading"></router-view>
+
+      <!-- Chat Content -->
+      <router-view 
+        @message-received="onMessageReceived" 
+        @is-loading="handleLoading"
+      ></router-view>
     </div>
+
+    <!-- Right Resizer -->
     <div 
       v-if="isRightSidebarOpen"
       class="resizer right-resizer" 
       @mousedown="startResizeRight"
     ></div>
-    <RightSidebar :is-open="isRightSidebarOpen" :width="rightSidebarWidth" :html-content="bailHtml" :is-loading="isAiLoading" />
+
+    <!-- Right Sidebar -->
+    <RightSidebar 
+      :is-open="isRightSidebarOpen" 
+      :width="rightSidebarWidth" 
+      :html-content="bailHtml" 
+      :is-loading="isAiLoading" 
+    />
   </div>
 </template>
 
@@ -160,50 +184,81 @@ const handleLoading = (loading) => {
   height: 100vh;
   width: 100vw;
   overflow: hidden;
+  background-color: var(--color-cream, #faf9f7);
+  font-family: 'DM Sans', -apple-system, sans-serif;
 }
 
 .main-content {
   flex: 1;
   height: 100%;
   position: relative;
+  min-width: 0;
 }
 
 .open-sidebar-btn {
   position: absolute;
-  top: 10px;
-  left: 10px;
+  top: 16px;
+  left: 16px;
   z-index: 100;
-  background: rgba(32,33,35,0.8);
-  border: 1px solid rgba(255,255,255,0.2);
-  border-radius: 5px;
-  color: #ececf1;
+  background: white;
+  border: 1px solid var(--color-cream-dark, #f0ede8);
+  border-radius: 10px;
+  color: var(--color-ink, #1a1a2e);
   cursor: pointer;
-  padding: 8px 12px;
-  transition: background-color 0.2s;
+  padding: 10px;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(26, 26, 46, 0.08);
 }
 
 .open-sidebar-btn:hover {
-  background-color: rgba(255,255,255,0.1);
+  background-color: var(--color-cream, #faf9f7);
+  border-color: var(--color-accent, #2563eb);
+  color: var(--color-accent, #2563eb);
 }
 
 .resizer {
-  width: 5px;
+  width: 6px;
   background-color: transparent;
   cursor: col-resize;
   height: 100%;
   z-index: 10;
   transition: background-color 0.2s;
+  position: relative;
 }
 
-.resizer:hover, .resizer:active {
-  background-color: rgba(52, 152, 219, 0.5);
+.resizer::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 4px;
+  height: 48px;
+  background: var(--color-cream-dark, #f0ede8);
+  border-radius: 2px;
+  transition: background-color 0.2s;
+}
+
+.resizer:hover::before,
+.resizer:active::before {
+  background-color: var(--color-accent, #2563eb);
 }
 
 .left-resizer {
-  border-right: 1px solid rgba(255,255,255,0.1);
+  margin-left: -3px;
 }
 
 .right-resizer {
-  border-left: 1px solid #e5e5e5;
+  margin-right: -3px;
+}
+
+/* Mobile responsive */
+@media (max-width: 1024px) {
+  .admin-container {
+    flex-direction: column;
+  }
 }
 </style>
