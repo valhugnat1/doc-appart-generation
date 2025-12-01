@@ -7,15 +7,15 @@ WORKDIR /app
 # Install system dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
+    pkg-config \
+    libcairo2-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements files
-COPY agent_recup_info/requirements.txt ./agent_recup_info/requirements.txt
-COPY fastapi_app/requirements.txt ./fastapi_app/requirements.txt
+COPY requirements.txt ./requirements.txt
 
 # Install Python dependencies
-RUN pip install --no-cache-dir -r agent_recup_info/requirements.txt
-RUN pip install --no-cache-dir -r fastapi_app/requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the application code
 COPY agent_recup_info ./agent_recup_info

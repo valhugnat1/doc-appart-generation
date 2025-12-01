@@ -1,3 +1,13 @@
+fastapi
+uvicorn
+pydantic
+python-dotenv
+langchain-core
+langchain-anthropic
+langgraph
+jinja2
+markdown
+xhtml2pdf
 langchain
 langchain-core
 langchain-openai
