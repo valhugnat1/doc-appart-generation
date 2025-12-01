@@ -115,7 +115,6 @@
         <span style="font-size: 10pt; font-weight: normal;">(Loi n°89-462 du 6 juillet 1989)</span>
     </div>
 
-    {% if designation_parties is defined %}
     {% set ns.idx = ns.idx + 1 %}
     <h2>{{ romans[ns.idx - 1] }}. DÉSIGNATION DES PARTIES</h2>
     <p>Le présent contrat est conclu entre les soussignés :</p>
@@ -195,7 +194,6 @@
     {% endif %}
 
     <p>Il a été convenu ce qui suit :</p>
-    {% endif %}
 
     {% if objet_contrat is defined %}
     {% set ns.idx = ns.idx + 1 %}
