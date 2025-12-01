@@ -8,7 +8,7 @@ const route = useRoute()
 // We might need to pass the ID to ChatInterface if it supports it
 // For now, just wrapping it.
 
-const emit = defineEmits(['message-received'])
+const emit = defineEmits(['message-received', 'is-loading'])
 </script>
 
 <template>
@@ -16,5 +16,6 @@ const emit = defineEmits(['message-received'])
     :key="route.params.id" 
     :conversation-id="route.params.id" 
     @message-received="$emit('message-received', $event)"
+    @is-loading="$emit('is-loading', $event)"
   />
 </template>

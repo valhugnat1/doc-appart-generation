@@ -1,35 +1,62 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import App from '../App.vue' // We might need to separate Home/Chat views, but for now let's see. 
-// Actually, App.vue is currently the main view. I should probably refactor App.vue content into a Home or Chat view.
-// Let's assume I'll create a ChatView.vue that contains the current chat logic from App.vue.
-
-// For now, let's define the routes and I will refactor App.vue content into a view component next.
-// But wait, the user wants a sidebar. 
-// App.vue should hold the Sidebar and the RouterView.
-// The RouterView will display the ChatInterface.
-
-// So I need to move the current chat interface from App.vue to a new component, say `views/ChatView.vue`.
+import PublicView from '../views/PublicView.vue'
+import AdminView from '../views/AdminView.vue'
+import ChatView from '../views/ChatView.vue'
 
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    redirect: () => {
-      // Generate a new UUID and redirect to /chat/{uuid}
-      const uuid = crypto.randomUUID()
-      return `/chat/${uuid}`
-    }
+    component: PublicView,
+    children: [
+      {
+        path: '',
+        name: 'PublicHome',
+        component: ChatView // Or a placeholder if needed, but ChatView handles the chat
+      },
+      {
+        path: 'chat/:id',
+        name: 'PublicChat',
+        component: ChatView
+      }
+    ]
   },
   {
-    path: '/chat/:id',
-    name: 'Chat',
-    component: () => import('../views/ChatView.vue')
+    path: '/admin',
+    component: AdminView,
+    meta: { requiresAuth: true },
+    children: [
+      {
+        path: '',
+        name: 'AdminHome',
+        component: ChatView
+      },
+      {
+        path: 'chat/:id',
+        name: 'AdminChat',
+        component: ChatView
+      }
+    ]
   }
 ]
 
 const router = createRouter({
   history: createWebHistory(),
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    // Simple password check
+    const password = prompt('Veuillez entrer le mot de passe administrateur :')
+    if (password === 'admin123') { // Hardcoded for now as requested
+      next()
+    } else {
+      alert('Mot de passe incorrect')
+      next('/')
+    }
+  } else {
+    next()
+  }
 })
 
 export default router

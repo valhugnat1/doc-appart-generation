@@ -11,7 +11,7 @@ defineProps({
   <div class="tool-call-status">
     <div class="spinner"></div>
     <div class="content">
-      <span class="label">Using tool:</span>
+      <span class="label">Utilisation de l'outil :</span>
       <span class="name">{{ toolName }}</span>
     </div>
   </div>

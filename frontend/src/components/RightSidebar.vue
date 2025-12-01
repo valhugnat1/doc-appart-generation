@@ -31,7 +31,7 @@ const props = defineProps({
         </div>
       </div>
       <div v-else class="empty-state">
-        <p>No document generated yet.</p>
+        <p>Aucun document généré pour le moment.</p>
       </div>
     </div>
   </div>

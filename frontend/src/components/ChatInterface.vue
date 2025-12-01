@@ -171,7 +171,7 @@ const sendMessage = async () => {
     }
     messages.value.push({ 
       role: 'assistant', 
-      content: 'Sorry, I encountered an error connecting to the server.' 
+      content: 'Désolé, j\'ai rencontré une erreur lors de la connexion au serveur.' 
     })
   } finally {
     isLoading.value = false
@@ -184,7 +184,7 @@ const sendMessage = async () => {
   <div class="chat-container">
     <div class="messages" ref="messagesContainer">
       <div v-if="messages.length === 0" class="empty-state">
-        <h1>How can I help you today?</h1>
+        <h1>Comment puis-je vous aider aujourd'hui ?</h1>
       </div>
       
       <div v-for="(msg, index) in messages" :key="index" :class="['message', msg.role]">
@@ -219,7 +219,7 @@ const sendMessage = async () => {
           v-model="userInput" 
           @input="handleInput"
           @keydown="handleKeyDown"
-          placeholder="Send a message..."
+          placeholder="Envoyez un message..."
           rows="1"
         ></textarea>
         <button @click="sendMessage" :disabled="!userInput.trim() || isLoading">
