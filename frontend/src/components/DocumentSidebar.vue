@@ -1,5 +1,5 @@
 <script setup>
-import { defineProps } from 'vue'
+import { defineProps, computed, ref, watch, nextTick, onMounted, onUnmounted } from 'vue'
 
 const props = defineProps({
   isOpen: {
@@ -18,6 +18,158 @@ const props = defineProps({
     type: Number,
     default: 600
   }
+})
+
+const iframeRef = ref(null)
+const iframeHeight = ref(800)
+
+// Create iframe srcdoc with isolated CSS
+const iframeSrcDoc = computed(() => {
+  if (!props.htmlContent) return ''
+  
+  return `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+    
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      color: #1a1a2e;
+      background: white;
+    }
+    
+    body {
+      padding: 40px;
+    }
+    
+    h1 {
+      font-family: Georgia, serif;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #1a1a2e;
+      text-align: center;
+      margin: 0 0 8px 0;
+    }
+    
+    h2 {
+      font-family: Georgia, serif;
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: #1a1a2e;
+      margin: 24px 0 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #2563eb;
+    }
+    
+    h3 {
+      font-family: Georgia, serif;
+      font-size: 1rem;
+      font-weight: 500;
+      color: #1a1a2e;
+      margin: 20px 0 10px;
+    }
+    
+    p {
+      font-size: 0.9rem;
+      line-height: 1.7;
+      color: #1a1a2e;
+      margin: 0 0 12px 0;
+    }
+    
+    ul, ol {
+      padding-left: 24px;
+      margin: 0 0 16px 0;
+    }
+    
+    li {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      margin-bottom: 6px;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+    }
+    
+    th, td {
+      border: 1px solid #e5e5e5;
+      padding: 8px 12px;
+      text-align: left;
+      font-size: 0.9rem;
+    }
+    
+    th {
+      background-color: #f8f8f8;
+      font-weight: 600;
+    }
+    
+    strong, b {
+      font-weight: 600;
+    }
+    
+    em, i {
+      font-style: italic;
+    }
+    
+    a {
+      color: #2563eb;
+      text-decoration: none;
+    }
+    
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+${props.htmlContent}
+<script>
+  function sendHeight() {
+    var height = document.body.scrollHeight;
+    window.parent.postMessage({ type: 'iframe-height', height: height }, '*');
+  }
+  
+  window.addEventListener('load', sendHeight);
+  
+  if (typeof ResizeObserver !== 'undefined') {
+    new ResizeObserver(sendHeight).observe(document.body);
+  }
+  
+  setTimeout(sendHeight, 100);
+  setTimeout(sendHeight, 500);
+<\/script>
+</body>
+</html>`
+})
+
+// Listen for iframe height messages
+const handleMessage = (event) => {
+  if (event.data && event.data.type === 'iframe-height') {
+    iframeHeight.value = Math.max(400, event.data.height + 20)
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('message', handleMessage)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('message', handleMessage)
+})
+
+// Reset height when content changes
+watch(() => props.htmlContent, () => {
+  iframeHeight.value = 800
 })
 </script>
 
@@ -60,7 +212,15 @@ const props = defineProps({
     <div class="sidebar-content">
       <div v-if="htmlContent || isLoading" class="preview-container">
         <div v-if="htmlContent" class="document-wrapper" :class="{ 'content-blurred': isLoading }">
-          <div class="document-content" v-html="htmlContent"></div>
+          <iframe 
+            ref="iframeRef"
+            class="document-iframe"
+            :srcdoc="iframeSrcDoc"
+            sandbox="allow-same-origin allow-scripts"
+            frameborder="0"
+            title="Document preview"
+            :style="{ height: iframeHeight + 'px' }"
+          ></iframe>
         </div>
         <div v-if="isLoading" class="loading-overlay">
           <div class="loading-card">
@@ -146,7 +306,6 @@ const props = defineProps({
 .sidebar-content {
   flex: 1;
   overflow-y: auto;
-  /* Top 24px, Sides 24px, Bottom 15% of viewport height */
   padding: 24px 24px 15vh 24px; 
 }
 
@@ -156,15 +315,19 @@ const props = defineProps({
 }
 
 .document-wrapper {
-  background: var(--color-surface);
+  background: white;
   border-radius: 16px;
   box-shadow: 0 4px 20px rgba(26, 26, 46, 0.08);
   overflow: hidden;
   transition: filter 0.3s, background-color 0.3s ease;
 }
 
-.document-content {
-  padding: 40px;
+.document-iframe {
+  width: 100%;
+  min-height: 400px;
+  border: none;
+  display: block;
+  background: white;
 }
 
 .content-blurred {
@@ -283,45 +446,6 @@ const props = defineProps({
 .action-btn.secondary:hover {
   border-color: var(--color-ink-muted);
   background: var(--color-surface);
-}
-
-/* Document content styling */
-:deep(.document-content h1) {
-  font-family: 'Fraunces', Georgia, serif;
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: var(--color-ink);
-  text-align: center;
-  margin-bottom: 8px;
-}
-
-:deep(.document-content h2) {
-  font-family: 'Fraunces', Georgia, serif;
-  font-size: 1.1rem;
-  font-weight: 500;
-  color: var(--color-ink);
-  margin: 24px 0 12px;
-  padding-bottom: 8px;
-  border-bottom: 2px solid var(--color-accent);
-}
-
-:deep(.document-content p) {
-  font-size: 0.9rem;
-  line-height: 1.7;
-  color: var(--color-ink);
-  margin-bottom: 12px;
-}
-
-:deep(.document-content ul),
-:deep(.document-content ol) {
-  padding-left: 24px;
-  margin-bottom: 16px;
-}
-
-:deep(.document-content li) {
-  font-size: 0.9rem;
-  line-height: 1.6;
-  margin-bottom: 6px;
 }
 
 .sidebar-content::-webkit-scrollbar {

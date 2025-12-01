@@ -22,45 +22,57 @@ defineProps({
   display: inline-flex;
   align-items: center;
   gap: 14px;
-  padding: 14px 20px;
-  background: linear-gradient(135deg, var(--color-accent-light, #dbeafe), #ede9fe);
-  border: 1px solid rgba(37, 99, 235, 0.2);
-  border-radius: 14px;
+  padding: 12px 20px;
+  /* Deep dark background (Midnight/Slate) */
+  background: #0f172a; 
+  /* Subtle border with slight transparency */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
   margin-top: 12px;
-  font-size: 14px;
-  color: var(--color-ink, #1a1a2e);
-  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.1);
+  /* Light text for contrast */
+  color: #e2e8f0;
+  /* Subtle drop shadow for depth */
+  box-shadow: 
+    0 4px 6px -1px rgba(0, 0, 0, 0.3), 
+    0 2px 4px -1px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
 }
 
 .spinner {
   width: 18px;
   height: 18px;
-  border: 2px solid rgba(37, 99, 235, 0.2);
+  /* Faint white track */
+  border: 2px solid rgba(255, 255, 255, 0.15);
   border-radius: 50%;
-  border-top-color: var(--color-accent, #2563eb);
+  /* Bright Neon Purple for the active part */
+  border-top-color: #a78bfa;
   animation: spin 1s linear infinite;
   flex-shrink: 0;
+  box-shadow: 0 0 8px rgba(167, 139, 250, 0.2);
 }
 
 .content {
   display: flex;
   flex-direction: column;
   gap: 2px;
+  line-height: 1.2;
 }
 
 .label {
-  font-size: 0.75rem;
-  color: var(--color-ink-muted, #7a7a8a);
+  font-size: 0.7rem;
+  /* Muted silver text */
+  color: #94a3b8;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  font-weight: 500;
+  letter-spacing: 0.08em;
+  font-weight: 600;
 }
 
 .name {
-  font-family: 'Menlo', 'Monaco', monospace;
+  font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
   font-weight: 600;
-  font-size: 0.9rem;
-  color: #7c3aed;
+  font-size: 0.85rem;
+  /* Bright Violet/White for the function name */
+  color: #e9d5ff;
 }
 
 @keyframes spin {
