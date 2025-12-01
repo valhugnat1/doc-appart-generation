@@ -5,6 +5,7 @@ import { marked } from 'marked'
 import DOMPurify from 'dompurify'
 import OpenAI from 'openai'
 import ToolCallStatus from './ToolCallStatus.vue'
+import { API_BASE_URL } from '@/config.js'
 
 const router = useRouter()
 
@@ -76,7 +77,7 @@ const loadConversation = async () => {
 
   isLoading.value = true
   try {
-    const response = await fetch(`http://localhost:8000/conversations/${props.conversationId}`)
+    const response = await fetch(`${API_BASE_URL}/conversations/${props.conversationId}`)
     if (response.ok) {
       const data = await response.json()
       messages.value = data.messages || []
@@ -117,9 +118,9 @@ const sendMessage = async () => {
 
   try {
     const openai = new OpenAI({
-      baseURL: 'http://localhost:8000/v1',
-      apiKey: 'not-needed', 
-      dangerouslyAllowBrowser: true 
+      baseURL: `${API_BASE_URL}/v1`,
+      apiKey: 'not-needed',
+      dangerouslyAllowBrowser: true
     })
 
     messages.value.push({ role: 'assistant', content: '' })

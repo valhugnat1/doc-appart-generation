@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { API_BASE_URL } from '@/config.js'
 
 const props = defineProps({
   isOpen: {
@@ -22,7 +23,7 @@ const isLoading = ref(false)
 const fetchConversations = async () => {
   isLoading.value = true
   try {
-    const response = await fetch('http://localhost:8000/conversations')
+    const response = await fetch(`${API_BASE_URL}/conversations`)
     if (response.ok) {
       const data = await response.json()
       conversations.value = data.conversations

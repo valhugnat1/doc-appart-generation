@@ -131,8 +131,6 @@ async def stream_chat_request(session_id: str, history: List[Dict[str, Any]], ne
         "session_id": session_id
     }
     
-    print(f"Streaming agent for session: {session_id}")
-
     # Initial chunk
     delta = Delta(role="assistant", content="")
     choice = StreamChoice(index=0, delta=delta, finish_reason=None)
@@ -146,8 +144,6 @@ async def stream_chat_request(session_id: str, history: List[Dict[str, Any]], ne
     try:
         async for event in agent_graph.astream(current_state, stream_mode="messages"):
             message_chunk = event[0] if isinstance(event, tuple) else event
-
-            print(message_chunk)
             
             # We are interested in AIMessageChunks that have content
             if isinstance(message_chunk, AIMessage) and message_chunk.content:

@@ -3,12 +3,14 @@ import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import Sidebar from './components/Sidebar.vue'
 import RightSidebar from './components/RightSidebar.vue'
+import { API_BASE_URL } from '@/config.js'
 
 const route = useRoute()
 const isSidebarOpen = ref(true)
 const isRightSidebarOpen = ref(false)
 const bailHtml = ref('')
 const isAiLoading = ref(false)
+const sidebarRef = ref(null)
 
 const leftSidebarWidth = ref(260)
 const rightSidebarWidth = ref(600)
@@ -71,9 +73,9 @@ const toggleSidebar = () => {
 
 const fetchBail = async (conversationId) => {
   if (!conversationId) return
-  
+
   try {
-    const response = await fetch(`http://localhost:8000/bail/${conversationId}`)
+    const response = await fetch(`${API_BASE_URL}/bail/${conversationId}`)
     if (response.ok) {
       const data = await response.json()
       bailHtml.value = data.html
@@ -104,6 +106,10 @@ watch(() => route.params.id, (newId) => {
 
 const onMessageReceived = (conversationId) => {
   fetchBail(conversationId)
+  // Refresh the conversation list to show the new conversation
+  if (sidebarRef.value) {
+    sidebarRef.value.fetchConversations()
+  }
 }
 
 const handleLoading = (loading) => {
@@ -116,7 +122,7 @@ const handleLoading = (loading) => {
 
 <template>
   <div class="app-container">
-    <Sidebar :is-open="isSidebarOpen" :width="leftSidebarWidth" @toggle="toggleSidebar" />
+    <Sidebar ref="sidebarRef" :is-open="isSidebarOpen" :width="leftSidebarWidth" @toggle="toggleSidebar" />
     <div 
       v-if="isSidebarOpen"
       class="resizer left-resizer" 
