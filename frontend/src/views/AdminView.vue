@@ -1,20 +1,20 @@
 <script setup>
 import { ref, watch, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import Sidebar from '../components/Sidebar.vue'
-import RightSidebar from '../components/RightSidebar.vue'
+import ConvSidebar from '../components/ConvSidebar.vue'
+import DocumentSidebar from '../components/DocumentSidebar.vue'
 import ThemeToggle from '../components/ThemeToggle.vue'
 import { API_BASE_URL } from '@/config.js'
 
 const route = useRoute()
 const isSidebarOpen = ref(true)
-const isRightSidebarOpen = ref(false)
+const isDocumentSidebarOpen = ref(false)
 const bailHtml = ref('')
 const isAiLoading = ref(false)
 const sidebarRef = ref(null)
 
 const leftSidebarWidth = ref(280)
-const rightSidebarWidth = ref(600)
+const documentSidebarWidth = ref(600)
 const isResizingLeft = ref(false)
 const isResizingRight = ref(false)
 
@@ -55,7 +55,7 @@ const handleResizeRight = (e) => {
   if (isResizingRight.value) {
     const newWidth = window.innerWidth - e.clientX
     if (newWidth > 300 && newWidth < 1200) {
-      rightSidebarWidth.value = newWidth
+      documentSidebarWidth.value = newWidth
     }
   }
 }
@@ -81,15 +81,15 @@ const fetchBail = async (conversationId) => {
       const data = await response.json()
       bailHtml.value = data.html
       if (bailHtml.value) {
-        isRightSidebarOpen.value = true
+        isDocumentSidebarOpen.value = true
       }
     } else {
-      isRightSidebarOpen.value = false
+      isDocumentSidebarOpen.value = false
       bailHtml.value = ''
     }
   } catch (error) {
     console.error('Error fetching bail:', error)
-    isRightSidebarOpen.value = false
+    isDocumentSidebarOpen.value = false
     bailHtml.value = ''
   }
 }
@@ -104,7 +104,7 @@ watch(() => route.params.id, (newId) => {
   if (newId) {
     fetchBail(newId)
   } else {
-    isRightSidebarOpen.value = false
+    isDocumentSidebarOpen.value = false
     bailHtml.value = ''
   }
 })
@@ -119,7 +119,7 @@ const onMessageReceived = (conversationId) => {
 const handleLoading = (loading) => {
   isAiLoading.value = loading
   if (loading) {
-    isRightSidebarOpen.value = true
+    isDocumentSidebarOpen.value = true
   }
 }
 </script>
@@ -127,7 +127,7 @@ const handleLoading = (loading) => {
 <template>
   <div class="admin-container">
     <!-- Left Sidebar -->
-    <Sidebar 
+    <ConvSidebar 
       ref="sidebarRef" 
       :is-open="isSidebarOpen" 
       :width="leftSidebarWidth" 
@@ -166,15 +166,15 @@ const handleLoading = (loading) => {
 
     <!-- Right Resizer -->
     <div 
-      v-if="isRightSidebarOpen"
+      v-if="isDocumentSidebarOpen"
       class="resizer right-resizer" 
       @mousedown="startResizeRight"
     ></div>
 
     <!-- Right Sidebar -->
-    <RightSidebar 
-      :is-open="isRightSidebarOpen" 
-      :width="rightSidebarWidth" 
+    <DocumentSidebar 
+      :is-open="isDocumentSidebarOpen" 
+      :width="documentSidebarWidth" 
       :html-content="bailHtml" 
       :is-loading="isAiLoading" 
     />
