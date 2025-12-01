@@ -3,6 +3,7 @@ import { ref, watch, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import Sidebar from '../components/Sidebar.vue'
 import RightSidebar from '../components/RightSidebar.vue'
+import ThemeToggle from '../components/ThemeToggle.vue'
 import { API_BASE_URL } from '@/config.js'
 
 const route = useRoute()
@@ -142,21 +143,23 @@ const handleLoading = (loading) => {
 
     <!-- Main Content -->
     <div class="main-content">
-      <!-- Toggle Sidebar Button (when closed) -->
-      <button 
-        v-if="!isSidebarOpen" 
-        class="open-sidebar-btn"
-        @click="toggleSidebar"
-        title="Ouvrir le menu"
-      >
-        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path d="M3 12h18M3 6h18M3 18h18"/>
-        </svg>
-      </button>
+      <!-- Top Controls (when sidebar closed) -->
+      <div v-if="!isSidebarOpen" class="top-controls">
+        <button
+          class="open-sidebar-btn"
+          @click="toggleSidebar"
+          title="Ouvrir le menu"
+        >
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M3 12h18M3 6h18M3 18h18"/>
+          </svg>
+        </button>
+        <ThemeToggle />
+      </div>
 
       <!-- Chat Content -->
-      <router-view 
-        @message-received="onMessageReceived" 
+      <router-view
+        @message-received="onMessageReceived"
         @is-loading="handleLoading"
       ></router-view>
     </div>
@@ -184,8 +187,9 @@ const handleLoading = (loading) => {
   height: 100vh;
   width: 100vw;
   overflow: hidden;
-  background-color: var(--color-cream, #faf9f7);
+  background-color: var(--color-background);
   font-family: 'DM Sans', -apple-system, sans-serif;
+  transition: background-color 0.3s ease;
 }
 
 .main-content {
@@ -195,15 +199,21 @@ const handleLoading = (loading) => {
   min-width: 0;
 }
 
-.open-sidebar-btn {
+.top-controls {
   position: absolute;
   top: 16px;
   left: 16px;
   z-index: 100;
-  background: white;
-  border: 1px solid var(--color-cream-dark, #f0ede8);
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.open-sidebar-btn {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: 10px;
-  color: var(--color-ink, #1a1a2e);
+  color: var(--color-ink);
   cursor: pointer;
   padding: 10px;
   transition: all 0.2s;
@@ -214,9 +224,9 @@ const handleLoading = (loading) => {
 }
 
 .open-sidebar-btn:hover {
-  background-color: var(--color-cream, #faf9f7);
-  border-color: var(--color-accent, #2563eb);
-  color: var(--color-accent, #2563eb);
+  background-color: var(--color-cream);
+  border-color: var(--color-accent);
+  color: var(--color-accent);
 }
 
 .resizer {
@@ -237,14 +247,14 @@ const handleLoading = (loading) => {
   transform: translate(-50%, -50%);
   width: 4px;
   height: 48px;
-  background: var(--color-cream-dark, #f0ede8);
+  background: var(--color-cream-dark);
   border-radius: 2px;
   transition: background-color 0.2s;
 }
 
 .resizer:hover::before,
 .resizer:active::before {
-  background-color: var(--color-accent, #2563eb);
+  background-color: var(--color-accent);
 }
 
 .left-resizer {

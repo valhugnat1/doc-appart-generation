@@ -83,9 +83,9 @@ const props = defineProps({
 <style scoped>
 .right-sidebar {
   width: 0;
-  background-color: var(--color-cream, #faf9f7);
-  border-left: 1px solid var(--color-cream-dark, #f0ede8);
-  transition: width 0.3s ease;
+  background-color: var(--color-background);
+  border-left: 1px solid var(--color-border);
+  transition: width 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
   overflow: hidden;
   height: 100%;
   display: flex;
@@ -102,8 +102,9 @@ const props = defineProps({
   align-items: center;
   gap: 16px;
   padding: 20px 24px;
-  background: white;
-  border-bottom: 1px solid var(--color-cream-dark, #f0ede8);
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .header-icon {
@@ -122,13 +123,13 @@ const props = defineProps({
   font-family: 'Fraunces', Georgia, serif;
   font-size: 1.25rem;
   font-weight: 500;
-  color: var(--color-ink, #1a1a2e);
+  color: var(--color-ink);
   margin: 0 0 4px 0;
 }
 
 .header-text p {
   font-size: 0.85rem;
-  color: var(--color-ink-muted, #7a7a8a);
+  color: var(--color-ink-muted);
   margin: 0;
 }
 
@@ -144,11 +145,11 @@ const props = defineProps({
 }
 
 .document-wrapper {
-  background: white;
+  background: var(--color-surface);
   border-radius: 16px;
   box-shadow: 0 4px 20px rgba(26, 26, 46, 0.08);
   overflow: hidden;
-  transition: filter 0.3s;
+  transition: filter 0.3s, background-color 0.3s ease;
 }
 
 .document-content {
@@ -174,18 +175,19 @@ const props = defineProps({
 }
 
 .loading-card {
-  background: white;
+  background: var(--color-surface);
   padding: 32px 48px;
   border-radius: 16px;
   box-shadow: 0 8px 32px rgba(26, 26, 46, 0.15);
   text-align: center;
+  transition: background-color 0.3s ease;
 }
 
 .refresh-spinner {
   width: 48px;
   height: 48px;
-  border: 4px solid var(--color-cream-dark, #f0ede8);
-  border-top-color: var(--color-accent, #2563eb);
+  border: 4px solid var(--color-cream-dark);
+  border-top-color: var(--color-accent);
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin: 0 auto 16px;
@@ -197,7 +199,7 @@ const props = defineProps({
 }
 
 .loading-card p {
-  color: var(--color-ink-light, #4a4a5a);
+  color: var(--color-ink-light);
   font-size: 0.95rem;
   margin: 0;
 }
@@ -223,12 +225,12 @@ const props = defineProps({
   font-family: 'Fraunces', Georgia, serif;
   font-size: 1.5rem;
   font-weight: 500;
-  color: var(--color-ink, #1a1a2e);
+  color: var(--color-ink);
   margin: 0 0 12px 0;
 }
 
 .empty-state p {
-  color: var(--color-ink-muted, #7a7a8a);
+  color: var(--color-ink-muted);
   font-size: 0.95rem;
   max-width: 280px;
   margin: 0;
@@ -238,8 +240,9 @@ const props = defineProps({
   display: flex;
   gap: 12px;
   padding: 20px 24px;
-  background: white;
-  border-top: 1px solid var(--color-cream-dark, #f0ede8);
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .action-btn {
@@ -258,7 +261,7 @@ const props = defineProps({
 }
 
 .action-btn.primary {
-  background: linear-gradient(135deg, var(--color-accent, #2563eb), var(--color-accent-dark, #1d4ed8));
+  background: linear-gradient(135deg, var(--color-accent), var(--color-accent-dark));
   color: white;
   box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
 }
@@ -269,14 +272,14 @@ const props = defineProps({
 }
 
 .action-btn.secondary {
-  background: var(--color-cream, #faf9f7);
-  color: var(--color-ink, #1a1a2e);
-  border: 2px solid var(--color-cream-dark, #f0ede8);
+  background: var(--color-cream);
+  color: var(--color-ink);
+  border: 2px solid var(--color-border);
 }
 
 .action-btn.secondary:hover {
-  border-color: var(--color-ink-muted, #7a7a8a);
-  background: white;
+  border-color: var(--color-ink-muted);
+  background: var(--color-surface);
 }
 
 /* Document content styling */
@@ -284,7 +287,7 @@ const props = defineProps({
   font-family: 'Fraunces', Georgia, serif;
   font-size: 1.5rem;
   font-weight: 600;
-  color: var(--color-ink, #1a1a2e);
+  color: var(--color-ink);
   text-align: center;
   margin-bottom: 8px;
 }
@@ -293,16 +296,16 @@ const props = defineProps({
   font-family: 'Fraunces', Georgia, serif;
   font-size: 1.1rem;
   font-weight: 500;
-  color: var(--color-ink, #1a1a2e);
+  color: var(--color-ink);
   margin: 24px 0 12px;
   padding-bottom: 8px;
-  border-bottom: 2px solid var(--color-accent, #2563eb);
+  border-bottom: 2px solid var(--color-accent);
 }
 
 :deep(.document-content p) {
   font-size: 0.9rem;
   line-height: 1.7;
-  color: var(--color-ink, #1a1a2e);
+  color: var(--color-ink);
   margin-bottom: 12px;
 }
 
@@ -328,11 +331,11 @@ const props = defineProps({
 }
 
 .sidebar-content::-webkit-scrollbar-thumb {
-  background: var(--color-cream-dark, #f0ede8);
+  background: var(--color-cream-dark);
   border-radius: 4px;
 }
 
 .sidebar-content::-webkit-scrollbar-thumb:hover {
-  background: var(--color-ink-muted, #7a7a8a);
+  background: var(--color-ink-muted);
 }
 </style>

@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { API_BASE_URL } from '@/config.js'
+import ThemeToggle from './ThemeToggle.vue'
 
 const props = defineProps({
   isOpen: {
@@ -76,11 +77,14 @@ onMounted(() => {
         </div>
         <span class="logo-text">BailAssist</span>
       </div>
-      <button class="close-btn" @click="toggleSidebar" title="Fermer">
-        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path d="M19 12H5M12 19l-7-7 7-7"/>
-        </svg>
-      </button>
+      <div class="sidebar-controls">
+        <ThemeToggle />
+        <button class="close-btn" @click="toggleSidebar" title="Fermer">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+          </svg>
+        </button>
+      </div>
     </div>
 
     <!-- New Chat Button -->
@@ -142,12 +146,13 @@ onMounted(() => {
 .sidebar {
   width: v-bind(width + 'px');
   height: 100vh;
-  background: white;
+  background: var(--color-surface);
   display: flex;
   flex-direction: column;
-  color: var(--color-ink, #1a1a2e);
-  border-right: 1px solid var(--color-cream-dark, #f0ede8);
+  color: var(--color-ink);
+  border-right: 1px solid var(--color-border);
   font-family: 'DM Sans', -apple-system, sans-serif;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .sidebar-brand {
@@ -155,7 +160,7 @@ onMounted(() => {
   justify-content: space-between;
   align-items: center;
   padding: 20px;
-  border-bottom: 1px solid var(--color-cream-dark, #f0ede8);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .logo {
@@ -167,7 +172,7 @@ onMounted(() => {
 .logo-icon {
   width: 40px;
   height: 40px;
-  background: linear-gradient(135deg, var(--color-accent, #2563eb), var(--color-accent-dark, #1d4ed8));
+  background: linear-gradient(135deg, var(--color-accent), var(--color-accent-dark));
   border-radius: 10px;
   display: flex;
   align-items: center;
@@ -179,13 +184,19 @@ onMounted(() => {
   font-family: 'Fraunces', Georgia, serif;
   font-size: 1.25rem;
   font-weight: 600;
-  color: var(--color-ink, #1a1a2e);
+  color: var(--color-ink);
+}
+
+.sidebar-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .close-btn {
   background: transparent;
   border: none;
-  color: var(--color-ink-muted, #7a7a8a);
+  color: var(--color-ink-muted);
   cursor: pointer;
   padding: 8px;
   border-radius: 8px;
@@ -196,8 +207,8 @@ onMounted(() => {
 }
 
 .close-btn:hover {
-  background-color: var(--color-cream, #faf9f7);
-  color: var(--color-ink, #1a1a2e);
+  background-color: var(--color-cream);
+  color: var(--color-ink);
 }
 
 .sidebar-actions {
@@ -211,7 +222,7 @@ onMounted(() => {
   justify-content: center;
   gap: 10px;
   padding: 14px 20px;
-  background: linear-gradient(135deg, var(--color-accent, #2563eb), var(--color-accent-dark, #1d4ed8));
+  background: linear-gradient(135deg, var(--color-accent), var(--color-accent-dark));
   color: white;
   border: none;
   border-radius: 12px;
@@ -240,7 +251,7 @@ onMounted(() => {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--color-ink-muted, #7a7a8a);
+  color: var(--color-ink-muted);
   margin-bottom: 12px;
   padding: 0 4px;
 }
@@ -258,15 +269,15 @@ onMounted(() => {
   justify-content: center;
   gap: 12px;
   padding: 40px 20px;
-  color: var(--color-ink-muted, #7a7a8a);
+  color: var(--color-ink-muted);
   font-size: 0.9rem;
 }
 
 .spinner {
   width: 20px;
   height: 20px;
-  border: 2px solid var(--color-cream-dark, #f0ede8);
-  border-top-color: var(--color-accent, #2563eb);
+  border: 2px solid var(--color-cream-dark);
+  border-top-color: var(--color-accent);
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -278,7 +289,7 @@ onMounted(() => {
 .empty-list {
   text-align: center;
   padding: 40px 20px;
-  color: var(--color-ink-muted, #7a7a8a);
+  color: var(--color-ink-muted);
   font-size: 0.9rem;
 }
 
@@ -295,32 +306,32 @@ onMounted(() => {
 }
 
 .conversation-item:hover {
-  background-color: var(--color-cream, #faf9f7);
+  background-color: var(--color-cream);
 }
 
 .conversation-item.active {
-  background-color: var(--color-accent-light, #dbeafe);
-  border-color: var(--color-accent, #2563eb);
+  background-color: var(--color-accent-light);
+  border-color: var(--color-accent);
 }
 
 .conversation-item.active .conversation-icon {
-  color: var(--color-accent, #2563eb);
+  color: var(--color-accent);
 }
 
 .conversation-icon {
   width: 32px;
   height: 32px;
-  background: var(--color-cream, #faf9f7);
+  background: var(--color-cream);
   border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--color-ink-muted, #7a7a8a);
+  color: var(--color-ink-muted);
   flex-shrink: 0;
 }
 
 .conversation-item.active .conversation-icon {
-  background: white;
+  background: var(--color-surface);
 }
 
 .conversation-info {
@@ -337,17 +348,17 @@ onMounted(() => {
   white-space: nowrap;
   font-size: 0.9rem;
   font-weight: 500;
-  color: var(--color-ink, #1a1a2e);
+  color: var(--color-ink);
 }
 
 .date {
   font-size: 0.75rem;
-  color: var(--color-ink-muted, #7a7a8a);
+  color: var(--color-ink-muted);
 }
 
 .sidebar-footer {
   padding: 16px;
-  border-top: 1px solid var(--color-cream-dark, #f0ede8);
+  border-top: 1px solid var(--color-border);
 }
 
 .footer-link {
@@ -356,7 +367,7 @@ onMounted(() => {
   gap: 10px;
   padding: 12px 16px;
   border-radius: 10px;
-  color: var(--color-ink-light, #4a4a5a);
+  color: var(--color-ink-light);
   text-decoration: none;
   font-size: 0.9rem;
   font-weight: 500;
@@ -364,8 +375,8 @@ onMounted(() => {
 }
 
 .footer-link:hover {
-  background-color: var(--color-cream, #faf9f7);
-  color: var(--color-accent, #2563eb);
+  background-color: var(--color-cream);
+  color: var(--color-accent);
 }
 
 /* Scrollbar styling */
@@ -378,11 +389,11 @@ onMounted(() => {
 }
 
 .conversations-list::-webkit-scrollbar-thumb {
-  background: var(--color-cream-dark, #f0ede8);
+  background: var(--color-cream-dark);
   border-radius: 3px;
 }
 
 .conversations-list::-webkit-scrollbar-thumb:hover {
-  background: var(--color-ink-muted, #7a7a8a);
+  background: var(--color-ink-muted);
 }
 </style>

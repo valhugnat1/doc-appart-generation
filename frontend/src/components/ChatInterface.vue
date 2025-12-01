@@ -256,9 +256,10 @@ const sendMessage = async () => {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background-color: var(--color-cream, #faf9f7);
-  color: var(--color-ink, #1a1a2e);
+  background-color: var(--color-background);
+  color: var(--color-ink);
   font-family: 'DM Sans', -apple-system, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .messages {
@@ -293,12 +294,12 @@ const sendMessage = async () => {
   font-family: 'Fraunces', Georgia, serif;
   font-size: 2rem;
   font-weight: 500;
-  color: var(--color-ink, #1a1a2e);
+  color: var(--color-ink);
   margin-bottom: 12px;
 }
 
 .empty-state p {
-  color: var(--color-ink-light, #4a4a5a);
+  color: var(--color-ink-light);
   font-size: 1.1rem;
 }
 
@@ -307,13 +308,13 @@ const sendMessage = async () => {
 }
 
 .message.user {
-  background-color: var(--color-cream, #faf9f7);
+  background-color: var(--color-background);
 }
 
 .message.assistant {
-  background-color: white;
-  border-top: 1px solid var(--color-cream-dark, #f0ede8);
-  border-bottom: 1px solid var(--color-cream-dark, #f0ede8);
+  background-color: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .message-content {
@@ -337,7 +338,7 @@ const sendMessage = async () => {
 }
 
 .avatar.user {
-  background: linear-gradient(135deg, var(--color-accent, #2563eb), var(--color-accent-dark, #1d4ed8));
+  background: linear-gradient(135deg, var(--color-accent), var(--color-accent-dark));
   color: white;
 }
 
@@ -356,7 +357,7 @@ const sendMessage = async () => {
 .sender-name {
   font-weight: 600;
   font-size: 0.9rem;
-  color: var(--color-ink, #1a1a2e);
+  color: var(--color-ink);
   margin-bottom: 8px;
 }
 
@@ -369,14 +370,14 @@ const sendMessage = async () => {
 :deep(.markdown-body) {
   font-size: 16px;
   line-height: 1.7;
-  color: var(--color-ink, #1a1a2e);
+  color: var(--color-ink);
 }
 
 :deep(.markdown-body p) { margin-bottom: 1em; }
 :deep(.markdown-body p:last-child) { margin-bottom: 0; }
 
 :deep(.markdown-body pre) {
-  background-color: var(--color-ink, #1a1a2e);
+  background-color: var(--color-ink);
   color: #f8f8f2;
   padding: 16px 20px;
   border-radius: 12px;
@@ -387,7 +388,7 @@ const sendMessage = async () => {
 
 :deep(.markdown-body code) {
   font-family: 'Menlo', 'Monaco', monospace;
-  background-color: var(--color-cream-dark, #f0ede8);
+  background-color: var(--color-cream-dark);
   padding: 3px 8px;
   border-radius: 6px;
   font-size: 0.9em;
@@ -410,19 +411,19 @@ const sendMessage = async () => {
   margin-bottom: 0.5em;
 }
 
-:deep(.markdown-body a) { 
-  color: var(--color-accent, #2563eb); 
+:deep(.markdown-body a) {
+  color: var(--color-accent);
   text-decoration: none;
   font-weight: 500;
 }
 
-:deep(.markdown-body a:hover) { 
-  text-decoration: underline; 
+:deep(.markdown-body a:hover) {
+  text-decoration: underline;
 }
 
 :deep(.markdown-body strong) {
   font-weight: 600;
-  color: var(--color-ink, #1a1a2e);
+  color: var(--color-ink);
 }
 
 :deep(.markdown-body h1),
@@ -431,7 +432,7 @@ const sendMessage = async () => {
   font-family: 'Fraunces', Georgia, serif;
   font-weight: 500;
   margin: 1.5em 0 0.75em;
-  color: var(--color-ink, #1a1a2e);
+  color: var(--color-ink);
 }
 
 :deep(.markdown-body h1) { font-size: 1.5em; }
@@ -439,10 +440,10 @@ const sendMessage = async () => {
 :deep(.markdown-body h3) { font-size: 1.15em; }
 
 :deep(.markdown-body blockquote) {
-  border-left: 4px solid var(--color-accent, #2563eb);
+  border-left: 4px solid var(--color-accent);
   padding-left: 16px;
   margin: 1em 0;
-  color: var(--color-ink-light, #4a4a5a);
+  color: var(--color-ink-light);
   font-style: italic;
 }
 
@@ -451,7 +452,7 @@ const sendMessage = async () => {
   bottom: 0;
   left: 0;
   right: 0;
-  background: linear-gradient(180deg, transparent, var(--color-cream, #faf9f7) 30%);
+  background: linear-gradient(180deg, transparent, var(--color-background) 30%);
   padding: 20px 24px 32px;
   z-index: 20;
 }
@@ -460,10 +461,10 @@ const sendMessage = async () => {
   max-width: 800px;
   margin: 0 auto;
   position: relative;
-  background: white;
+  background: var(--color-surface);
   border-radius: 24px;
   box-shadow: 0 4px 24px rgba(26, 26, 46, 0.1);
-  border: 2px solid var(--color-cream-dark, #f0ede8);
+  border: 2px solid var(--color-border);
   display: flex;
   align-items: flex-end;
   padding: 8px 8px 8px 20px;
@@ -471,7 +472,7 @@ const sendMessage = async () => {
 }
 
 .input-wrapper:focus-within {
-  border-color: var(--color-accent, #2563eb);
+  border-color: var(--color-accent);
   box-shadow: 0 4px 24px rgba(37, 99, 235, 0.15);
 }
 
@@ -480,7 +481,7 @@ textarea {
   max-height: 200px;
   background-color: transparent;
   border: none;
-  color: var(--color-ink, #1a1a2e);
+  color: var(--color-ink);
   padding: 12px 0;
   font-family: inherit;
   font-size: 16px;
@@ -491,13 +492,13 @@ textarea {
 }
 
 textarea::placeholder {
-  color: var(--color-ink-muted, #7a7a8a);
+  color: var(--color-ink-muted);
 }
 
 textarea:focus { overflow-y: auto; }
 
 .send-btn {
-  background: linear-gradient(135deg, var(--color-accent, #2563eb), var(--color-accent-dark, #1d4ed8));
+  background: linear-gradient(135deg, var(--color-accent), var(--color-accent-dark));
   border: none;
   color: white;
   cursor: pointer;
@@ -510,21 +511,21 @@ textarea:focus { overflow-y: auto; }
   flex-shrink: 0;
 }
 
-.send-btn:hover:not(:disabled) { 
+.send-btn:hover:not(:disabled) {
   transform: scale(1.05);
   box-shadow: 0 4px 16px rgba(37, 99, 235, 0.3);
 }
 
-.send-btn:disabled { 
-  background: var(--color-cream-dark, #f0ede8); 
-  color: var(--color-ink-muted, #7a7a8a); 
-  cursor: not-allowed; 
+.send-btn:disabled {
+  background: var(--color-cream-dark);
+  color: var(--color-ink-muted);
+  cursor: not-allowed;
 }
 
 .input-hint {
   text-align: center;
   font-size: 0.8rem;
-  color: var(--color-ink-muted, #7a7a8a);
+  color: var(--color-ink-muted);
   margin-top: 12px;
 }
 
@@ -537,7 +538,7 @@ textarea:focus { overflow-y: auto; }
 .typing-indicator span {
   width: 8px;
   height: 8px;
-  background-color: var(--color-accent, #2563eb);
+  background-color: var(--color-accent);
   border-radius: 50%;
   animation: bounce 1.4s infinite both;
 }
@@ -566,11 +567,11 @@ textarea:focus { overflow-y: auto; }
 }
 
 .messages::-webkit-scrollbar-thumb {
-  background: var(--color-cream-dark, #f0ede8);
+  background: var(--color-cream-dark);
   border-radius: 4px;
 }
 
 .messages::-webkit-scrollbar-thumb:hover {
-  background: var(--color-ink-muted, #7a7a8a);
+  background: var(--color-ink-muted);
 }
 </style>

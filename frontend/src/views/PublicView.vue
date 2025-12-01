@@ -2,6 +2,7 @@
 import { ref, watch, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import RightSidebar from '../components/RightSidebar.vue'
+import ThemeToggle from '../components/ThemeToggle.vue'
 import { API_BASE_URL } from '@/config.js'
 import Cookies from 'js-cookie'
 
@@ -117,6 +118,7 @@ onMounted(() => {
         </a>
         
         <div class="header-actions">
+          <ThemeToggle />
           <button @click="startNewConversation" class="new-conv-btn">
             <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path d="M12 5v14M5 12h14"/>
@@ -155,8 +157,9 @@ onMounted(() => {
   height: 100vh;
   width: 100vw;
   overflow: hidden;
-  background-color: var(--color-cream, #faf9f7);
+  background-color: var(--color-background);
   font-family: 'DM Sans', -apple-system, sans-serif;
+  transition: background-color 0.3s ease;
 }
 
 .main-content {
@@ -173,9 +176,10 @@ onMounted(() => {
   justify-content: space-between;
   align-items: center;
   padding: 16px 24px;
-  background: white;
-  border-bottom: 1px solid var(--color-cream-dark, #f0ede8);
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
   z-index: 10;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .logo {
@@ -188,7 +192,7 @@ onMounted(() => {
 .logo-icon {
   width: 40px;
   height: 40px;
-  background: linear-gradient(135deg, var(--color-accent, #2563eb), var(--color-accent-dark, #1d4ed8));
+  background: linear-gradient(135deg, var(--color-accent), var(--color-accent-dark));
   border-radius: 10px;
   display: flex;
   align-items: center;
@@ -200,12 +204,13 @@ onMounted(() => {
   font-family: 'Fraunces', Georgia, serif;
   font-size: 1.35rem;
   font-weight: 600;
-  color: var(--color-ink, #1a1a2e);
+  color: var(--color-ink);
 }
 
 .header-actions {
   display: flex;
   gap: 12px;
+  align-items: center;
 }
 
 .new-conv-btn {
@@ -213,7 +218,7 @@ onMounted(() => {
   align-items: center;
   gap: 8px;
   padding: 10px 20px;
-  background: linear-gradient(135deg, var(--color-accent, #2563eb), var(--color-accent-dark, #1d4ed8));
+  background: linear-gradient(135deg, var(--color-accent), var(--color-accent-dark));
   color: white;
   border: none;
   border-radius: 100px;
@@ -252,14 +257,14 @@ onMounted(() => {
   transform: translate(-50%, -50%);
   width: 4px;
   height: 48px;
-  background: var(--color-cream-dark, #f0ede8);
+  background: var(--color-cream-dark);
   border-radius: 2px;
   transition: background-color 0.2s;
 }
 
 .resizer:hover::before,
 .resizer:active::before {
-  background-color: var(--color-accent, #2563eb);
+  background-color: var(--color-accent);
 }
 
 /* Mobile responsive */
