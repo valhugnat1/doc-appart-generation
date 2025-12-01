@@ -23,23 +23,40 @@ const props = defineProps({
 
 <template>
   <div class="right-sidebar" :class="{ 'is-open': isOpen }">
-    <!-- Header -->
     <div class="sidebar-header">
-      <div class="header-icon">
-        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-          <path d="M14 2v6h6"/>
-          <path d="M16 13H8"/>
-          <path d="M16 17H8"/>
-        </svg>
+      <div class="header-left">
+        <div class="header-icon">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <path d="M14 2v6h6"/>
+            <path d="M16 13H8"/>
+            <path d="M16 17H8"/>
+          </svg>
+        </div>
+        <div class="header-text">
+          <h2>Aperçu du bail</h2>
+          <p>Document en cours de génération</p>
+        </div>
       </div>
-      <div class="header-text">
-        <h2>Aperçu du bail</h2>
-        <p>Document en cours de génération</p>
+
+      <div v-if="htmlContent && !isLoading" class="header-actions">
+        <button class="action-btn secondary" title="Aperçu plein écran">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+            <circle cx="12" cy="12" r="3"/>
+          </svg>
+        </button>
+        <button class="action-btn primary">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7,10 12,15 17,10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          <span>PDF</span>
+        </button>
       </div>
     </div>
 
-    <!-- Content -->
     <div class="sidebar-content">
       <div v-if="htmlContent || isLoading" class="preview-container">
         <div v-if="htmlContent" class="document-wrapper" :class="{ 'content-blurred': isLoading }">
@@ -57,25 +74,6 @@ const props = defineProps({
         <h3>Aucun document</h3>
         <p>Le bail apparaîtra ici au fur et à mesure de la conversation</p>
       </div>
-    </div>
-
-    <!-- Footer Actions -->
-    <div v-if="htmlContent && !isLoading" class="sidebar-footer">
-      <button class="action-btn secondary">
-        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-          <circle cx="12" cy="12" r="3"/>
-        </svg>
-        Aperçu plein écran
-      </button>
-      <button class="action-btn primary">
-        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-          <polyline points="7,10 12,15 17,10"/>
-          <line x1="12" y1="15" x2="12" y2="3"/>
-        </svg>
-        Télécharger PDF
-      </button>
     </div>
   </div>
 </template>
@@ -100,11 +98,23 @@ const props = defineProps({
 .sidebar-header {
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 20px 24px;
+  justify-content: space-between;
+  padding: 16px 24px;
   background: var(--color-surface);
   border-bottom: 1px solid var(--color-border);
   transition: background-color 0.3s ease, border-color 0.3s ease;
+  min-height: 80px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.header-actions {
+  display: flex;
+  gap: 8px;
 }
 
 .header-icon {
@@ -136,7 +146,8 @@ const props = defineProps({
 .sidebar-content {
   flex: 1;
   overflow-y: auto;
-  padding: 24px;
+  /* Top 24px, Sides 24px, Bottom 15% of viewport height */
+  padding: 24px 24px 15vh 24px; 
 }
 
 .preview-container {
@@ -236,45 +247,37 @@ const props = defineProps({
   margin: 0;
 }
 
-.sidebar-footer {
-  display: flex;
-  gap: 12px;
-  padding: 20px 24px;
-  background: var(--color-surface);
-  border-top: 1px solid var(--color-border);
-  transition: background-color 0.3s ease, border-color 0.3s ease;
-}
-
 .action-btn {
-  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  padding: 14px 20px;
-  border-radius: 12px;
-  font-size: 0.9rem;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
   border: none;
+  white-space: nowrap;
 }
 
 .action-btn.primary {
   background: linear-gradient(135deg, var(--color-accent), var(--color-accent-dark));
   color: white;
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
 }
 
 .action-btn.primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
 }
 
 .action-btn.secondary {
   background: var(--color-cream);
   color: var(--color-ink);
-  border: 2px solid var(--color-border);
+  border: 1px solid var(--color-border);
+  padding: 8px;
 }
 
 .action-btn.secondary:hover {
@@ -321,7 +324,6 @@ const props = defineProps({
   margin-bottom: 6px;
 }
 
-/* Scrollbar styling */
 .sidebar-content::-webkit-scrollbar {
   width: 8px;
 }
