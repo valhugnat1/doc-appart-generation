@@ -171,6 +171,35 @@ onUnmounted(() => {
 watch(() => props.htmlContent, () => {
   iframeHeight.value = 800
 })
+
+import { useRoute } from 'vue-router'
+import { API_BASE_URL } from '@/config.js'
+const route = useRoute()
+
+const downloadPdf = async () => {
+  const uuid = route.params.id
+  console.log('Download PDF for UUID:', uuid);
+  
+  if (!uuid) return
+  
+  try {
+    const response = await fetch(`${API_BASE_URL}/bail/pdf/${uuid}`)
+    if (!response.ok) throw new Error('Download failed')
+    
+    const blob = await response.blob()
+    const url = window.URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `bail_${uuid}.pdf`
+    document.body.appendChild(a)
+    a.click()
+    window.URL.revokeObjectURL(url)
+    document.body.removeChild(a)
+  } catch (error) {
+    console.error('Error downloading PDF:', error)
+    // You might want to add a toast notification here
+  }
+}
 </script>
 
 <template>
@@ -198,7 +227,7 @@ watch(() => props.htmlContent, () => {
             <circle cx="12" cy="12" r="3"/>
           </svg>
         </button>
-        <button class="action-btn primary">
+        <button class="action-btn primary" @click="downloadPdf">
           <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
             <polyline points="7,10 12,15 17,10"/>
