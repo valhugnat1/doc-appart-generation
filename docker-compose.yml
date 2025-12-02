@@ -1,4 +1,11 @@
 services:
+  landing:
+    build:
+      context: ./landing
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+
   backend:
     build:
       context: ./backend

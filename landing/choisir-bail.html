@@ -8,7 +8,11 @@
     <meta name="robots" content="index, follow">
     
     <title>Choisir le Type de Bail | Location Meublée ou Vide | BailAssist</title>
-    
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="asset/logo_clean.png">
+    <link rel="apple-touch-icon" href="asset/logo_clean.png">
+
     <link rel="canonical" href="https://bailassist.fr/choisir-bail">
     
     <!-- Fonts -->
@@ -102,13 +106,15 @@
         .logo-icon {
             width: 44px;
             height: 44px;
-            background: linear-gradient(135deg, var(--color-accent), var(--color-accent-dark));
-            border-radius: var(--radius-sm);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-size: 20px;
+        }
+
+        .logo-icon img {
+            width: 44px;
+            height: 44px;
+            object-fit: contain;
         }
 
         .logo-text {
@@ -653,19 +659,13 @@
     <nav class="nav">
         <div class="container">
             <div class="nav-inner">
-                <a href="/" class="logo">
+                <a href="index.html" class="logo">
                     <div class="logo-icon">
-                        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                            <path d="M14 2v6h6"/>
-                            <path d="M16 13H8"/>
-                            <path d="M16 17H8"/>
-                            <path d="M10 9H8"/>
-                        </svg>
+                        <img src="asset/logo_clean.png" alt="BailAssist Logo">
                     </div>
                     <span class="logo-text">BailAssist</span>
                 </a>
-                <a href="/" class="back-link">
+                <a href="index.html" class="back-link">
                     <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path d="M19 12H5M12 19l-7-7 7-7"/>
                     </svg>
@@ -695,7 +695,7 @@
                 <!-- Choice Cards -->
                 <div class="choice-grid">
                     <!-- Meublé -->
-                    <a href="https://app.bailassist.fr/meuble" class="choice-card meuble">
+                    <a href="http://localhost:8080" class="choice-card meuble">
                         <span class="popular-badge">Le + populaire</span>
                         <div class="choice-icon">🛋️</div>
                         <h2>Location meublée</h2>
@@ -727,7 +727,7 @@
                     </a>
 
                     <!-- Non meublé -->
-                    <a href="https://app.bailassist.fr/vide" class="choice-card vide">
+                    <a href="http://localhost:8080" class="choice-card vide">
                         <div class="choice-icon">🏠</div>
                         <h2>Location vide</h2>
                         <p class="choice-subtitle">Logement non meublé (nu)</p>
