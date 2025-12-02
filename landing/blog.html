@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Blog BailAssist : guides pratiques, conseils juridiques et actualités sur la location immobilière en France. Bail meublé, dépôt de garantie, DPE, droits des locataires et propriétaires.">
+    <meta name="keywords" content="blog location, conseils bail, guide propriétaire, droit locataire, immobilier France, DPE 2025, dépôt garantie, bail meublé, location appartement">
+    <meta name="author" content="BailAssist">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph / Social -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://bailassist.fr/blog">
+    <meta property="og:title" content="Blog BailAssist - Guides et Conseils Location Immobilière">
+    <meta property="og:description" content="Guides pratiques, conseils juridiques et actualités sur la location immobilière en France. Tout savoir sur les baux, droits et obligations.">
+    <meta property="og:image" content="/og-image-blog.jpg">
+    <meta property="og:locale" content="fr_FR">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Blog BailAssist - Guides et Conseils Location Immobilière">
+    <meta name="twitter:description" content="Guides pratiques et conseils juridiques sur la location immobilière en France.">
+    
+    <title>Blog | Guides et Conseils Location Immobilière | BailAssist</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="asset/logo_clean.png">
+    <link rel="apple-touch-icon" href="asset/logo_clean.png">
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://bailassist.fr/blog">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Schema.org structured data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Blog",
+        "name": "Blog BailAssist",
+        "description": "Guides pratiques, conseils juridiques et actualités sur la location immobilière en France",
+        "url": "https://bailassist.fr/blog",
+        "publisher": {
+            "@type": "Organization",
+            "name": "BailAssist",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://bailassist.fr/asset/logo_clean.png"
+            }
+        },
+        "blogPost": [
+            {
+                "@type": "BlogPosting",
+                "headline": "DPE 2025 : nouvelles règles pour les passoires thermiques",
+                "datePublished": "2025-01-15",
+                "url": "https://bailassist.fr/blog/dpe-2025-nouvelles-regles"
+            },
+            {
+                "@type": "BlogPosting",
+                "headline": "Dépôt de garantie : montant, délai de restitution et litiges",
+                "datePublished": "2025-02-08",
+                "url": "https://bailassist.fr/blog/depot-garantie-regles"
+            },
+            {
+                "@type": "BlogPosting",
+                "headline": "Bail meublé vs non meublé : quelles différences en 2025 ?",
+                "datePublished": "2025-03-22",
+                "url": "https://bailassist.fr/blog/bail-meuble-vs-non-meuble"
+            }
+        ]
+    }
+    </script>
+    
+    <style>
+        :root {
+            --color-ink: #1a1a2e;
+            --color-ink-light: #4a4a5a;
+            --color-ink-muted: #7a7a8a;
+            --color-cream: #faf9f7;
+            --color-cream-dark: #f0ede8;
+            --color-accent: #2563eb;
+            --color-accent-dark: #1d4ed8;
+            --color-accent-light: #dbeafe;
+            --color-success: #059669;
+            --color-success-light: #d1fae5;
+            --color-warm: #f59e0b;
+            --color-warm-light: #fef3c7;
+            --color-purple: #7c3aed;
+            --color-purple-light: #ede9fe;
+            --color-teal: #0891b2;
+            --color-teal-light: #cffafe;
+            --font-display: 'Fraunces', Georgia, serif;
+            --font-body: 'DM Sans', -apple-system, sans-serif;
+            --shadow-soft: 0 4px 20px rgba(26, 26, 46, 0.08);
+            --shadow-medium: 0 8px 40px rgba(26, 26, 46, 0.12);
+            --shadow-strong: 0 20px 60px rgba(26, 26, 46, 0.15);
+            --radius-sm: 8px;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+            --radius-xl: 32px;
+        }
+
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--color-ink);
+            background: var(--color-cream);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: var(--font-display);
+            font-weight: 500;
+            line-height: 1.2;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 20px 0;
+            background: rgba(250, 249, 247, 0.95);
+            backdrop-filter: blur(20px);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .nav-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--color-ink);
+        }
+
+        .logo-icon {
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-icon img {
+            width: 44px;
+            height: 44px;
+            object-fit: contain;
+        }
+
+        .logo-text {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--color-ink);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--color-accent);
+        }
+
+        .nav-cta {
+            background: var(--color-ink);
+            color: white;
+            padding: 12px 28px;
+            border-radius: 100px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-cta:hover {
+            background: var(--color-accent);
+            transform: translateY(-2px);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        /* Hero Section */
+        .blog-hero {
+            padding: 160px 0 80px;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(180deg, var(--color-cream) 0%, white 100%);
+        }
+
+        .blog-hero::before {
+            content: '';
+            position: absolute;
+            top: -30%;
+            right: -10%;
+            width: 60%;
+            height: 120%;
+            background: radial-gradient(ellipse, rgba(37, 99, 235, 0.08) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .blog-hero::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -10%;
+            width: 50%;
+            height: 100%;
+            background: radial-gradient(ellipse, rgba(124, 58, 237, 0.05) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .blog-hero-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .blog-hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--color-accent-light);
+            color: var(--color-accent);
+            padding: 10px 20px;
+            border-radius: 100px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+
+        .blog-hero h1 {
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            color: var(--color-ink);
+            margin-bottom: 20px;
+            letter-spacing: -0.02em;
+        }
+
+        .blog-hero h1 span {
+            color: var(--color-accent);
+            position: relative;
+        }
+
+        .blog-hero-description {
+            font-size: 1.25rem;
+            color: var(--color-ink-light);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Categories Filter */
+        .categories-section {
+            padding: 40px 0;
+            background: white;
+            border-bottom: 1px solid var(--color-cream-dark);
+            position: sticky;
+            top: 84px;
+            z-index: 50;
+        }
+
+        .categories-list {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .category-btn {
+            padding: 12px 24px;
+            border-radius: 100px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            cursor: pointer;
+            background: var(--color-cream);
+            color: var(--color-ink-light);
+        }
+
+        .category-btn:hover,
+        .category-btn.active {
+            background: var(--color-accent);
+            color: white;
+        }
+
+        .category-btn.guide { border-color: var(--color-success); color: var(--color-success); background: var(--color-success-light); }
+        .category-btn.guide:hover, .category-btn.guide.active { background: var(--color-success); color: white; }
+
+        .category-btn.juridique { border-color: var(--color-purple); color: var(--color-purple); background: var(--color-purple-light); }
+        .category-btn.juridique:hover, .category-btn.juridique.active { background: var(--color-purple); color: white; }
+
+        .category-btn.reglementation { border-color: var(--color-teal); color: var(--color-teal); background: var(--color-teal-light); }
+        .category-btn.reglementation:hover, .category-btn.reglementation.active { background: var(--color-teal); color: white; }
+
+        /* Featured Article */
+        .featured-section {
+            padding: 80px 0;
+        }
+
+        .featured-article {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 60px;
+            background: white;
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            box-shadow: var(--shadow-medium);
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.4s ease;
+        }
+
+        .featured-article:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-strong);
+        }
+
+        .featured-image {
+            background: linear-gradient(135deg, var(--color-accent-light) 0%, var(--color-purple-light) 100%);
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .featured-image::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.3) 50%, transparent 70%);
+            transform: translateX(-100%);
+            transition: transform 0.8s ease;
+        }
+
+        .featured-article:hover .featured-image::before {
+            transform: translateX(100%);
+        }
+
+        .featured-content {
+            padding: 60px 60px 60px 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .featured-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--color-warm);
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 16px;
+        }
+
+        .featured-category {
+            display: inline-block;
+            background: var(--color-success-light);
+            color: var(--color-success);
+            padding: 6px 16px;
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .featured-title {
+            font-size: 2rem;
+            margin-bottom: 16px;
+            line-height: 1.3;
+            color: var(--color-ink);
+        }
+
+        .featured-excerpt {
+            font-size: 1.1rem;
+            color: var(--color-ink-light);
+            margin-bottom: 28px;
+            line-height: 1.7;
+        }
+
+        .featured-meta {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            font-size: 0.9rem;
+            color: var(--color-ink-muted);
+        }
+
+        .featured-meta span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .read-more {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--color-accent);
+            font-weight: 600;
+            margin-top: 24px;
+            transition: gap 0.3s ease;
+        }
+
+        .featured-article:hover .read-more {
+            gap: 12px;
+        }
+
+        /* Articles Grid */
+        .articles-section {
+            padding: 40px 0 120px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 48px;
+        }
+
+        .section-title {
+            font-size: 1.75rem;
+        }
+
+        .articles-count {
+            color: var(--color-ink-muted);
+            font-size: 0.95rem;
+        }
+
+        .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+        }
+
+        .article-card {
+            background: white;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-soft);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .article-card:hover {
+            transform: translateY(-12px);
+            box-shadow: var(--shadow-strong);
+        }
+
+        .article-image {
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .article-card:nth-child(1) .article-image {
+            background: linear-gradient(135deg, var(--color-teal-light), var(--color-accent-light));
+        }
+
+        .article-card:nth-child(2) .article-image {
+            background: linear-gradient(135deg, var(--color-purple-light), var(--color-warm-light));
+        }
+
+        .article-card:nth-child(3) .article-image {
+            background: linear-gradient(135deg, var(--color-success-light), var(--color-teal-light));
+        }
+
+        .article-image::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.2) 50%, transparent 70%);
+            transform: translateX(-100%);
+            transition: transform 0.6s;
+        }
+
+        .article-card:hover .article-image::before {
+            transform: translateX(100%);
+        }
+
+        .article-content {
+            padding: 28px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .article-category {
+            display: inline-block;
+            padding: 5px 14px;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            width: fit-content;
+        }
+
+        .article-category.guide {
+            background: var(--color-success-light);
+            color: var(--color-success);
+        }
+
+        .article-category.juridique {
+            background: var(--color-purple-light);
+            color: var(--color-purple);
+        }
+
+        .article-category.reglementation {
+            background: var(--color-teal-light);
+            color: var(--color-teal);
+        }
+
+        .article-title {
+            font-size: 1.25rem;
+            margin-bottom: 12px;
+            line-height: 1.4;
+            color: var(--color-ink);
+        }
+
+        .article-excerpt {
+            color: var(--color-ink-light);
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+            flex: 1;
+        }
+
+        .article-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: var(--color-ink-muted);
+            padding-top: 16px;
+            border-top: 1px solid var(--color-cream-dark);
+        }
+
+        /* Newsletter Section */
+        .newsletter-section {
+            padding: 100px 0;
+            background: linear-gradient(135deg, var(--color-ink) 0%, #2a2a4e 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .newsletter-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(37, 99, 235, 0.15) 0%, transparent 40%);
+            animation: pulse 8s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .newsletter-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .newsletter-content h2 {
+            color: white;
+            font-size: 2.25rem;
+            margin-bottom: 16px;
+        }
+
+        .newsletter-content p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.1rem;
+            margin-bottom: 32px;
+        }
+
+        .newsletter-form {
+            display: flex;
+            gap: 12px;
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        .newsletter-input {
+            flex: 1;
+            padding: 18px 24px;
+            border-radius: 100px;
+            border: none;
+            font-size: 1rem;
+            font-family: var(--font-body);
+            outline: none;
+        }
+
+        .newsletter-input::placeholder {
+            color: var(--color-ink-muted);
+        }
+
+        .newsletter-btn {
+            background: var(--color-accent);
+            color: white;
+            padding: 18px 32px;
+            border-radius: 100px;
+            border: none;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: var(--font-body);
+        }
+
+        .newsletter-btn:hover {
+            background: var(--color-accent-dark);
+            transform: translateY(-2px);
+        }
+
+        .newsletter-note {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.85rem;
+            margin-top: 16px;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--color-ink);
+            color: white;
+            padding: 60px 0 40px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 60px;
+            margin-bottom: 40px;
+        }
+
+        .footer-brand .logo {
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .footer-brand p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.95rem;
+            margin-bottom: 24px;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 12px;
+        }
+
+        .footer-social a {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            transition: all 0.2s;
+        }
+
+        .footer-social a:hover {
+            background: var(--color-accent);
+        }
+
+        .footer-column h4 {
+            font-family: var(--font-body);
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 24px;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            padding-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-bottom p {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+        }
+
+        .footer-legal {
+            display: flex;
+            gap: 24px;
+        }
+
+        .footer-legal a {
+            color: rgba(255, 255, 255, 0.5);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+
+        .footer-legal a:hover {
+            color: white;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .blog-hero-content {
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .featured-article {
+            animation: fadeInUp 0.8s ease-out 0.2s backwards;
+        }
+
+        .article-card {
+            animation: fadeInUp 0.6s ease-out backwards;
+        }
+
+        .article-card:nth-child(1) { animation-delay: 0.1s; }
+        .article-card:nth-child(2) { animation-delay: 0.2s; }
+        .article-card:nth-child(3) { animation-delay: 0.3s; }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .featured-article {
+                grid-template-columns: 1fr;
+            }
+
+            .featured-content {
+                padding: 40px;
+            }
+
+            .articles-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .blog-hero {
+                padding: 140px 0 60px;
+            }
+
+            .categories-section {
+                top: 64px;
+            }
+
+            .categories-list {
+                justify-content: flex-start;
+                overflow-x: auto;
+                padding-bottom: 8px;
+                flex-wrap: nowrap;
+            }
+
+            .category-btn {
+                white-space: nowrap;
+            }
+
+            .featured-image {
+                min-height: 250px;
+                font-size: 5rem;
+            }
+
+            .featured-title {
+                font-size: 1.5rem;
+            }
+
+            .articles-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+            .newsletter-form {
+                flex-direction: column;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="container">
+            <div class="nav-inner">
+                <a href="index.html" class="logo">
+                    <div class="logo-icon">
+                        <img src="asset/logo_clean.png" alt="BailAssist Logo">
+                    </div>
+                    <span class="logo-text">BailAssist</span>
+                </a>
+                <ul class="nav-links">
+                    <li><a href="index.html#fonctionnalites">Fonctionnalités</a></li>
+                    <li><a href="index.html#comment-ca-marche">Comment ça marche</a></li>
+                    <li><a href="blog.html">Blog</a></li>
+                    <li><a href="index.html#faq">FAQ</a></li>
+                </ul>
+                <a href="choisir-bail.html" class="nav-cta">Créer mon bail</a>
+                <button class="mobile-menu-btn" aria-label="Menu">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path d="M3 12h18M3 6h18M3 18h18"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="blog-hero">
+        <div class="container">
+            <div class="blog-hero-content">
+                <div class="blog-hero-badge">
+                    <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14H6v-2h6v2zm4-4H6v-2h10v2zm0-4H6V7h10v2z"/></svg>
+                    Blog & Ressources
+                </div>
+                <h1>Guides et <span>conseils</span> pour propriétaires et locataires</h1>
+                <p class="blog-hero-description">Tout ce que vous devez savoir sur la location immobilière en France : réglementation, droits, obligations et bonnes pratiques.</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Categories Filter -->
+    <!-- <section class="categories-section">
+        <div class="container">
+            <div class="categories-list">
+                <button class="category-btn active">Tous les articles</button>
+                <button class="category-btn guide">Guide</button>
+                <button class="category-btn juridique">Juridique</button>
+                <button class="category-btn reglementation">Réglementation</button>
+            </div>
+        </div>
+    </section> -->
+
+    <!-- Featured Article -->
+    <section class="featured-section">
+        <div class="container">
+            <a href="blog/bail-meuble-vs-non-meuble.html" class="featured-article">
+                <div class="featured-image">🏠</div>
+                <div class="featured-content">
+                    <div class="featured-label">
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        Article à la une
+                    </div>
+                    <span class="featured-category">Guide</span>
+                    <h2 class="featured-title">Bail meublé vs non meublé : quelles différences en 2025 ?</h2>
+                    <p class="featured-excerpt">Durée du bail, préavis, dépôt de garantie, fiscalité... Découvrez toutes les différences entre ces deux types de contrats de location et choisissez celui qui correspond le mieux à votre situation.</p>
+                    <div class="featured-meta">
+                        <span>
+                            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                            12 min de lecture
+                        </span>
+                        <span>
+                            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                            22 Novembre 2025
+                        </span>
+                    </div>
+                    <div class="read-more">
+                        Lire l'article complet
+                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <!-- Articles Grid -->
+    <section class="articles-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Tous nos articles</h2>
+                <span class="articles-count">3 articles disponibles</span>
+            </div>
+            <div class="articles-grid">
+                <a href="blog/dpe-2025-nouvelles-regles.html" class="article-card">
+                    <div class="article-image">🌱</div>
+                    <div class="article-content">
+                        <span class="article-category reglementation">Réglementation</span>
+                        <h3 class="article-title">DPE 2025 : nouvelles règles pour les passoires thermiques</h3>
+                        <p class="article-excerpt">Ce qui change pour les logements classés F et G. Calendrier, obligations des propriétaires et aides disponibles pour la rénovation énergétique.</p>
+                        <div class="article-meta">
+                            <span>10 min de lecture</span>
+                            <span>15 janvier 2025</span>
+                        </div>
+                    </div>
+                </a>
+                <a href="blog/depot-garantie-regles.html" class="article-card">
+                    <div class="article-image">💰</div>
+                    <div class="article-content">
+                        <span class="article-category juridique">Juridique</span>
+                        <h3 class="article-title">Dépôt de garantie : montant, délai de restitution et litiges</h3>
+                        <p class="article-excerpt">Tout savoir sur le dépôt de garantie : montant maximum autorisé, délais légaux de restitution et recours en cas de litige.</p>
+                        <div class="article-meta">
+                            <span>8 min de lecture</span>
+                            <span>8 Mai 2025</span>
+                        </div>
+                    </div>
+                </a>
+                <a href="blog/bail-meuble-vs-non-meuble.html" class="article-card">
+                    <div class="article-image">🏠</div>
+                    <div class="article-content">
+                        <span class="article-category guide">Guide</span>
+                        <h3 class="article-title">Bail meublé vs non meublé : quelles différences en 2025 ?</h3>
+                        <p class="article-excerpt">Durée, préavis, dépôt de garantie... Découvrez toutes les différences entre ces deux types de contrats.</p>
+                        <div class="article-meta">
+                            <span>12 min de lecture</span>
+                            <span>22 Novembre 2025</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="newsletter-section">
+        <div class="container">
+            <div class="newsletter-content">
+                <h2>Restez informé</h2>
+                <p>Recevez nos derniers articles et conseils directement dans votre boîte mail. Pas de spam, uniquement du contenu utile.</p>
+                <form class="newsletter-form">
+                    <input type="email" class="newsletter-input" placeholder="Votre adresse email" required>
+                    <button type="submit" class="newsletter-btn">S'abonner</button>
+                </form>
+                <p class="newsletter-note">En vous inscrivant, vous acceptez notre politique de confidentialité.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="index.html" class="logo">
+                        <div class="logo-icon">
+                            <img src="asset/logo_clean.png" alt="BailAssist Logo">
+                        </div>
+                        <span class="logo-text">BailAssist</span>
+                    </a>
+                    <p>Créez des baux de location conformes à la loi française en quelques minutes. 100% gratuit, simple et sécurisé.</p>
+                    <div class="footer-social">
+                        <a href="#" aria-label="Facebook">
+                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                        </a>
+                        <a href="#" aria-label="Twitter">
+                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>
+                        </a>
+                        <a href="#" aria-label="LinkedIn">
+                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h4>Produit</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html#fonctionnalites">Fonctionnalités</a></li>
+                        <li><a href="index.html#comment-ca-marche">Comment ça marche</a></li>
+                        <li><a href="choisir-bail.html">Créer un bail</a></li>
+                        <li><a href="index.html#faq">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Ressources</h4>
+                    <ul class="footer-links">
+                        <li><a href="blog.html">Blog</a></li>
+                        <li><a href="/guides">Guides pratiques</a></li>
+                        <li><a href="/modeles">Modèles de bail</a></li>
+                        <li><a href="/lexique">Lexique juridique</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Légal</h4>
+                    <ul class="footer-links">
+                        <li><a href="/mentions-legales">Mentions légales</a></li>
+                        <li><a href="/confidentialite">Politique de confidentialité</a></li>
+                        <li><a href="/cgu">CGU</a></li>
+                        <li><a href="/contact">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2025 BailAssist. Tous droits réservés. Service gratuit de création de bail en ligne.</p>
+                <div class="footer-legal">
+                    <a href="/mentions-legales">Mentions légales</a>
+                    <a href="/confidentialite">Confidentialité</a>
+                    <a href="/cookies">Cookies</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Category filter functionality
+        document.querySelectorAll('.category-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            });
+        });
+
+        // Newsletter form
+        document.querySelector('.newsletter-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Merci pour votre inscription ! Vous recevrez bientôt nos derniers articles.');
+        });
+    </script>
+</body>
+</html>
