@@ -1,0 +1,88 @@
+# =============================================================================
+# Terraform Variables - Example Configuration
+# =============================================================================
+# Copy this file to terraform.tfvars and fill in your values
+# =============================================================================
+
+# Scaleway Project ID (required)
+project_id = "your-project-id-here"
+
+# Region and Zone
+region = "fr-par"
+zone   = "fr-par-1"
+
+# Container Registry Configuration
+registry_namespace = "perso"
+registry_endpoint  = "rg.fr-par.scw.cloud"
+
+# Serverless Container Namespace
+# Set to true to create a new namespace, false to use existing
+create_container_namespace = false
+
+# Existing container namespace ID (used when create_container_namespace = false)
+container_namespace_id = "e10c8558-99b7-4f45-a136-554d47120af0"
+
+# New namespace name (used when create_container_namespace = true)
+container_namespace_name = "bail-app"
+
+# Image tag to deploy
+image_tag = "latest"
+
+# Backend environment variables (non-sensitive)
+backend_env_vars = {
+  # EXAMPLE_VAR = "example_value"
+  # API_BASE_URL = "https://api.example.com"
+}
+
+# Backend secret environment variables (sensitive)
+# These will be stored securely by Scaleway
+backend_secret_env_vars = {
+  # OPENAI_API_KEY = "sk-..."
+  # DATABASE_URL = "postgresql://..."
+}
+
+# Container configurations (override defaults if needed)
+# containers = {
+#   landing = {
+#     description     = "Landing page service"
+#     port            = 80
+#     min_scale       = 0
+#     max_scale       = 5
+#     memory_limit    = 256
+#     cpu_limit       = 140
+#     timeout         = 300
+#     max_concurrency = 50
+#     privacy         = "public"
+#     deploy          = true
+#     environment_variables        = {}
+#     secret_environment_variables = {}
+#   }
+#   backend = {
+#     description     = "FastAPI Backend service"
+#     port            = 8000
+#     min_scale       = 1  # Keep at least one instance warm
+#     max_scale       = 10
+#     memory_limit    = 1024  # Increase for heavy workloads
+#     cpu_limit       = 560
+#     timeout         = 300
+#     max_concurrency = 50
+#     privacy         = "public"
+#     deploy          = true
+#     environment_variables        = {}
+#     secret_environment_variables = {}
+#   }
+#   frontend = {
+#     description     = "Vue.js Frontend service"
+#     port            = 80
+#     min_scale       = 0
+#     max_scale       = 5
+#     memory_limit    = 256
+#     cpu_limit       = 140
+#     timeout         = 300
+#     max_concurrency = 50
+#     privacy         = "public"
+#     deploy          = true
+#     environment_variables        = {}
+#     secret_environment_variables = {}
+#   }
+# }
