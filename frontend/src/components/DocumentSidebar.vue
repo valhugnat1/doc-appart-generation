@@ -176,6 +176,12 @@ import { useRoute } from 'vue-router'
 import { API_BASE_URL } from '@/config.js'
 const route = useRoute()
 
+const isFullscreen = ref(false)
+
+const toggleFullscreen = () => {
+  isFullscreen.value = !isFullscreen.value
+}
+
 const downloadPdf = async () => {
   const uuid = route.params.id
   console.log('Download PDF for UUID:', uuid);
@@ -203,7 +209,7 @@ const downloadPdf = async () => {
 </script>
 
 <template>
-  <div class="right-sidebar" :class="{ 'is-open': isOpen }">
+  <div class="right-sidebar" :class="{ 'is-open': isOpen, 'full-screen': isFullscreen }">
     <div class="sidebar-header">
       <div class="header-left">
         <div class="header-icon">
@@ -221,10 +227,12 @@ const downloadPdf = async () => {
       </div>
 
       <div v-if="htmlContent && !isLoading" class="header-actions">
-        <button class="action-btn secondary" title="Aperçu plein écran">
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-            <circle cx="12" cy="12" r="3"/>
+        <button class="action-btn secondary" :title="isFullscreen ? 'Quitter plein écran' : 'Aperçu plein écran'" @click="toggleFullscreen">
+          <svg v-if="!isFullscreen" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
+          </svg>
+          <svg v-else width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+             <path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/>
           </svg>
         </button>
         <button class="action-btn primary" @click="downloadPdf">
@@ -492,5 +500,15 @@ const downloadPdf = async () => {
 
 .sidebar-content::-webkit-scrollbar-thumb:hover {
   background: var(--color-ink-muted);
+}
+
+.right-sidebar.full-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw !important;
+  height: 100vh;
+  z-index: 1000;
+  border-left: none;
 }
 </style>
