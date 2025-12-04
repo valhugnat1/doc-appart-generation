@@ -23,12 +23,32 @@ This directory contains scripts and Terraform configurations to build, push, and
 │   └──────┬──────┴──────┬──────┴──────┬──────┘                   │
 │          │             │             │                           │
 │          ▼             ▼             ▼                           │
+│   Custom Domains (optional):                                    │
+│   https://bail.outil-immo.fr    (Landing)                       │
+│   https://api.outil-immo.fr     (Backend)                       │
+│   https://app.outil-immo.fr     (Frontend)                      │
+│                                                                  │
+│   Or default Scaleway domains:                                  │
 │   https://landing-xxx.containers.scw.cloud                      │
 │   https://backend-xxx.containers.scw.cloud                      │
 │   https://frontend-xxx.containers.scw.cloud                     │
 │                                                                  │
 └─────────────────────────────────────────────────────────────────┘
 ```
+
+## Link Configuration
+
+The application uses the following URL structure in production:
+
+- **Landing Page**: `https://bail.outil-immo.fr`
+  - Links to frontend: `https://app.outil-immo.fr`
+- **Frontend**: `https://app.outil-immo.fr`
+  - API calls to: `https://api.outil-immo.fr`
+- **Backend**: `https://api.outil-immo.fr`
+
+These URLs are configured:
+- **Landing page links**: Hardcoded in HTML files
+- **Frontend API URL**: Set via `VITE_API_BASE_URL` build argument
 
 ## Prerequisites
 
@@ -96,7 +116,14 @@ Builds and pushes Docker images to Scaleway Container Registry.
 
 # Build with specific tag
 TAG=v1.0.0 ./build-and-push.sh all
+
+# Build frontend with custom API URL
+VITE_API_BASE_URL=https://api.outil-immo.fr ./build-and-push.sh all
 ```
+
+**Environment Variables:**
+- `TAG` - Docker image tag (default: `latest`)
+- `VITE_API_BASE_URL` - API base URL for frontend (default: `https://api.outil-immo.fr`)
 
 ### `deploy.sh`
 

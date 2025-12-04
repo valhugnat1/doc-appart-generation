@@ -13,6 +13,9 @@ REGISTRY="rg.fr-par.scw.cloud"
 NAMESPACE="perso"
 TAG="${TAG:-latest}"
 
+# Environment variables for build
+VITE_API_BASE_URL="${VITE_API_BASE_URL:-https://api.outil-immo.fr}"
+
 # Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -94,20 +97,28 @@ build_image() {
     local context=$2
     local dockerfile=$3
     local full_image="${REGISTRY}/${NAMESPACE}/${service_name}:${TAG}"
-    
+
     log_info "Building image: ${full_image}"
     log_info "  Context: ${context}"
     log_info "  Dockerfile: ${dockerfile}"
     log_info "  Platform: linux/amd64"
-    
+
+    # Build args for frontend
+    local build_args=""
+    if [ "$service_name" == "frontend" ]; then
+        build_args="--build-arg VITE_API_BASE_URL=${VITE_API_BASE_URL}"
+        log_info "  API URL: ${VITE_API_BASE_URL}"
+    fi
+
     # Use buildx for cross-platform builds (macOS ARM -> Linux AMD64)
     docker buildx build \
         --platform linux/amd64 \
         -t "${full_image}" \
         -f "${context}/${dockerfile}" \
+        ${build_args} \
         --push \
         "${context}"
-    
+
     if [ $? -eq 0 ]; then
         log_info "Successfully built and pushed ${full_image}"
     else
@@ -140,19 +151,27 @@ build_image_local() {
     local context=$2
     local dockerfile=$3
     local full_image="${REGISTRY}/${NAMESPACE}/${service_name}:${TAG}"
-    
+
     log_info "Building image locally: ${full_image}"
     log_info "  Context: ${context}"
     log_info "  Dockerfile: ${dockerfile}"
     log_info "  Platform: linux/amd64"
-    
+
+    # Build args for frontend
+    local build_args=""
+    if [ "$service_name" == "frontend" ]; then
+        build_args="--build-arg VITE_API_BASE_URL=${VITE_API_BASE_URL}"
+        log_info "  API URL: ${VITE_API_BASE_URL}"
+    fi
+
     docker buildx build \
         --platform linux/amd64 \
         -t "${full_image}" \
         -f "${context}/${dockerfile}" \
+        ${build_args} \
         --load \
         "${context}"
-    
+
     if [ $? -eq 0 ]; then
         log_info "Successfully built ${full_image}"
     else
@@ -247,15 +266,18 @@ show_help() {
     echo "  help            Show this help message"
     echo ""
     echo "Options:"
-    echo "  TAG=<tag>       Set image tag (default: latest)"
+    echo "  TAG=<tag>                   Set image tag (default: latest)"
+    echo "  VITE_API_BASE_URL=<url>     Set API URL for frontend (default: https://api.outil-immo.fr)"
     echo ""
     echo "Environment variables:"
-    echo "  SCW_SECRET_KEY  Scaleway secret key for registry authentication"
+    echo "  SCW_SECRET_KEY              Scaleway secret key for registry authentication"
+    echo "  VITE_API_BASE_URL           API base URL for frontend build"
     echo ""
     echo "Examples:"
-    echo "  $0 all                    # Build and push all services"
-    echo "  $0 single backend         # Build and push only backend"
-    echo "  TAG=v1.0.0 $0 all         # Build and push with specific tag"
+    echo "  $0 all                                               # Build and push all services"
+    echo "  $0 single backend                                    # Build and push only backend"
+    echo "  TAG=v1.0.0 $0 all                                    # Build and push with specific tag"
+    echo "  VITE_API_BASE_URL=https://api.example.com $0 all     # Build with custom API URL"
     echo ""
 }
 

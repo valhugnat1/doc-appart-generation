@@ -60,7 +60,6 @@ output "image_urls" {
     for name in keys(local.containers_to_deploy) : name => "${local.image_base}/${name}:${var.image_tag}"
   }
 }
-
 # =============================================================================
 # Custom Domain Outputs
 # =============================================================================
@@ -70,17 +69,18 @@ output "custom_domains" {
   value = var.enable_custom_domains ? {
     landing  = var.domains.landing != "" ? {
       hostname = var.domains.landing
-      status   = try(scaleway_container_domain.landing[0].status, "not configured")
+      # Status attribute removed as it is not supported by the provider
+      configured = try(scaleway_container_domain.landing[0].id != "", false)
       url      = "https://${var.domains.landing}"
     } : null
     backend  = var.domains.backend != "" ? {
       hostname = var.domains.backend
-      status   = try(scaleway_container_domain.backend[0].status, "not configured")
+      configured = try(scaleway_container_domain.backend[0].id != "", false)
       url      = "https://${var.domains.backend}"
     } : null
     frontend = var.domains.frontend != "" ? {
       hostname = var.domains.frontend
-      status   = try(scaleway_container_domain.frontend[0].status, "not configured")
+      configured = try(scaleway_container_domain.frontend[0].id != "", false)
       url      = "https://${var.domains.frontend}"
     } : null
   } : null
