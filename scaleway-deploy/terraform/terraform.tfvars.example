@@ -28,10 +28,27 @@ container_namespace_name = "bail-app"
 # Image tag to deploy
 image_tag = "latest"
 
+# =============================================================================
+# Custom Domains Configuration (outil-immo.fr)
+# =============================================================================
+# Set to true to enable custom domains
+enable_custom_domains = false
+
+# Your custom domains - leave empty "" to skip a service
+domains = {
+  landing  = "outil-immo.fr"        # or "www.outil-immo.fr"
+  backend  = "api.outil-immo.fr"
+  frontend = "app.outil-immo.fr"
+}
+
+# =============================================================================
+# Environment Variables
+# =============================================================================
+
 # Backend environment variables (non-sensitive)
 backend_env_vars = {
   # EXAMPLE_VAR = "example_value"
-  # API_BASE_URL = "https://api.example.com"
+  # API_BASE_URL = "https://api.outil-immo.fr"
 }
 
 # Backend secret environment variables (sensitive)
@@ -40,6 +57,13 @@ backend_secret_env_vars = {
   # OPENAI_API_KEY = "sk-..."
   # DATABASE_URL = "postgresql://..."
 }
+
+# =============================================================================
+# Deployment Control
+# =============================================================================
+# Change this value to force redeployment of containers
+# Example: force_redeploy = "v1.0.1" or "2024-01-15-1"
+force_redeploy = ""
 
 # Container configurations (override defaults if needed)
 # containers = {

@@ -60,3 +60,52 @@ output "image_urls" {
     for name in keys(local.containers_to_deploy) : name => "${local.image_base}/${name}:${var.image_tag}"
   }
 }
+
+# =============================================================================
+# Custom Domain Outputs
+# =============================================================================
+
+output "custom_domains" {
+  description = "Custom domain configuration status"
+  value = var.enable_custom_domains ? {
+    landing  = var.domains.landing != "" ? {
+      hostname = var.domains.landing
+      status   = try(scaleway_container_domain.landing[0].status, "not configured")
+      url      = "https://${var.domains.landing}"
+    } : null
+    backend  = var.domains.backend != "" ? {
+      hostname = var.domains.backend
+      status   = try(scaleway_container_domain.backend[0].status, "not configured")
+      url      = "https://${var.domains.backend}"
+    } : null
+    frontend = var.domains.frontend != "" ? {
+      hostname = var.domains.frontend
+      status   = try(scaleway_container_domain.frontend[0].status, "not configured")
+      url      = "https://${var.domains.frontend}"
+    } : null
+  } : null
+}
+
+output "dns_configuration" {
+  description = "DNS records to configure on your domain provider"
+  value = var.enable_custom_domains ? {
+    instructions = "Add these CNAME records to your DNS provider (e.g., outil-immo.fr)"
+    records = {
+      landing = var.domains.landing != "" ? {
+        type  = "CNAME"
+        name  = var.domains.landing
+        value = scaleway_container.services["landing"].domain_name
+      } : null
+      backend = var.domains.backend != "" ? {
+        type  = "CNAME"
+        name  = var.domains.backend
+        value = scaleway_container.services["backend"].domain_name
+      } : null
+      frontend = var.domains.frontend != "" ? {
+        type  = "CNAME"
+        name  = var.domains.frontend
+        value = scaleway_container.services["frontend"].domain_name
+      } : null
+    }
+  } : null
+}

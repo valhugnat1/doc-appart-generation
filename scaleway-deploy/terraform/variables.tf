@@ -135,3 +135,37 @@ variable "backend_secret_env_vars" {
   default     = {}
   sensitive   = true
 }
+
+# =============================================================================
+# Custom Domains Configuration
+# =============================================================================
+
+variable "enable_custom_domains" {
+  description = "Enable custom domain configuration"
+  type        = bool
+  default     = false
+}
+
+variable "domains" {
+  description = "Custom domain names for each service"
+  type = object({
+    landing  = string
+    backend  = string
+    frontend = string
+  })
+  default = {
+    landing  = ""
+    backend  = ""
+    frontend = ""
+  }
+}
+
+# =============================================================================
+# Deployment Configuration
+# =============================================================================
+
+variable "force_redeploy" {
+  description = "Change this value to force container redeployment (e.g., timestamp or version)"
+  type        = string
+  default     = ""
+}

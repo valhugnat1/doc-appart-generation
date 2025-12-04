@@ -51,8 +51,11 @@ resource "scaleway_container" "services" {
   # Image configuration
   registry_image = "${local.image_base}/${each.key}:${var.image_tag}"
   
+  # Force redeployment when this value changes
+  # Use: terraform apply -var="force_redeploy=$(date +%s)"
+  registry_sha256 = var.force_redeploy != "" ? var.force_redeploy : null
+
   # Use deploy flag to trigger redeployment
-  # Change this value to force a new deployment
   deploy = true
 
   # Port configuration
@@ -83,35 +86,29 @@ resource "scaleway_container" "services" {
     each.value.secret_environment_variables,
     each.key == "backend" ? var.backend_secret_env_vars : {}
   )
-
-  # Health check configuration (optional)
-  # http_option = "enabled"
-
-  lifecycle {
-    # Ignore changes to registry_sha256 to avoid unnecessary redeployments
-    ignore_changes = [
-      # Uncomment the following line if you want to manage deployments manually
-      # registry_sha256,
-    ]
-  }
 }
 
 # -----------------------------------------------------------------------------
-# Container Domains (Custom domains - optional)
+# Container Domains (Custom domains)
 # -----------------------------------------------------------------------------
 
-# Uncomment and configure if you want to add custom domains
-# resource "scaleway_container_domain" "landing" {
-#   container_id = scaleway_container.services["landing"].id
-#   hostname     = "www.yourdomain.com"
-# }
+# Landing page domain: outil-immo.fr (root domain)
+resource "scaleway_container_domain" "landing" {
+  count        = var.enable_custom_domains && var.domains.landing != "" ? 1 : 0
+  container_id = scaleway_container.services["landing"].id
+  hostname     = var.domains.landing
+}
 
-# resource "scaleway_container_domain" "backend" {
-#   container_id = scaleway_container.services["backend"].id
-#   hostname     = "api.yourdomain.com"
-# }
+# Backend API domain: api.outil-immo.fr
+resource "scaleway_container_domain" "backend" {
+  count        = var.enable_custom_domains && var.domains.backend != "" ? 1 : 0
+  container_id = scaleway_container.services["backend"].id
+  hostname     = var.domains.backend
+}
 
-# resource "scaleway_container_domain" "frontend" {
-#   container_id = scaleway_container.services["frontend"].id
-#   hostname     = "app.yourdomain.com"
-# }
+# Frontend app domain: app.outil-immo.fr
+resource "scaleway_container_domain" "frontend" {
+  count        = var.enable_custom_domains && var.domains.frontend != "" ? 1 : 0
+  container_id = scaleway_container.services["frontend"].id
+  hostname     = var.domains.frontend
+}
