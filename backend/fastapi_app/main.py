@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .routers import conversations, chat, bail
+from .routers import conversations, chat, bail, auth
 # Import config to ensure sys.path is set up
 from . import config
 
@@ -18,6 +18,7 @@ app.add_middleware(
 app.include_router(conversations.router)
 app.include_router(chat.router)
 app.include_router(bail.router)
+app.include_router(auth.router)
 
 @app.get("/health")
 async def health():
