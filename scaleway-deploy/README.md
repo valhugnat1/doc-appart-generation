@@ -60,6 +60,7 @@ These URLs are configured:
 2. **Tools installed**:
    - Docker
    - Terraform >= 1.0.0
+   - jq (for output parsing)
 
 3. **Environment variables**:
    ```bash
@@ -76,6 +77,19 @@ These URLs are configured:
 # From project root
 cd scaleway-deploy
 ./deploy.sh all
+```
+
+### Quick Update (Recommended for daily use)
+
+```bash
+# Update all services
+./scaleway-deploy/update-container.sh all
+
+# Update only backend
+./scaleway-deploy/update-container.sh backend
+
+# Redeploy without rebuilding
+./scaleway-deploy/update-container.sh frontend --skip-build
 ```
 
 ### Step-by-Step Deployment
@@ -97,12 +111,38 @@ terraform apply
 
 ## Scripts
 
+### `update-container.sh` ⭐ (Recommended)
+
+Quick update script for daily deployments. Combines build and Terraform apply in one command with service targeting.
+
+```bash
+# Update all services (build + deploy)
+./update-container.sh all
+
+# Update single service
+./update-container.sh backend
+./update-container.sh frontend
+./update-container.sh landing
+
+# Redeploy without rebuilding (config changes only)
+./update-container.sh backend --skip-build
+
+# Show help
+./update-container.sh --help
+```
+
+**Features:**
+- Targets specific services for faster deployments
+- Uses timestamp to force container redeployment
+- Can skip build phase for config-only changes
+- Displays container URLs after deployment
+
 ### `build-and-push.sh`
 
 Builds and pushes Docker images to Scaleway Container Registry.
 
 ```bash
-# Build all images
+# Build all images locally (no push)
 ./build-and-push.sh build
 
 # Push all images
@@ -119,15 +159,19 @@ TAG=v1.0.0 ./build-and-push.sh all
 
 # Build frontend with custom API URL
 VITE_API_BASE_URL=https://api.outil-immo.fr ./build-and-push.sh all
+
+# Show image info
+./build-and-push.sh info
 ```
 
 **Environment Variables:**
 - `TAG` - Docker image tag (default: `latest`)
 - `VITE_API_BASE_URL` - API base URL for frontend (default: `https://api.outil-immo.fr`)
+- `SCW_SECRET_KEY` - Required for registry authentication
 
 ### `deploy.sh`
 
-Full deployment workflow combining Docker build and Terraform.
+Full deployment workflow combining Docker build and Terraform. Best for initial deployments or major changes.
 
 ```bash
 # Full deployment
@@ -149,6 +193,16 @@ Full deployment workflow combining Docker build and Terraform.
 ./deploy.sh destroy
 ```
 
+## Script Comparison
+
+| Script | Use Case | Build | Push | Terraform | Service Targeting |
+|--------|----------|-------|------|-----------|-------------------|
+| `update-container.sh` | Daily updates | ✅ | ✅ | ✅ | ✅ |
+| `build-and-push.sh` | Build/push only | ✅ | ✅ | ❌ | ✅ |
+| `deploy.sh` | Full deployment | ✅ | ✅ | ✅ | ❌ |
+
+**Recommendation:** Use `update-container.sh` for most operations, `deploy.sh` for initial setup or destroy.
+
 ## Terraform Configuration
 
 ### Files
@@ -158,6 +212,7 @@ Full deployment workflow combining Docker build and Terraform.
 | `provider.tf` | Scaleway provider configuration |
 | `variables.tf` | Variable definitions |
 | `main.tf` | Container resources |
+| `data.tf` | Data sources |
 | `outputs.tf` | Output definitions |
 | `terraform.tfvars` | Your configuration values |
 
@@ -169,6 +224,7 @@ Full deployment workflow combining Docker build and Terraform.
 | `registry_namespace` | Registry namespace name | `perso` |
 | `container_namespace_id` | Existing namespace ID | `e10c8558-...` |
 | `image_tag` | Docker image tag | `latest` |
+| `force_redeploy` | Timestamp to force redeployment | `""` |
 | `create_container_namespace` | Create new namespace | `false` |
 
 ### Container Configuration
@@ -229,6 +285,7 @@ After deployment, Terraform outputs:
 
 ```bash
 # View outputs
+cd terraform
 terraform output
 
 # Get specific URL
@@ -237,15 +294,18 @@ terraform output backend_url
 
 ## Common Operations
 
-### Update a Single Service
+### Update a Single Service (Recommended)
 
 ```bash
-# Rebuild and push only backend
-./build-and-push.sh single backend
+# Quickest way - build, push, and deploy
+./update-container.sh backend
+```
 
-# Redeploy
-cd terraform
-terraform apply -target=scaleway_container.services[\"backend\"]
+### Update Without Rebuild
+
+```bash
+# Just redeploy (e.g., after config change in Terraform)
+./update-container.sh backend --skip-build
 ```
 
 ### Deploy with Specific Tag
@@ -254,14 +314,22 @@ terraform apply -target=scaleway_container.services[\"backend\"]
 TAG=v1.0.0 ./deploy.sh all
 ```
 
-### Force Redeployment
-
-The container's `deploy` attribute triggers redeployment. You can also:
+### Force Redeployment (Alternative method)
 
 ```bash
 # Taint the resource to force recreation
+cd terraform
 terraform taint 'scaleway_container.services["backend"]'
 terraform apply
+```
+
+### View Container URLs
+
+```bash
+./update-container.sh --skip-build  # Will show URLs at the end
+
+# Or directly via Terraform
+cd terraform && terraform output container_urls
 ```
 
 ## Troubleshooting
@@ -287,6 +355,14 @@ Verify your credentials:
 scw account whoami
 ```
 
+### Build Fails on macOS (ARM)
+
+The scripts use `docker buildx` for cross-platform builds (ARM → AMD64). If buildx isn't working:
+```bash
+# Create/reset the multiarch builder
+docker buildx create --name multiarch --use --bootstrap
+```
+
 ## Cost Optimization
 
 - Set `min_scale = 0` to scale to zero when not in use
@@ -299,3 +375,20 @@ scw account whoami
 2. Use `secret_environment_variables` for sensitive data
 3. Consider using `privacy = "private"` for internal services
 4. Rotate API keys regularly
+
+## File Structure
+
+```
+scaleway-deploy/
+├── README.md              # This file
+├── build-and-push.sh      # Docker build & push script
+├── deploy.sh              # Full deployment script
+├── update-container.sh    # Quick update script ⭐
+└── terraform/
+    ├── provider.tf
+    ├── variables.tf
+    ├── main.tf
+    ├── data.tf
+    ├── outputs.tf
+    └── terraform.tfvars.example
+```
