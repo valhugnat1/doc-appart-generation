@@ -50,10 +50,6 @@ resource "scaleway_container" "services" {
 
   # Image configuration
   registry_image = "${local.image_base}/${each.key}:${var.image_tag}"
-  
-  # Force redeployment when this value changes
-  # Use: terraform apply -var="force_redeploy=$(date +%s)"
-  registry_sha256 = var.force_redeploy != "" ? var.force_redeploy : null
 
   # Use deploy flag to trigger redeployment
   deploy = true
@@ -77,9 +73,10 @@ resource "scaleway_container" "services" {
   privacy = each.value.privacy
 
   # Environment variables
-  environment_variables = merge(
+environment_variables = merge(
     each.value.environment_variables,
-    each.key == "backend" ? var.backend_env_vars : {}
+    each.key == "backend" ? var.backend_env_vars : {},
+    { "FORCE_REDEPLOY" = var.force_redeploy }
   )
 
   secret_environment_variables = merge(

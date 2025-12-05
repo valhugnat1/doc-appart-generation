@@ -12,6 +12,10 @@ const props = defineProps({
   width: {
     type: Number,
     default: 280
+  },
+  baseRoute: {
+    type: String,
+    default: '/admin/chat'
   }
 })
 
@@ -39,11 +43,11 @@ const fetchConversations = async () => {
 
 const createNewChat = () => {
   const uuid = crypto.randomUUID()
-  router.push(`/chat/${uuid}`)
+  router.push(`${props.baseRoute}/${uuid}`)
 }
 
 const selectConversation = (id) => {
-  router.push(`/chat/${id}`)
+  router.push(`${props.baseRoute}/${id}`)
 }
 
 const toggleSidebar = () => {

@@ -167,5 +167,5 @@ variable "domains" {
 variable "force_redeploy" {
   description = "Change this value to force container redeployment (e.g., timestamp or version)"
   type        = string
-  default     = ""
+  default     = "0"
 }

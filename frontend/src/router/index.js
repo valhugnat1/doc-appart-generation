@@ -44,15 +44,29 @@ const router = createRouter({
   routes
 })
 
+import Cookies from 'js-cookie'
+
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    // Simple password check
-    const password = prompt('Veuillez entrer le mot de passe administrateur :')
-    if (password === 'admin123') { // Hardcoded for now as requested
+    // Check for existing auth cookie
+    const isAuthenticated = Cookies.get('admin_auth') === 'true'
+    
+    if (isAuthenticated) {
       next()
     } else {
-      alert('Mot de passe incorrect')
-      next('/')
+      // Simple password check
+      const password = prompt('Veuillez entrer le mot de passe administrateur :')
+      // Use environment variable for password
+      const adminPassword = import.meta.env.VITE_ADMIN_PASSWORD || 'admin123'
+      
+      if (password === adminPassword) {
+        // Set cookie to expire in 7 days
+        Cookies.set('admin_auth', 'true', { expires: 7 })
+        next()
+      } else {
+        alert('Mot de passe incorrect')
+        next('/')
+      }
     }
   } else {
     next()
