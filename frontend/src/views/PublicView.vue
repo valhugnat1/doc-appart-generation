@@ -107,12 +107,7 @@ onMounted(() => {
       <header class="header">
         <a href="/" class="logo">
           <div class="logo-icon">
-            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-              <path d="M14 2v6h6"/>
-              <path d="M16 13H8"/>
-              <path d="M16 17H8"/>
-            </svg>
+            <img src="/logo_clean.png" alt="BailAssist Logo">
           </div>
           <span class="logo-text">BailAssist</span>
         </a>
@@ -190,14 +185,17 @@ onMounted(() => {
 }
 
 .logo-icon {
-  width: 40px;
-  height: 40px;
-  background: linear-gradient(135deg, var(--color-accent), var(--color-accent-dark));
-  border-radius: 10px;
+  width: 66px;
+  height: 66px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
+}
+
+.logo-icon img {
+  width: 66px;
+  height: 66px;
+  object-fit: contain;
 }
 
 .logo-text {
