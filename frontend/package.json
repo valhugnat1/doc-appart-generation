@@ -8,9 +8,14 @@
   },
   "scripts": {
     "dev": "vite",
-    "test": "vitest",
     "build": "vite build",
-    "preview": "vite preview"
+    "build:staging": "vite build --mode staging",
+    "build:prod": "vite build --mode production",
+    "preview": "vite preview",
+    "preview:staging": "vite preview --mode staging",
+    "test": "vitest",
+    "test:coverage": "vitest --coverage",
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore"
   },
   "dependencies": {
     "@langchain/core": "^1.0.6",
