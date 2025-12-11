@@ -24,7 +24,7 @@ This directory contains scripts and Terraform configurations to build, push, and
 │          │             │             │                           │
 │          ▼             ▼             ▼                           │
 │   Custom Domains (optional):                                    │
-│   https://bail.outil-immo.fr    (Landing)                       │
+│   https://www.outil-immo.fr    (Landing)                       │
 │   https://api.outil-immo.fr     (Backend)                       │
 │   https://app.outil-immo.fr     (Frontend)                      │
 │                                                                  │
@@ -40,7 +40,7 @@ This directory contains scripts and Terraform configurations to build, push, and
 
 The application uses the following URL structure in production:
 
-- **Landing Page**: `https://bail.outil-immo.fr`
+- **Landing Page**: `https://www.outil-immo.fr`
   - Links to frontend: `https://app.outil-immo.fr`
 - **Frontend**: `https://app.outil-immo.fr`
   - API calls to: `https://api.outil-immo.fr`
