@@ -28,6 +28,22 @@
       gtag('js', new Date());
 
       gtag('config', 'AW-11279291177');
+
+      // Helper function to delay opening a URL until a gtag event is sent.
+      // Call it in response to an action that should navigate to a URL.
+      function gtagSendEvent(url) {
+        var callback = function () {
+          if (typeof url === 'string') {
+            window.location = url;
+          }
+        };
+        gtag('event', 'ads_conversion_Submit_lead_form_1', {
+          'event_callback': callback,
+          'event_timeout': 2000,
+          // <event_parameters>
+        });
+        return false;
+      }
     </script>
     
     <style>
@@ -705,7 +721,7 @@
                 <!-- Choice Cards -->
                 <div class="choice-grid">
                     <!-- Meublé -->
-                    <a href="https://app.outil-immo.fr" class="choice-card meuble">
+                    <a href="javascript:void(0)" onclick="return gtagSendEvent('https://app.outil-immo.fr');" class="choice-card meuble">
                         <span class="popular-badge">Le + populaire</span>
                         <div class="choice-icon">🛋️</div>
                         <h2>Location meublée</h2>
@@ -737,7 +753,7 @@
                     </a>
 
                     <!-- Non meublé -->
-                    <a href="https://app.outil-immo.fr" class="choice-card vide">
+                    <a href="javascript:void(0)" onclick="alert('Cette fonctionnalité n\'est pas encore disponible.'); return false;" class="choice-card vide">
                         <div class="choice-icon">🏠</div>
                         <h2>Location vide</h2>
                         <p class="choice-subtitle">Logement non meublé (nu)</p>
